@@ -1,28 +1,43 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
+import ru.kirsanov.mdbo.metamodel.constraint.PrimaryKey;
 import ru.kirsanov.mdbo.metamodel.datatype.Datatype;
+import ru.kirsanov.mdbo.metamodel.exception.NotExistsColumnException;
 
 import java.util.LinkedList;
 import java.util.List;
 
 public class Table extends MetaObject implements Container {
 
-    private List<Field> fields;
+    private List<Column> columns;
     private Container container;
+    private List<PrimaryKey> primaryKeys = new LinkedList<PrimaryKey>();
 
     public Table(final String name) {
         super(name);
-        fields = new LinkedList<Field>();
+        columns = new LinkedList<Column>();
     }
 
-    public Field createField(String name, Datatype datatype) {
-        Field field = new Field(name, datatype);
-        this.fields.add(field);
-        return field;
+    public Column createColumn(String name, Datatype datatype) {
+        Column column = new Column(this, name, datatype);
+        this.columns.add(column);
+        return column;
     }
 
-    public List<Field> getFields() {
-        return this.fields;
+    public PrimaryKey createPrimaryKey(Column column) throws NotExistsColumnException {
+        if (columns.contains(column)) {
+            PrimaryKey primaryKey = new PrimaryKey(this, column.getName());
+            if (!primaryKeys.contains(primaryKey)) {
+                primaryKeys.add(primaryKey);
+            }
+            return primaryKey;
+        } else {
+            throw new NotExistsColumnException();
+        }
+    }
+
+    public List<Column> getColumns() {
+        return this.columns;
     }
 
     public Container getParent() {
