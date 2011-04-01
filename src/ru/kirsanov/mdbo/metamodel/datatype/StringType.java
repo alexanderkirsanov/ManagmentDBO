@@ -30,4 +30,20 @@ public class StringType extends Datatype {
         throw new IncorrectVariableTypeException();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        StringType that = (StringType) o;
+
+        if (size != that.size) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return size;
+    }
 }

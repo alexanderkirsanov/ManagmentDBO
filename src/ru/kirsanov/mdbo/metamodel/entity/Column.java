@@ -108,11 +108,7 @@ public class Column extends MetaObject implements Container {
 
         if (nullable != column.nullable) return false;
         if (unique != column.unique) return false;
-        if (container != null ? !container.equals(column.container) : column.container != null) return false;
-        if (dataType != null ? !dataType.equals(column.dataType) : column.dataType != null) return false;
-        if (defaultValue != null ? !defaultValue.equals(column.defaultValue) : column.defaultValue != null)
-            return false;
-        if (table != null ? !table.equals(column.table) : column.table != null) return false;
+        if (table != null ? !table.getName().equals(column.table.getName()) : column.table != null) return false;
         if (variableList != null ? !variableList.equals(column.variableList) : column.variableList != null)
             return false;
 

@@ -47,4 +47,8 @@ public class Table extends MetaObject implements Container {
     public void setContainer(Container container) {
         this.container = container;
     }
+
+    public PrimaryKey getPrimaryKey() {
+        return primaryKeys.get(0);
+    }
 }

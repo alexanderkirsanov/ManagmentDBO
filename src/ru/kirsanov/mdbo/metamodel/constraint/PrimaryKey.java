@@ -6,16 +6,7 @@ public class PrimaryKey extends AbstractConstraint implements Constraint{
 	private String name;
 
 	public PrimaryKey(Table table, String name) {
-		super( table, null );
-	}
+		super( table, name );
 
-	@Override
-	public String getName() {
-		return name;
 	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
 }
