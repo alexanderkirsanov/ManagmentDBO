@@ -2,9 +2,10 @@ package ru.kirsanov.mdbo.metamodel.constraint;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.kirsanov.mdbo.metamodel.datatype.IntegerType;
+import ru.kirsanov.mdbo.metamodel.datatype.SmallInt;
 import ru.kirsanov.mdbo.metamodel.entity.Column;
 import ru.kirsanov.mdbo.metamodel.entity.Table;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,7 +18,7 @@ public class PrimaryKeyTest {
     @Before
     public void setUp() {
         table = new Table("test");
-        column = table.createColumn("testColumn", new IntegerType());
+        column = table.createColumn("testColumn", new SmallInt());
         pkName = "testPK";
         pk = new PrimaryKey(table, pkName);
     }
@@ -28,7 +29,7 @@ public class PrimaryKeyTest {
     }
 
     @Test
-    public void columnTest() {
+    public void columnTest() throws ColumnNotFoundException{
         pk.addColumn(column);
         assertEquals(column, pk.getColumns().get(0));
     }

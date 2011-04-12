@@ -2,6 +2,7 @@ package ru.kirsanov.mdbo.metamodel.constraint;
 
 import ru.kirsanov.mdbo.metamodel.entity.Column;
 import ru.kirsanov.mdbo.metamodel.entity.Table;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +30,10 @@ public abstract  class AbstractConstraint implements Constraint{
 		return columns;
 	}
 
-	public void addColumn(final Column column) {
+	public void addColumn(final Column column) throws ColumnNotFoundException {
 
 		if (!column.getTable().equals(getTable()) ) {
-			throw new IllegalArgumentException( "column not found" );
+			throw new ColumnNotFoundException();
 		}
 		columns.add(column);
 	}

@@ -6,27 +6,27 @@ import ru.kirsanov.mdbo.metamodel.exception.IncorrectVariableTypeException;
 
 import static org.junit.Assert.assertEquals;
 
-public class IntegerTypeTest {
+public class SmallIntTest {
 
     private Datatype datatype;
 
     @Before
     public void setUp(){
-        datatype = new IntegerType();
+        datatype = new SmallInt();
     }
     @Test
     public void getNameTest() throws Exception {
-        assertEquals("Integer", datatype.getName());
+        assertEquals("SmallInt", datatype.getName());
     }
 
     @Test
     public void getSqlStringTest() throws Exception {
-        assertEquals("integer", datatype.getSqlString());
+        assertEquals("smallint", datatype.getSqlString());
     }
 
     @Test
     public void checkCorrectTest() throws Exception, IncorrectVariableTypeException {
-        Integer integer = new Integer(10);
+        SmallInt integer = new SmallInt();
         datatype.checkCorrect(integer);
     }
 

@@ -7,6 +7,5 @@ public class PrimaryKey extends AbstractConstraint implements Constraint{
 
 	public PrimaryKey(Table table, String name) {
 		super( table, name );
-
 	}
 }

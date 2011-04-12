@@ -2,8 +2,8 @@ package ru.kirsanov.mdbo.metamodel;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.kirsanov.mdbo.metamodel.datatype.IntegerType;
-import ru.kirsanov.mdbo.metamodel.datatype.StringType;
+import ru.kirsanov.mdbo.metamodel.datatype.SmallInt;
+import ru.kirsanov.mdbo.metamodel.datatype.Varchar;
 import ru.kirsanov.mdbo.metamodel.entity.Column;
 import ru.kirsanov.mdbo.metamodel.entity.Table;
 import ru.kirsanov.mdbo.metamodel.exception.ElementNotFoundException;
@@ -14,12 +14,12 @@ import static org.junit.Assert.assertTrue;
 
 public class ColumnTest {
     private Column column;
-    private IntegerType integer;
+    private SmallInt integer;
 
     @Before
     public void setUp() throws Exception {
         String fieldName = "My_Field";
-        integer = new IntegerType();
+        integer = new SmallInt();
         Table table = new Table("test");
         column = new Column(table, fieldName, integer);
     }
@@ -27,7 +27,7 @@ public class ColumnTest {
     @Test
     public void dataTypeTest() throws Exception {
         assertEquals(integer, column.getDataType());
-        StringType string = new StringType(10);
+        Varchar string = new Varchar(10);
         column.setDataType(string);
 
         assertEquals(string, column.getDataType());
@@ -35,21 +35,21 @@ public class ColumnTest {
 
     @Test
     public void addCorrectVariableTest() throws Exception, IncorrectVariableTypeException {
-        Integer integerVariable = new Integer(10);
+        SmallInt integerVariable = new SmallInt();
         column.addVariable(integerVariable);
         assertEquals(integerVariable, column.getVariable(0));
     }
 
     @Test(expected = IncorrectVariableTypeException.class)
     public void AddIncorrectVariableTest() throws Exception, IncorrectVariableTypeException {
-        String stringVariable = new String("10");
+        Varchar stringVariable = new Varchar(10);
         column.addVariable(stringVariable);
         assertEquals(stringVariable, column.getVariable(0));
     }
 
     @Test(expected = ElementNotFoundException.class)
     public void removeVariableTest() throws Exception, IncorrectVariableTypeException {
-        Integer integerVariable = new Integer(10);
+        SmallInt integerVariable = new SmallInt();
         column.addVariable(integerVariable);
         column.removeVariable(0);
         column.getVariable(0);
@@ -57,23 +57,23 @@ public class ColumnTest {
 
     @Test
     public void correctChangeVariableTest() throws Exception, IncorrectVariableTypeException {
-        Integer integerVariable = new Integer(10);
+        SmallInt integerVariable = new SmallInt();
         column.addVariable(integerVariable);
-        Integer newIntegerValue = new Integer(20);
+        SmallInt newIntegerValue = new SmallInt();
         column.changeVariable(newIntegerValue, 0);
     }
 
     @Test(expected = ElementNotFoundException.class)
     public void incorrectChangeVariableTest() throws Exception, IncorrectVariableTypeException {
-        Integer integerVariable = new Integer(10);
+        SmallInt integerVariable = new SmallInt();
         column.addVariable(integerVariable);
-        Integer newIntegerValue = new Integer(20);
+        SmallInt newIntegerValue = new SmallInt();
         column.changeVariable(newIntegerValue, 1);
     }
 
     @Test(expected = IncorrectVariableTypeException.class)
     public void incorrectVariableTypeChangeTest() throws Exception, IncorrectVariableTypeException {
-        Integer integerVariable = new Integer(10);
+        SmallInt integerVariable = new SmallInt();
         column.addVariable(integerVariable);
         String string = new String("10");
         column.changeVariable(string, 0);

@@ -6,35 +6,35 @@ import ru.kirsanov.mdbo.metamodel.exception.IncorrectVariableTypeException;
 
 import static org.junit.Assert.assertEquals;
 
-public class StringTypeTest {
+public class VarcharTest {
     private Datatype stringType;
     private int length;
 
     @Before
     public void setUp() {
         length = 10;
-        stringType = new StringType(length);
+        stringType = new Varchar(length);
     }
 
     @Test
     public void getNameTest() throws Exception {
-        assertEquals("String", stringType.getName());
+        assertEquals("Varchar", stringType.getName());
     }
 
     @Test
     public void getSqlStringTest() throws Exception {
-        assertEquals("VARCHAR (" + String.valueOf(length) + ")", stringType.getSqlString());
+        assertEquals("Varchar (" + String.valueOf(length) + ")", stringType.getSqlString());
     }
 
     @Test
     public void checkCorrectTest() throws Exception, IncorrectVariableTypeException {
-        String test = "test";
+        Varchar test = new Varchar(9);
         stringType.checkCorrect(test);
     }
 
     @Test(expected = IncorrectVariableTypeException.class)
     public void checkIncorrectTest() throws Exception, IncorrectVariableTypeException {
-        String test = "test test test";  //length >size
+        Varchar test = new Varchar(12);  //length >size
         stringType.checkCorrect(test);
     }
 }

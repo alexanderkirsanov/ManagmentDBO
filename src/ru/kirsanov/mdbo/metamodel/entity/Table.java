@@ -1,6 +1,7 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
 import ru.kirsanov.mdbo.metamodel.constraint.PrimaryKey;
+import ru.kirsanov.mdbo.metamodel.constraint.UniqueKey;
 import ru.kirsanov.mdbo.metamodel.datatype.Datatype;
 import ru.kirsanov.mdbo.metamodel.exception.NotExistsColumnException;
 
@@ -12,6 +13,7 @@ public class Table extends MetaObject implements Container {
     private List<Column> columns;
     private Container container;
     private List<PrimaryKey> primaryKeys = new LinkedList<PrimaryKey>();
+    private List<UniqueKey> uniqueKeys = new LinkedList<UniqueKey>();
 
     public Table(final String name) {
         super(name);
@@ -40,6 +42,16 @@ public class Table extends MetaObject implements Container {
         return this.columns;
     }
 
+    public UniqueKey createUniqueKey(String name) {
+        UniqueKey uniqueKey = new UniqueKey(this, name);
+        uniqueKeys.add(uniqueKey);
+        return uniqueKey;
+    }
+
+    public List<UniqueKey> getUniqueKeys() {
+        return uniqueKeys;
+    }
+
     public Container getParent() {
         return this.container;
     }
@@ -50,5 +62,9 @@ public class Table extends MetaObject implements Container {
 
     public PrimaryKey getPrimaryKey() {
         return primaryKeys.get(0);
+    }
+
+    public List<PrimaryKey> getPrimaryKeys() {
+        return primaryKeys;
     }
 }
