@@ -2,7 +2,7 @@ package ru.kirsanov.mdbo.metamodel.entity;
 
 import ru.kirsanov.mdbo.metamodel.constraint.PrimaryKey;
 import ru.kirsanov.mdbo.metamodel.constraint.UniqueKey;
-import ru.kirsanov.mdbo.metamodel.datatype.Datatype;
+import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.exception.NotExistsColumnException;
 
 import java.util.LinkedList;
@@ -20,8 +20,8 @@ public class Table extends MetaObject implements Container {
         columns = new LinkedList<Column>();
     }
 
-    public Column createColumn(String name, Datatype datatype) {
-        Column column = new Column(this, name, datatype);
+    public Column createColumn(String name, DataType dataType) {
+        Column column = new Column(this, name, dataType);
         this.columns.add(column);
         return column;
     }

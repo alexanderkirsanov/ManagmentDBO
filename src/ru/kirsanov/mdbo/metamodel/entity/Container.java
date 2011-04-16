@@ -3,7 +3,7 @@ package ru.kirsanov.mdbo.metamodel.entity;
 /**
  * Created by IntelliJ IDEA.
  * User: lqip32
- * Date: 24.03.11
+ * date: 24.03.11
  * Time: 11:05
  * To change this template use File | Settings | File Templates.
  */

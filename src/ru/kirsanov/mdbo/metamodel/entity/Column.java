@@ -1,6 +1,6 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
-import ru.kirsanov.mdbo.metamodel.datatype.Datatype;
+import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.exception.ElementNotFoundException;
 import ru.kirsanov.mdbo.metamodel.exception.IncorrectVariableTypeException;
 
@@ -9,19 +9,19 @@ import java.util.ArrayList;
 public class Column extends MetaObject implements Container {
 
     private Container container;
-    private Datatype dataType;
-    private ArrayList<Object> variableList;
+    private DataType dataType;
+    private ArrayList<String> variableList;
     private boolean nullable;
     private boolean unique;
     private String defaultValue;
     private Table table;
 
-    public Column(final Table table, final String name, final Datatype dataType) {
+    public Column(final Table table, final String name, final DataType dataType) {
         super(name);
         setContainer(table);
         this.table = table;
         this.dataType = dataType;
-        variableList = new ArrayList<Object>();
+        variableList = new ArrayList<String>();
     }
 
     public Container getParent() {
@@ -36,15 +36,15 @@ public class Column extends MetaObject implements Container {
         this.container = container;
     }
 
-    public void setDataType(final Datatype dataType) {
+    public void setDataType(final DataType dataType) {
         this.dataType = dataType;
     }
 
-    public Datatype getDataType() {
+    public DataType getDataType() {
         return this.dataType;
     }
 
-    public void addVariable(Object variable) throws IncorrectVariableTypeException {
+    public void addVariable(String variable) throws IncorrectVariableTypeException {
         dataType.checkCorrect(variable);
         variableList.add(variable);
     }
@@ -57,7 +57,7 @@ public class Column extends MetaObject implements Container {
         }
     }
 
-    public Object getVariable(int id) throws ElementNotFoundException {
+    public String getVariable(int id) throws ElementNotFoundException {
         if (id < variableList.size()) {
             return variableList.get(id);
         } else {
@@ -65,7 +65,7 @@ public class Column extends MetaObject implements Container {
         }
     }
 
-    public void changeVariable(Object variable, int id) throws ElementNotFoundException, IncorrectVariableTypeException {
+    public void changeVariable(String variable, int id) throws ElementNotFoundException, IncorrectVariableTypeException {
         if (id < variableList.size()) {
             dataType.checkCorrect(variable);
             variableList.set(id, variable);

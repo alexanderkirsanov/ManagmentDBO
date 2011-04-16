@@ -2,7 +2,7 @@ package ru.kirsanov.mdbo.metamodel.constraint;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.kirsanov.mdbo.metamodel.datatype.SmallInt;
+import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
 import ru.kirsanov.mdbo.metamodel.entity.Column;
 import ru.kirsanov.mdbo.metamodel.entity.Table;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
@@ -18,7 +18,7 @@ public class PrimaryKeyTest {
     @Before
     public void setUp() {
         table = new Table("test");
-        column = table.createColumn("testColumn", new SmallInt());
+        column = table.createColumn("testColumn", new SimpleDatatype("Smallint"));
         pkName = "testPK";
         pk = new PrimaryKey(table, pkName);
     }

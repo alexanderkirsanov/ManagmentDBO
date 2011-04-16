@@ -2,7 +2,7 @@ package ru.kirsanov.mdbo.metamodel.constraint;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.kirsanov.mdbo.metamodel.datatype.SmallInt;
+import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
 import ru.kirsanov.mdbo.metamodel.entity.Column;
 import ru.kirsanov.mdbo.metamodel.entity.Table;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
@@ -19,9 +19,9 @@ public class ForeignKeyTest {
     @Before
     public void setUp() throws Exception {
         sourceTable = new Table("source");
-        sourceColumn = sourceTable.createColumn("sourceColumn", new SmallInt());
+        sourceColumn = sourceTable.createColumn("sourceColumn", new SimpleDatatype("Smallint"));
         targetTable = new Table("target");
-        targetColumn = targetTable.createColumn("targetColumn", new SmallInt());
+        targetColumn = targetTable.createColumn("targetColumn", new SimpleDatatype("Smallint"));
         foreignKey = new ForeignKey(sourceTable, targetTable);
     }
 
