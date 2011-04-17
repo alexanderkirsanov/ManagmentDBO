@@ -1,7 +1,5 @@
 package ru.kirsanov.mdbo.metamodel.datatype;
 
-import ru.kirsanov.mdbo.metamodel.exception.IncorrectVariableTypeException;
-
 public class SimpleDatatype implements DataType {
 
     private String name = null;
@@ -18,7 +16,7 @@ public class SimpleDatatype implements DataType {
             result.append(" (").append(precision);
 
             if (scale != 0) {
-                result.append(" ,").append(scale);
+                result.append(", ").append(scale);
             }
             result.append(")");
         }
@@ -37,10 +35,6 @@ public class SimpleDatatype implements DataType {
     public SimpleDatatype(String name, int precision, int scale) {
         this(name, precision);
         this.scale = scale;
-    }
-
-    public void checkCorrect(Object o) throws IncorrectVariableTypeException {
-
     }
 
     @Override

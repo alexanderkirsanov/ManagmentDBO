@@ -19,8 +19,10 @@ public class SimpleDataTypeTest {
     }
 
     @Test
-    public void getSqlStringTest() throws Exception {
+    public void sqlStringTest() throws Exception {
         assertEquals("VARCHAR (10)", dataType.getSqlString());
+        dataType = new SimpleDatatype("NUMERIC", 10,12);
+        assertEquals("NUMERIC (10, 12)", dataType.getSqlString());
     }
 
 }

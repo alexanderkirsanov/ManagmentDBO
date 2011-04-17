@@ -3,6 +3,7 @@ package ru.kirsanov.mdbo.metamodel.entity;
 import ru.kirsanov.mdbo.metamodel.constraint.PrimaryKey;
 import ru.kirsanov.mdbo.metamodel.constraint.UniqueKey;
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
+import ru.kirsanov.mdbo.metamodel.exception.ElementNotFoundException;
 import ru.kirsanov.mdbo.metamodel.exception.NotExistsColumnException;
 
 import java.util.LinkedList;
@@ -66,5 +67,25 @@ public class Table extends MetaObject implements Container {
 
     public List<PrimaryKey> getPrimaryKeys() {
         return primaryKeys;
+    }
+
+    public void addTuple(String... value) throws IllegalArgumentException {
+        if (value.length == columns.size()) {
+            int i = 0;
+            for (String currentStr : value) {
+                columns.get(i).addVariable(currentStr);
+                i++;
+            }
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    public void removeTuple(int number) throws ElementNotFoundException {
+        if (number < columns.size()) {
+            for (Column column : columns) {
+                column.removeVariable(number);
+            }
+        }
     }
 }

@@ -1,7 +1,5 @@
 package ru.kirsanov.mdbo.metamodel.datatype;
 
-import ru.kirsanov.mdbo.metamodel.exception.IncorrectVariableTypeException;
-
 /**
  * Created by IntelliJ IDEA.
  * User: lqip32
@@ -14,5 +12,4 @@ public interface DataType {
 
     String getSqlString();
 
-    void checkCorrect(Object o) throws IncorrectVariableTypeException;
 }

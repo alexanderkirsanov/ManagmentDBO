@@ -22,7 +22,4 @@ public class Schema extends MetaObject {
     public List<Table> getTables() {
         return this.tables;
     }
-
-
-
 }

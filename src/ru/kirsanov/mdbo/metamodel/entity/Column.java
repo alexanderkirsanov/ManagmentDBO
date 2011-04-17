@@ -2,7 +2,6 @@ package ru.kirsanov.mdbo.metamodel.entity;
 
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.exception.ElementNotFoundException;
-import ru.kirsanov.mdbo.metamodel.exception.IncorrectVariableTypeException;
 
 import java.util.ArrayList;
 
@@ -44,8 +43,7 @@ public class Column extends MetaObject implements Container {
         return this.dataType;
     }
 
-    public void addVariable(String variable) throws IncorrectVariableTypeException {
-        dataType.checkCorrect(variable);
+    public void addVariable(String variable) {
         variableList.add(variable);
     }
 
@@ -65,9 +63,8 @@ public class Column extends MetaObject implements Container {
         }
     }
 
-    public void changeVariable(String variable, int id) throws ElementNotFoundException, IncorrectVariableTypeException {
+    public void changeVariable(String variable, int id) throws ElementNotFoundException {
         if (id < variableList.size()) {
-            dataType.checkCorrect(variable);
             variableList.set(id, variable);
         } else {
             throw new ElementNotFoundException();
