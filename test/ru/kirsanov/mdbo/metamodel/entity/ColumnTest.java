@@ -1,4 +1,4 @@
-package ru.kirsanov.mdbo.metamodel;
+package ru.kirsanov.mdbo.metamodel.entity;
 
 import org.junit.Before;
 import org.junit.Test;

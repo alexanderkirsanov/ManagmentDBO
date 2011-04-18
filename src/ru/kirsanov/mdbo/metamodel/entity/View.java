@@ -15,4 +15,7 @@ public class View extends MetaObject {
        this.columns.add(column);
     }
 
+    public List<Column> getColumns() {
+        return this.columns;
+    }
 }
