@@ -5,6 +5,7 @@ import org.junit.Test;
 import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
 import ru.kirsanov.mdbo.metamodel.entity.Column;
 import ru.kirsanov.mdbo.metamodel.entity.Table;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 
 import static org.junit.Assert.assertEquals;
@@ -17,7 +18,7 @@ public class ForeignKeyTest {
     private ForeignKey foreignKey;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() throws Exception, ColumnAlreadyExistsException {
         sourceTable = new Table("source");
         sourceColumn = sourceTable.createColumn("sourceColumn", new SimpleDatatype("Smallint"));
         targetTable = new Table("target");

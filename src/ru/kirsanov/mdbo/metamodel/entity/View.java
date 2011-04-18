@@ -16,4 +16,7 @@ public class View extends MetaObject {
 
     }
 
+    public List<Column> getColumns() {
+        return this.columns;
+    }
 }
