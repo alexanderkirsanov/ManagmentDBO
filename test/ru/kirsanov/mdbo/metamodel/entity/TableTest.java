@@ -10,9 +10,6 @@ import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 import ru.kirsanov.mdbo.metamodel.exception.ElementNotFoundException;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static org.junit.Assert.assertEquals;
 
 public class TableTest {
@@ -121,6 +118,23 @@ public class TableTest {
         table.createPrimaryKey(idColumn);
         table.createColumn("name", varcharDataType);
         table.addTuple("1", "Alexandr");
-        table.getTuple(2);
+        table.removeTuple(0);
+        table.getTuple(1);
+    }
+
+    @Test(expected = ElementNotFoundException.class)
+    public void removeNotExistsTupleTest() throws ColumnAlreadyExistsException, ColumnNotFoundException, ElementNotFoundException {
+        DataType integerDataType = new SimpleDatatype("INTEGER");
+        DataType varcharDataType = new SimpleDatatype("VARCHAR", 10);
+        Column idColumn = table.createColumn("id", integerDataType);
+        table.createPrimaryKey(idColumn);
+        table.removeTuple(0);
+    }
+
+    @Test
+    public void containerTest() {
+        Schema schema = new Schema("test");
+        table.setContainer(schema);
+        assertEquals(schema, table.getParent());
     }
 }

@@ -116,6 +116,32 @@ public class Table extends MetaObject implements Container {
             for (Column column : columns) {
                 column.removeVariable(id);
             }
+        } else {
+            throw new ElementNotFoundException();
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Table table = (Table) o;
+
+        if (columns != null ? !columns.equals(table.columns) : table.columns != null) return false;
+        if (container != null ? !container.equals(table.container) : table.container != null) return false;
+        if (primaryKey != null ? !primaryKey.equals(table.primaryKey) : table.primaryKey != null) return false;
+        if (uniqueKey != null ? !uniqueKey.equals(table.uniqueKey) : table.uniqueKey != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = columns != null ? columns.hashCode() : 0;
+        result = 31 * result + (container != null ? container.hashCode() : 0);
+        result = 31 * result + (primaryKey != null ? primaryKey.hashCode() : 0);
+        result = 31 * result + (uniqueKey != null ? uniqueKey.hashCode() : 0);
+        return result;
     }
 }
