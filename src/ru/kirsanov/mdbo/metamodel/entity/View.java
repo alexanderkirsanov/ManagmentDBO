@@ -13,6 +13,7 @@ public class View extends MetaObject {
 
     public void addColumn(Column column){
        this.columns.add(column);
+
     }
 
 }
