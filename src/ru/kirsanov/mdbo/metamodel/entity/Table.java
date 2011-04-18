@@ -4,8 +4,8 @@ import ru.kirsanov.mdbo.metamodel.constraint.PrimaryKey;
 import ru.kirsanov.mdbo.metamodel.constraint.UniqueKey;
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 import ru.kirsanov.mdbo.metamodel.exception.ElementNotFoundException;
-import ru.kirsanov.mdbo.metamodel.exception.NotFoundColumnException;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -15,8 +15,8 @@ public class Table extends MetaObject implements Container {
 
     private List<Column> columns;
     private Container container;
-    private List<PrimaryKey> primaryKeys = new LinkedList<PrimaryKey>();
-    private List<UniqueKey> uniqueKeys = new LinkedList<UniqueKey>();
+    private PrimaryKey primaryKey = null;
+    private UniqueKey uniqueKey = null;
 
     public Table(final String name) {
         super(name);
@@ -46,20 +46,18 @@ public class Table extends MetaObject implements Container {
         return foundColumn;
     }
 
-    public void removeColumn(final Column column) throws NotFoundColumnException {
-        if (getColumn(column.getName()) == null) throw new NotFoundColumnException();
+    public void removeColumn(final Column column) throws ColumnNotFoundException {
+        if (getColumn(column.getName()) == null) throw new ColumnNotFoundException();
         this.columns.remove(column);
     }
 
-    public PrimaryKey createPrimaryKey(Column column) throws NotFoundColumnException {
+    public PrimaryKey createPrimaryKey(Column column) throws ColumnNotFoundException {
         if (columns.contains(column)) {
-            PrimaryKey primaryKey = new PrimaryKey(this, column.getName());
-            if (!primaryKeys.contains(primaryKey)) {
-                primaryKeys.add(primaryKey);
-            }
+            primaryKey = new PrimaryKey(this, column.getName());
+            primaryKey.addColumn(column);
             return primaryKey;
         } else {
-            throw new NotFoundColumnException();
+            throw new ColumnNotFoundException();
         }
     }
 
@@ -67,14 +65,14 @@ public class Table extends MetaObject implements Container {
         return this.columns;
     }
 
-    public UniqueKey createUniqueKey(String name) {
-        UniqueKey uniqueKey = new UniqueKey(this, name);
-        uniqueKeys.add(uniqueKey);
+    public UniqueKey createUniqueKey(Column column) throws ColumnNotFoundException {
+        uniqueKey = new UniqueKey(this, column.getName());
+        uniqueKey.addColumn(column);
         return uniqueKey;
     }
 
-    public List<UniqueKey> getUniqueKeys() {
-        return uniqueKeys;
+    public UniqueKey getUniqueKey() {
+        return uniqueKey;
     }
 
     public Container getParent() {
@@ -86,11 +84,7 @@ public class Table extends MetaObject implements Container {
     }
 
     public PrimaryKey getPrimaryKey() {
-        return primaryKeys.get(0);
-    }
-
-    public List<PrimaryKey> getPrimaryKeys() {
-        return primaryKeys;
+        return primaryKey;
     }
 
     public void addTuple(String... value) throws IllegalArgumentException {
