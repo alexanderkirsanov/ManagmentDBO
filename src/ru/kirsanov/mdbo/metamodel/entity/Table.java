@@ -3,9 +3,11 @@ package ru.kirsanov.mdbo.metamodel.entity;
 import ru.kirsanov.mdbo.metamodel.constraint.PrimaryKey;
 import ru.kirsanov.mdbo.metamodel.constraint.UniqueKey;
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.ElementNotFoundException;
-import ru.kirsanov.mdbo.metamodel.exception.NotExistsColumnException;
+import ru.kirsanov.mdbo.metamodel.exception.NotFoundColumnException;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,13 +23,35 @@ public class Table extends MetaObject implements Container {
         columns = new LinkedList<Column>();
     }
 
-    public Column createColumn(String name, DataType dataType) {
+    public Table(final String name, final Schema schema) {
+        super(name);
+        this.container = schema;
+        columns = new LinkedList<Column>();
+    }
+
+    public Column createColumn(final String name, final DataType dataType) throws ColumnAlreadyExistsException {
+        if (!(getColumn(name) == null)) throw new ColumnAlreadyExistsException();
         Column column = new Column(this, name, dataType);
         this.columns.add(column);
         return column;
     }
 
-    public PrimaryKey createPrimaryKey(Column column) throws NotExistsColumnException {
+    public Column getColumn(String name) {
+        Column foundColumn = null;
+        for (Column column : columns) {
+            if (column.getName().equals(name)) {
+                return column;
+            }
+        }
+        return foundColumn;
+    }
+
+    public void removeColumn(final Column column) throws NotFoundColumnException {
+        if (getColumn(column.getName()) == null) throw new NotFoundColumnException();
+        this.columns.remove(column);
+    }
+
+    public PrimaryKey createPrimaryKey(Column column) throws NotFoundColumnException {
         if (columns.contains(column)) {
             PrimaryKey primaryKey = new PrimaryKey(this, column.getName());
             if (!primaryKeys.contains(primaryKey)) {
@@ -35,7 +59,7 @@ public class Table extends MetaObject implements Container {
             }
             return primaryKey;
         } else {
-            throw new NotExistsColumnException();
+            throw new NotFoundColumnException();
         }
     }
 
@@ -81,10 +105,22 @@ public class Table extends MetaObject implements Container {
         }
     }
 
-    public void removeTuple(int number) throws ElementNotFoundException {
-        if (number < columns.size()) {
+    public List<String> getTuple(int id) throws ElementNotFoundException {
+        List<String> tuple = new ArrayList<String>();
+        if (id < columns.size()) {
             for (Column column : columns) {
-                column.removeVariable(number);
+                tuple.add(column.getVariable(id));
+            }
+        } else {
+            throw new ElementNotFoundException();
+        }
+        return tuple;
+    }
+
+    public void removeTuple(int id) throws ElementNotFoundException {
+        if (id < columns.size()) {
+            for (Column column : columns) {
+                column.removeVariable(id);
             }
         }
     }
