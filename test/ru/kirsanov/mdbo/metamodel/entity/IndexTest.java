@@ -7,29 +7,22 @@ import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 
 import static org.junit.Assert.assertEquals;
 
-public class ViewTest {
-    private Column column;
+public class IndexTest {
     private Table table;
-    private View view;
+    private Column column;
+    private Index index;
 
     @Before
     public void setUp() throws ColumnAlreadyExistsException {
-        view = new View("MyView");
         table = new Table("MyTable");
         column = table.createColumn("myColumn", new SimpleDatatype("VARCHAR", 60));
-
-    }
-
-    @Test
-    public void columnsTest() throws Exception {
-        view.addColumn(column);
-        assertEquals(column, view.getColumns().get(0));
+        index = new Index("test", column, 19);
     }
 
     @Test
     public void constraintsTest() throws Exception {
-        view.addColumn(column);
-        view.createConstraint(column, ">0");
-        assertEquals(">0", view.getConstraints().get(0).getConstraintString());
+        index.createConstraint(">0");
+        assertEquals(">0", index.getConstraint().getConstraintString());
     }
+
 }
