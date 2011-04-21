@@ -11,5 +11,6 @@ public class PostgresDatabaseTest {
         Database db = new PostgresDatabase("db");
         ISchema schema = db.createSchema(schemaName);
         assertEquals(schemaName, schema.getName());
+
     }
 }
