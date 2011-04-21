@@ -11,34 +11,36 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Table extends MetaObject implements Container {
+public class Table extends MetaObject implements ITable {
 
-    private List<Column> columns;
+    private List<IColumn> columns;
     private Container container;
     private PrimaryKey primaryKey = null;
     private UniqueKey uniqueKey = null;
 
     public Table(final String name) {
         super(name);
-        columns = new LinkedList<Column>();
+        columns = new LinkedList<IColumn>();
     }
 
-    public Table(final String name, final Schema schema) {
+    public Table(final String name, final ISchema schema) {
         super(name);
         this.container = schema;
-        columns = new LinkedList<Column>();
+        columns = new LinkedList<IColumn>();
     }
 
-    public Column createColumn(final String name, final DataType dataType) throws ColumnAlreadyExistsException {
+    @Override
+    public IColumn createColumn(final String name, final DataType dataType) throws ColumnAlreadyExistsException {
         if (!(getColumn(name) == null)) throw new ColumnAlreadyExistsException();
         Column column = new Column(this, name, dataType);
         this.columns.add(column);
         return column;
     }
 
-    public Column getColumn(String name) {
+    @Override
+    public IColumn getColumn(String name) {
         Column foundColumn = null;
-        for (Column column : columns) {
+        for (IColumn column : columns) {
             if (column.getName().equals(name)) {
                 return column;
             }
@@ -46,12 +48,14 @@ public class Table extends MetaObject implements Container {
         return foundColumn;
     }
 
-    public void removeColumn(final Column column) throws ColumnNotFoundException {
+    @Override
+    public void removeColumn(final IColumn column) throws ColumnNotFoundException {
         if (getColumn(column.getName()) == null) throw new ColumnNotFoundException();
         this.columns.remove(column);
     }
 
-    public PrimaryKey createPrimaryKey(Column column) throws ColumnNotFoundException {
+    @Override
+    public PrimaryKey createPrimaryKey(IColumn column) throws ColumnNotFoundException {
         if (columns.contains(column)) {
             primaryKey = new PrimaryKey(this, column.getName());
             primaryKey.addColumn(column);
@@ -61,16 +65,19 @@ public class Table extends MetaObject implements Container {
         }
     }
 
-    public List<Column> getColumns() {
+    @Override
+    public List<IColumn> getColumns() {
         return this.columns;
     }
 
-    public UniqueKey createUniqueKey(Column column) throws ColumnNotFoundException {
+    @Override
+    public UniqueKey createUniqueKey(IColumn column) throws ColumnNotFoundException {
         uniqueKey = new UniqueKey(this, column.getName());
         uniqueKey.addColumn(column);
         return uniqueKey;
     }
 
+    @Override
     public UniqueKey getUniqueKey() {
         return uniqueKey;
     }
@@ -83,10 +90,12 @@ public class Table extends MetaObject implements Container {
         this.container = container;
     }
 
+    @Override
     public PrimaryKey getPrimaryKey() {
         return primaryKey;
     }
 
+    @Override
     public void addTuple(String... value) throws IllegalArgumentException {
         if (value.length == columns.size()) {
             int i = 0;
@@ -99,10 +108,11 @@ public class Table extends MetaObject implements Container {
         }
     }
 
+    @Override
     public List<String> getTuple(int id) throws ElementNotFoundException {
         List<String> tuple = new ArrayList<String>();
         if (id < columns.size()) {
-            for (Column column : columns) {
+            for (IColumn column : columns) {
                 tuple.add(column.getVariable(id));
             }
         } else {
@@ -111,9 +121,10 @@ public class Table extends MetaObject implements Container {
         return tuple;
     }
 
+    @Override
     public void removeTuple(int id) throws ElementNotFoundException {
         if (id < columns.size()) {
-            for (Column column : columns) {
+            for (IColumn column : columns) {
                 column.removeVariable(id);
             }
         } else {

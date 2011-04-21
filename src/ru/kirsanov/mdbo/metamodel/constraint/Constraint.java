@@ -1,13 +1,13 @@
 package ru.kirsanov.mdbo.metamodel.constraint;
 
-import ru.kirsanov.mdbo.metamodel.entity.Column;
-import ru.kirsanov.mdbo.metamodel.entity.Table;
+import ru.kirsanov.mdbo.metamodel.entity.IColumn;
+import ru.kirsanov.mdbo.metamodel.entity.ITable;
 
 public interface Constraint {
 
-    Table getTable();
+    ITable getTable();
 
     String getName();
 
-    Iterable<Column> getColumns();
+    Iterable<IColumn> getColumns();
 }

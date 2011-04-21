@@ -4,8 +4,6 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
-import ru.kirsanov.mdbo.metamodel.entity.Column;
-import ru.kirsanov.mdbo.metamodel.entity.Table;
 import ru.kirsanov.mdbo.metamodel.exception.ElementNotFoundException;
 
 import static org.junit.Assert.assertEquals;

@@ -5,7 +5,7 @@ import ru.kirsanov.mdbo.metamodel.exception.ElementNotFoundException;
 
 import java.util.ArrayList;
 
-public class Column extends MetaObject implements Container {
+public class Column extends MetaObject implements IColumn {
 
     private Container container;
     private DataType dataType;
@@ -13,9 +13,9 @@ public class Column extends MetaObject implements Container {
     private boolean nullable;
     private boolean unique;
     private String defaultValue;
-    private Table table;
+    private ITable table;
 
-    public Column(final Table table, final String name, final DataType dataType) {
+    public Column(final ITable table, final String name, final DataType dataType) {
         super(name);
         setContainer(table);
         this.table = table;
@@ -23,30 +23,37 @@ public class Column extends MetaObject implements Container {
         variableList = new ArrayList<String>();
     }
 
+    @Override
     public Container getParent() {
         return this.container;
     }
 
-    public Table getTable() {
+    @Override
+    public ITable getTable() {
         return this.table;
     }
 
+    @Override
     public void setContainer(final Container container) {
         this.container = container;
     }
 
+    @Override
     public void setDataType(final DataType dataType) {
         this.dataType = dataType;
     }
 
+    @Override
     public DataType getDataType() {
         return this.dataType;
     }
 
+    @Override
     public void addVariable(String variable) {
         variableList.add(variable);
     }
 
+    @Override
     public void removeVariable(int id) throws ElementNotFoundException {
         if (id < variableList.size()) {
             variableList.remove(id);
@@ -55,6 +62,7 @@ public class Column extends MetaObject implements Container {
         }
     }
 
+    @Override
     public String getVariable(int id) throws ElementNotFoundException {
         if (id < variableList.size()) {
             return variableList.get(id);
@@ -63,6 +71,7 @@ public class Column extends MetaObject implements Container {
         }
     }
 
+    @Override
     public void changeVariable(String variable, int id) throws ElementNotFoundException {
         if (id < variableList.size()) {
             variableList.set(id, variable);
@@ -71,26 +80,32 @@ public class Column extends MetaObject implements Container {
         }
     }
 
+    @Override
     public boolean isNullable() {
         return nullable;
     }
 
+    @Override
     public void setNullable(boolean nullable) {
         this.nullable = nullable;
     }
 
+    @Override
     public boolean isUnique() {
         return unique;
     }
 
+    @Override
     public void setUnique(boolean unique) {
         this.unique = unique;
     }
 
+    @Override
     public String getDefaultValue() {
         return defaultValue;
     }
 
+    @Override
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
     }

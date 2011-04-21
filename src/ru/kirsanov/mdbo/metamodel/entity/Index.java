@@ -3,35 +3,50 @@ package ru.kirsanov.mdbo.metamodel.entity;
 import ru.kirsanov.mdbo.metamodel.constraint.Constraint;
 import ru.kirsanov.mdbo.metamodel.constraint.EntityConstraint;
 
-public class Index extends MetaObject {
-    private Column column;
+public class Index extends MetaObject implements IIndex {
+    private IColumn column;
     private int count;
-    public static final int UNIQUE = 1;
-    public static final int FULL_TEXT_SEARCH = 2;
     private int type = 0;
-    private Table table;
+    private ITable table;
     private EntityConstraint constraint = null;
 
-    public Index(final String name, Column column, int count) {
+    public Index(final String name, IColumn column, int count) {
         super(name);
         this.column = column;
         this.table = column.getTable();
         this.count = count;
     }
 
-    public Index(final String name, Column column, int count, int type) {
+    public Index(final String name, IColumn column, int count, int type) {
         this(name, column, count);
         this.type = type;
     }
 
+    @Override
     public Constraint createConstraint(String constraint) {
         EntityConstraint entityConstraint = new EntityConstraint(column, constraint);
         this.constraint = entityConstraint;
         return entityConstraint;
     }
 
+    @Override
     public EntityConstraint getConstraint() {
         return this.constraint;
+    }
+
+    @Override
+    public IColumn getColumn() {
+        return this.column;
+    }
+
+    @Override
+    public int getType() {
+        return this.type;
+    }
+
+    @Override
+    public int getCount() {
+        return this.count;
     }
 
     @Override

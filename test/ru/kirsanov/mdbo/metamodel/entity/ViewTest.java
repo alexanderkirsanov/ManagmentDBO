@@ -8,9 +8,9 @@ import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import static org.junit.Assert.assertEquals;
 
 public class ViewTest {
-    private Column column;
-    private Table table;
-    private View view;
+    private IColumn column;
+    private ITable table;
+    private IView view;
 
     @Before
     public void setUp() throws ColumnAlreadyExistsException {

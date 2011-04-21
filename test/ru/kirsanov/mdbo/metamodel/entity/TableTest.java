@@ -30,7 +30,7 @@ public class TableTest {
     @Test
     public void parentTest() {
         assertEquals(null, table.getParent());
-        Schema schema = new Schema("testSchema");
+        ISchema schema = new Schema("testSchema");
         table = new Table(name, schema);
         assertEquals(schema, table.getParent());
     }
@@ -52,7 +52,7 @@ public class TableTest {
     @Test
     public void removeColumnTest() throws ColumnNotFoundException, ColumnAlreadyExistsException {
         DataType dataType = new SimpleDatatype("INTEGER");
-        Column column = table.createColumn("test", dataType);
+        IColumn column = table.createColumn("test", dataType);
         table.removeColumn(column);
         assertEquals(0, table.getColumns().size());
     }
@@ -60,7 +60,7 @@ public class TableTest {
     @Test(expected = ColumnNotFoundException.class)
     public void removeNotExistsColumnTest() throws ColumnNotFoundException, ColumnAlreadyExistsException {
         DataType dataType = new SimpleDatatype("INTEGER");
-        Column column = table.createColumn("test", dataType);
+        IColumn column = table.createColumn("test", dataType);
         table.removeColumn(column);
         table.removeColumn(column);
     }
@@ -103,7 +103,7 @@ public class TableTest {
     public void tupleTest() throws ColumnAlreadyExistsException, ColumnNotFoundException, ElementNotFoundException {
         DataType integerDataType = new SimpleDatatype("INTEGER");
         DataType varcharDataType = new SimpleDatatype("VARCHAR", 10);
-        Column idColumn = table.createColumn("id", integerDataType);
+        IColumn idColumn = table.createColumn("id", integerDataType);
         table.createPrimaryKey(idColumn);
         table.createColumn("name", varcharDataType);
         table.addTuple("1", "Alexandr");
@@ -114,7 +114,7 @@ public class TableTest {
     public void notFoundTupleTest() throws ColumnAlreadyExistsException, ColumnNotFoundException, ElementNotFoundException {
         DataType integerDataType = new SimpleDatatype("INTEGER");
         DataType varcharDataType = new SimpleDatatype("VARCHAR", 10);
-        Column idColumn = table.createColumn("id", integerDataType);
+        IColumn idColumn = table.createColumn("id", integerDataType);
         table.createPrimaryKey(idColumn);
         table.createColumn("name", varcharDataType);
         table.addTuple("1", "Alexandr");
@@ -126,14 +126,14 @@ public class TableTest {
     public void removeNotExistsTupleTest() throws ColumnAlreadyExistsException, ColumnNotFoundException, ElementNotFoundException {
         DataType integerDataType = new SimpleDatatype("INTEGER");
         DataType varcharDataType = new SimpleDatatype("VARCHAR", 10);
-        Column idColumn = table.createColumn("id", integerDataType);
+        IColumn idColumn = table.createColumn("id", integerDataType);
         table.createPrimaryKey(idColumn);
         table.removeTuple(0);
     }
 
     @Test
     public void containerTest() {
-        Schema schema = new Schema("test");
+        ISchema schema = new Schema("test");
         table.setContainer(schema);
         assertEquals(schema, table.getParent());
     }

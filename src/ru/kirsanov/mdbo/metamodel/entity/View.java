@@ -6,30 +6,34 @@ import ru.kirsanov.mdbo.metamodel.constraint.EntityConstraint;
 import java.util.ArrayList;
 import java.util.List;
 
-public class View extends MetaObject {
-    private List<Column> columns;
+public class View extends MetaObject implements IView {
+    private List<IColumn> columns;
     private List<EntityConstraint> constraints;
 
     public View(final String name) {
         super(name);
         constraints = new ArrayList<EntityConstraint>();
-        columns = new ArrayList<Column>();
+        columns = new ArrayList<IColumn>();
     }
 
-    public void addColumn(Column column) {
+    @Override
+    public void addColumn(IColumn column) {
         this.columns.add(column);
     }
 
-    public List<Column> getColumns() {
+    @Override
+    public List<IColumn> getColumns() {
         return this.columns;
     }
 
-    public Constraint createConstraint(Column column, String constraint) {
+    @Override
+    public Constraint createConstraint(IColumn column, String constraint) {
         EntityConstraint entityConstraint = new EntityConstraint(column, constraint);
         this.constraints.add(entityConstraint);
         return entityConstraint;
     }
 
+    @Override
     public List<EntityConstraint> getConstraints() {
         return this.constraints;
     }

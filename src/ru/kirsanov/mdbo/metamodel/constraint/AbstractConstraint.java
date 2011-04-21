@@ -1,24 +1,24 @@
 package ru.kirsanov.mdbo.metamodel.constraint;
 
-import ru.kirsanov.mdbo.metamodel.entity.Column;
-import ru.kirsanov.mdbo.metamodel.entity.Table;
+import ru.kirsanov.mdbo.metamodel.entity.IColumn;
+import ru.kirsanov.mdbo.metamodel.entity.ITable;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractConstraint implements Constraint {
-    private Table table;
+    private ITable table;
     private String name;
-    private List<Column> columns;
+    private List<IColumn> columns;
 
-    public AbstractConstraint(Table table, String name) {
+    public AbstractConstraint(ITable table, String name) {
         this.table = table;
         this.name = name;
-        columns = new ArrayList<Column>();
+        columns = new ArrayList<IColumn>();
     }
 
-    public Table getTable() {
+    public ITable getTable() {
         return table;
     }
 
@@ -26,11 +26,11 @@ public abstract class AbstractConstraint implements Constraint {
         return name;
     }
 
-    public List<Column> getColumns() {
+    public List<IColumn> getColumns() {
         return columns;
     }
 
-    public void addColumn(final Column column) throws ColumnNotFoundException {
+    public void addColumn(final IColumn column) throws ColumnNotFoundException {
 
         if (!column.getTable().equals(getTable())) {
             throw new ColumnNotFoundException();

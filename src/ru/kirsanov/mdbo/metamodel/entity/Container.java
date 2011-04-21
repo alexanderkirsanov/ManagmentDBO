@@ -11,4 +11,6 @@ public interface Container {
     Container getParent();
 
     void setContainer(Container container);
+
+    public String getName();
 }

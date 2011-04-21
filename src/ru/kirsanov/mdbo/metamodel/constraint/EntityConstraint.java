@@ -1,12 +1,12 @@
 package ru.kirsanov.mdbo.metamodel.constraint;
 
-import ru.kirsanov.mdbo.metamodel.entity.Column;
+import ru.kirsanov.mdbo.metamodel.entity.IColumn;
 
 public class EntityConstraint extends AbstractConstraint {
     private String constraintString;
-    private Column column;
+    private IColumn column;
 
-    public EntityConstraint(Column column, String constraintString) {
+    public EntityConstraint(IColumn column, String constraintString) {
         super(column.getTable(), null);
         this.column = column;
         this.constraintString = constraintString;

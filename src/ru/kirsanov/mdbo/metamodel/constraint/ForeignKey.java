@@ -1,8 +1,8 @@
 package ru.kirsanov.mdbo.metamodel.constraint;
 
 
-import ru.kirsanov.mdbo.metamodel.entity.Column;
-import ru.kirsanov.mdbo.metamodel.entity.Table;
+import ru.kirsanov.mdbo.metamodel.entity.IColumn;
+import ru.kirsanov.mdbo.metamodel.entity.ITable;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 
 import java.util.ArrayList;
@@ -10,33 +10,33 @@ import java.util.List;
 
 public class ForeignKey extends AbstractConstraint implements Constraint {
 
-    private final Table targetTable;
-    private List<Column> targetColumns;
+    private final ITable targetTable;
+    private List<IColumn> targetColumns;
     private ReferentialAction deleteRule = ReferentialAction.NO_ACTION;
     private ReferentialAction updateRule = ReferentialAction.NO_ACTION;
 
-    public ForeignKey(Table sourceTable, Table targetTable, String name) {
+    public ForeignKey(ITable sourceTable, ITable targetTable, String name) {
         super(sourceTable, name);
         this.targetTable = targetTable;
     }
 
-    protected ForeignKey(Table sourceTable, Table targetTable) {
+    protected ForeignKey(ITable sourceTable, ITable targetTable) {
         this(sourceTable, targetTable, null);
     }
 
-    public Table getSourceTable() {
+    public ITable getSourceTable() {
         return getTable();
     }
 
-    public Table getTargetTable() {
+    public ITable getTargetTable() {
         return targetTable;
     }
 
-    public List<Column> getSourceColumns() {
+    public List<IColumn> getSourceColumns() {
         return getColumns();
     }
 
-    public List<Column> getTargetColumns() {
+    public List<IColumn> getTargetColumns() {
         return targetColumns == null
                 ? getTargetTable().getPrimaryKey().getColumns()
                 : targetColumns;
@@ -44,14 +44,14 @@ public class ForeignKey extends AbstractConstraint implements Constraint {
 
     @Override
     @Deprecated
-    public void addColumn(Column column) throws ColumnNotFoundException {
+    public void addColumn(IColumn column) throws ColumnNotFoundException {
         addColumnMapping(column, null);
     }
 
-    public void addColumnMapping(Column sourceColumn, Column targetColumn) throws ColumnNotFoundException {
+    public void addColumnMapping(IColumn sourceColumn, IColumn targetColumn) throws ColumnNotFoundException {
         if (getSourceTable().getColumns().contains(sourceColumn) && getTargetTable().getColumns().contains(targetColumn)) {
             if (targetColumns == null) {
-                targetColumns = new ArrayList<Column>();
+                targetColumns = new ArrayList<IColumn>();
             }
             targetColumns.add(targetColumn);
             super.addColumn(sourceColumn);

@@ -3,24 +3,27 @@ package ru.kirsanov.mdbo.metamodel.entity;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Schema extends MetaObject implements Container {
-    private List<Table> tables;
+public class Schema extends MetaObject implements ISchema {
+    private List<ITable> tables;
     private Container container;
 
     public Schema(final String name) {
         super(name);
-        tables = new LinkedList<Table>();
+        tables = new LinkedList<ITable>();
     }
 
-    public void addTable(Table table) {
+    @Override
+    public void addTable(ITable table) {
         this.tables.add(table);
     }
 
-    public void removeTable(Table table) {
+    @Override
+    public void removeTable(ITable table) {
         this.tables.remove(table);
     }
 
-    public List<Table> getTables() {
+    @Override
+    public List<ITable> getTables() {
         return this.tables;
     }
 

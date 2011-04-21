@@ -3,7 +3,8 @@ package ru.kirsanov.mdbo.metamodel.constraint;
 import org.junit.Before;
 import org.junit.Test;
 import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
-import ru.kirsanov.mdbo.metamodel.entity.Column;
+import ru.kirsanov.mdbo.metamodel.entity.IColumn;
+import ru.kirsanov.mdbo.metamodel.entity.ITable;
 import ru.kirsanov.mdbo.metamodel.entity.Table;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
@@ -11,10 +12,10 @@ import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 import static org.junit.Assert.assertEquals;
 
 public class ForeignKeyTest {
-    private Table sourceTable;
-    private Table targetTable;
-    private Column sourceColumn;
-    private Column targetColumn;
+    private ITable sourceTable;
+    private ITable targetTable;
+    private IColumn sourceColumn;
+    private IColumn targetColumn;
     private ForeignKey foreignKey;
 
     @Before
@@ -39,13 +40,13 @@ public class ForeignKeyTest {
 
     @Test
     public void getSourceColumnsTest() throws Exception, ColumnNotFoundException {
-        foreignKey.addColumnMapping(sourceColumn,targetColumn);
+        foreignKey.addColumnMapping(sourceColumn, targetColumn);
         assertEquals(sourceColumn, foreignKey.getSourceColumns().get(0));
     }
 
        @Test
     public void getTargetColumnsTest() throws Exception, ColumnNotFoundException {
-            foreignKey.addColumnMapping(sourceColumn,targetColumn);
+            foreignKey.addColumnMapping(sourceColumn, targetColumn);
         assertEquals(targetColumn, foreignKey.getTargetColumns().get(0));
     }
 

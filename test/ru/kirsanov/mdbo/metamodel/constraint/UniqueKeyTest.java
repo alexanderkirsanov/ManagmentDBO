@@ -3,7 +3,8 @@ package ru.kirsanov.mdbo.metamodel.constraint;
 import org.junit.Before;
 import org.junit.Test;
 import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
-import ru.kirsanov.mdbo.metamodel.entity.Column;
+import ru.kirsanov.mdbo.metamodel.entity.IColumn;
+import ru.kirsanov.mdbo.metamodel.entity.ITable;
 import ru.kirsanov.mdbo.metamodel.entity.Table;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
@@ -11,8 +12,8 @@ import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 import static org.junit.Assert.assertEquals;
 
 public class UniqueKeyTest{
-    private Table table;
-    private Column column;
+    private ITable table;
+    private IColumn column;
     private String uniqueKeyName;
     private UniqueKey uniqueKey;
 
