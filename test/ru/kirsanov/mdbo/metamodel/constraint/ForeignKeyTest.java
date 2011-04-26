@@ -44,9 +44,9 @@ public class ForeignKeyTest {
         assertEquals(sourceColumn, foreignKey.getSourceColumns().get(0));
     }
 
-       @Test
+    @Test
     public void getTargetColumnsTest() throws Exception, ColumnNotFoundException {
-            foreignKey.addColumnMapping(sourceColumn, targetColumn);
+        foreignKey.addColumnMapping(sourceColumn, targetColumn);
         assertEquals(targetColumn, foreignKey.getTargetColumns().get(0));
     }
 

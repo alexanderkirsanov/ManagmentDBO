@@ -23,9 +23,10 @@ public class ColumnTest {
     }
 
     @Test
-    public void parentTest(){
+    public void parentTest() {
         assertEquals(table, column.getParent());
     }
+
     @Test
     public void dataTypeTest() throws Exception {
         assertEquals(integer, column.getDataType());
@@ -35,7 +36,7 @@ public class ColumnTest {
     }
 
     @Test
-    public void addCorrectVariableTest() throws Exception{
+    public void addCorrectVariableTest() throws Exception {
         String str = new String("test");
         column.addVariable(str);
         assertEquals(str, column.getVariable(0));
@@ -58,7 +59,7 @@ public class ColumnTest {
     }
 
     @Test(expected = ElementNotFoundException.class)
-    public void incorrectChangeVariableTest() throws Exception{
+    public void incorrectChangeVariableTest() throws Exception {
         String str = new String("test");
         column.addVariable(str);
         String newStr = new String("test2");

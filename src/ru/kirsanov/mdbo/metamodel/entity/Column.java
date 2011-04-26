@@ -129,13 +129,12 @@ public class Column extends MetaObject implements IColumn {
 
     @Override
     public int hashCode() {
-        int result = container != null ? container.hashCode() : 0;
+        int result = 0;
         result = 31 * result + (dataType != null ? dataType.hashCode() : 0);
         result = 31 * result + (variableList != null ? variableList.hashCode() : 0);
         result = 31 * result + (nullable ? 1 : 0);
         result = 31 * result + (unique ? 1 : 0);
         result = 31 * result + (defaultValue != null ? defaultValue.hashCode() : 0);
-        result = 31 * result + (table != null ? table.hashCode() : 0);
         return result;
     }
 }

@@ -11,7 +11,7 @@ import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 
 import static org.junit.Assert.assertEquals;
 
-public class UniqueKeyTest{
+public class UniqueKeyTest {
     private ITable table;
     private IColumn column;
     private String uniqueKeyName;

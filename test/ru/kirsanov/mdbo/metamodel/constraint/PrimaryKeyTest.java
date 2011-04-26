@@ -31,7 +31,7 @@ public class PrimaryKeyTest {
     }
 
     @Test
-    public void columnTest() throws ColumnNotFoundException{
+    public void columnTest() throws ColumnNotFoundException {
         pk.addColumn(column);
         assertEquals(column, pk.getColumns().get(0));
     }
