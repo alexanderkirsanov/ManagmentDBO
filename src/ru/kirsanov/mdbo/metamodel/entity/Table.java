@@ -140,7 +140,7 @@ public class Table extends MetaObject implements ITable {
         Table table = (Table) o;
 
         if (columns != null ? !columns.equals(table.columns) : table.columns != null) return false;
-        if (container != null ? !container.equals(table.container) : table.container != null) return false;
+        if (container != null ? !container.getName().equals(table.container.getName()) : table.container != null) return false;
         if (primaryKey != null ? !primaryKey.equals(table.primaryKey) : table.primaryKey != null) return false;
         if (uniqueKey != null ? !uniqueKey.equals(table.uniqueKey) : table.uniqueKey != null) return false;
 

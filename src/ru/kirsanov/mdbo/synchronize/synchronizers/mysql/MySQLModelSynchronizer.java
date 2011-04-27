@@ -51,7 +51,7 @@ public class MySQLModelSynchronizer implements IModelSynchronizer {
             String columnDefault = resultSetOfTable.getString("COLUMN_DEFAULT");
             DataType dataType = createDataType(columnType, dataTypeName);
             IColumn column = table.createColumn(columnName, dataType);
-            if (isNullable.equals("false")) {
+            if (isNullable.equals("no")) {
                 column.setNullable(false);
             } else {
                 column.setNullable(true);
@@ -70,14 +70,14 @@ public class MySQLModelSynchronizer implements IModelSynchronizer {
         return model;
     }
 
-    private DataType createDataType(String columnType, String dataTypeName) {
+    public DataType createDataType(String columnType, String dataTypeName) {
         DataType dataType;
         StringBuffer sb = new StringBuffer(columnType);
         if (sb.indexOf("(") != -1) {
-            int precisionEnd = (sb.indexOf(",") != -1) ? (sb.indexOf(",") - 1) : (sb.indexOf(")") - 1);
-            int precision = Integer.valueOf(sb.substring(sb.indexOf("(") + 1, precisionEnd));
+            int precisionEnd = (sb.indexOf(",") != -1) ? (sb.indexOf(",") ) : (sb.indexOf(")"));
+            int precision = Integer.valueOf(sb.substring(sb.indexOf("(") +1, precisionEnd));
             if (sb.indexOf(",") != -1) {
-                int scale = Integer.valueOf(sb.substring(sb.indexOf(",") + 1, sb.indexOf(")") - 1));
+                int scale = Integer.valueOf(sb.substring(sb.indexOf(",") + 1, sb.indexOf(")") ));
                 dataType = new SimpleDatatype(dataTypeName, precision, scale);
             } else {
                 dataType = new SimpleDatatype(dataTypeName, precision);

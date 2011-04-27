@@ -2,6 +2,7 @@ package ru.kirsanov.mdbo.synchronize;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
 import ru.kirsanov.mdbo.metamodel.entity.*;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
@@ -26,25 +27,25 @@ public class MySQLModelSynchronizerTest {
     public void setUp() throws ColumnAlreadyExistsException, ColumnNotFoundException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         testModel = new MysqlModel("testbase");
         ISchema schema = testModel.createSchema("testbase");
-        Table testTable = new Table("test");
-        schema.addTable(testTable);
-        IColumn idColumn = testTable.createColumn("id", new SimpleDatatype("int", 11));
-        idColumn.setNullable(false);
-        IColumn numberColumn = testTable.createColumn("numbers", new SimpleDatatype("int", 11));
-        numberColumn.setNullable(true);
-        IColumn testColumn = testTable.createColumn("test", new SimpleDatatype("varchar", 30));
-        testColumn.setDefaultValue("test");
-        testColumn.setNullable(true);
-        IColumn testRealColumn = testTable.createColumn("test_real", new SimpleDatatype("double", 10, 10));
-        testRealColumn.setNullable(true);
-
         Table testFkTable = new Table("test_fk");
         schema.addTable(testFkTable);
         IColumn idFkColumn = testFkTable.createColumn("id", new SimpleDatatype("int", 11));
         idFkColumn.setNullable(false);
-        testFkTable.createPrimaryKey(idFkColumn);
+        // testFkTable.createPrimaryKey(idFkColumn);
         IColumn testId = testFkTable.createColumn("test_id", new SimpleDatatype("int", 11));
+        testId.setNullable(true);
+        Table testTable = new Table("test");
+        schema.addTable(testTable);
+        IColumn idColumn = testTable.createColumn("id", new SimpleDatatype("int", 11));
+        idColumn.setNullable(true);
+        IColumn numberColumn = testTable.createColumn("numbers", new SimpleDatatype("int", 11));
         numberColumn.setNullable(true);
+        IColumn testColumn = testTable.createColumn("test", new SimpleDatatype("varchar", 30));
+        testColumn.setDefaultValue("text");
+        testColumn.setNullable(true);
+        IColumn testRealColumn = testTable.createColumn("test_real", new SimpleDatatype("double", 10, 10));
+        testRealColumn.setNullable(true);
+
 
         cm = new ConnectionManger(new ConnectionData("localhost", "information_schema", "mysql", "lqip32", "4f3v6"));
         ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "testbase", "mysql", "lqip32", "4f3v6"));
@@ -71,10 +72,18 @@ public class MySQLModelSynchronizerTest {
     }
 
     @Test
+    public void createDataTypeTest() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        MySQLModelSynchronizer mySqlModel = new MySQLModelSynchronizer(cm.getConnection());
+        DataType dataType = mySqlModel.createDataType("integer(1,1)", "integer");
+        DataType integerType = new SimpleDatatype("integer", 1, 1);
+        assertEquals(integerType, dataType);
+    }
+
+    @Test
     public void synchronizeTest() throws SQLException, IncorrectDataBaseType, ConnectionNotSet, ColumnAlreadyExistsException, ColumnNotFoundException, ModelSynchronizerNotFound, ClassNotFoundException, InstantiationException, IllegalAccessException {
         Model model = new MysqlModel("testbase");
         MySQLModelSynchronizer mySqlModel = new MySQLModelSynchronizer(cm.getConnection());
         Model mysqlModel = mySqlModel.execute(model);
-        assertEquals(testModel, model);
+        assertEquals(testModel, mysqlModel);
     }
 }
