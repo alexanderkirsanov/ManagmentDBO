@@ -2,6 +2,7 @@ package ru.kirsanov.mdbo.synchronize;
 
 import ru.kirsanov.mdbo.metamodel.entity.Model;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 import ru.kirsanov.mdbo.synchronize.exception.ConnectionNotSet;
 import ru.kirsanov.mdbo.synchronize.exception.IncorrectDataBaseType;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;
@@ -19,7 +20,7 @@ public class Synchronizer implements ISynchronizer {
     }
 
     @Override
-    public Model synchronize(Model model) throws ModelSynchronizerNotFound, IncorrectDataBaseType, ConnectionNotSet, SQLException, ColumnAlreadyExistsException {
+    public Model synchronize(Model model) throws ModelSynchronizerNotFound, IncorrectDataBaseType, ConnectionNotSet, SQLException, ColumnAlreadyExistsException, ColumnNotFoundException {
         IModelSynchronizer modelSynchronizer = models.get(model);
         return modelSynchronizer.execute(model);
     }

@@ -4,6 +4,7 @@ import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
 import ru.kirsanov.mdbo.metamodel.entity.*;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 import ru.kirsanov.mdbo.synchronize.exception.ConnectionNotSet;
 import ru.kirsanov.mdbo.synchronize.exception.IncorrectDataBaseType;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;
@@ -19,6 +20,13 @@ import java.util.Map;
 import java.util.Set;
 
 public class MySQLModelSynchronizer implements IModelSynchronizer {
+    private static final String TABLE__NAME = "TABLE_NAME";
+    private static final String COLUMN_NAME = "COLUMN_NAME";
+    private static final String IS_NULLABLE = "IS_NULLABLE";
+    private static final String COLUMN_TYPE = "COLUMN_TYPE";
+    private static final String DATA_TYPE = "DATA_TYPE";
+    private static final String COLUMN_DEFAULT = "COLUMN_DEFAULT";
+    private static final String COLUMN_KEY = "COLUMN_KEY";
     private Connection connection;
 
     public MySQLModelSynchronizer(Connection connection) {
@@ -26,7 +34,7 @@ public class MySQLModelSynchronizer implements IModelSynchronizer {
     }
 
     @Override
-    public Model execute(final Model model) throws IncorrectDataBaseType, ConnectionNotSet, SQLException, ModelSynchronizerNotFound, ColumnAlreadyExistsException {
+    public Model execute(final Model model) throws IncorrectDataBaseType, ConnectionNotSet, SQLException, ModelSynchronizerNotFound, ColumnAlreadyExistsException, ColumnNotFoundException {
         if (!(model instanceof MysqlModel)) throw new ModelSynchronizerNotFound();
         PreparedStatement selectInformationFromSysTable = connection
                 .prepareStatement("SELECT * FROM columns WHERE Table_Schema = ?");
@@ -36,7 +44,7 @@ public class MySQLModelSynchronizer implements IModelSynchronizer {
         ResultSet resultSetOfTable = selectInformationFromSysTable.executeQuery();
         Map<String, ITable> tables = new HashMap<String, ITable>();
         while (resultSetOfTable.next()) {
-            String tableName = resultSetOfTable.getString("TABLE_NAME");
+            String tableName = resultSetOfTable.getString(TABLE__NAME);
             ITable table = null;
             if (tables.containsKey(tableName)) {
                 table = tables.get(tableName);
@@ -44,11 +52,12 @@ public class MySQLModelSynchronizer implements IModelSynchronizer {
                 table = new Table(tableName);
                 tables.put(tableName, table);
             }
-            String columnName = resultSetOfTable.getString("COLUMN_NAME").toLowerCase();
-            String isNullable = resultSetOfTable.getString("IS_NULLABLE").toLowerCase();
-            String columnType = resultSetOfTable.getString("COLUMN_TYPE").toLowerCase();
-            String dataTypeName = resultSetOfTable.getString("DATA_TYPE").toLowerCase();
-            String columnDefault = resultSetOfTable.getString("COLUMN_DEFAULT");
+            String columnName = resultSetOfTable.getString(COLUMN_NAME).toLowerCase();
+            String isNullable = resultSetOfTable.getString(IS_NULLABLE).toLowerCase();
+            String columnType = resultSetOfTable.getString(COLUMN_TYPE).toLowerCase();
+            String dataTypeName = resultSetOfTable.getString(DATA_TYPE).toLowerCase();
+            String columnDefault = resultSetOfTable.getString(COLUMN_DEFAULT);
+            String isPrimari = resultSetOfTable.getString(COLUMN_KEY);
             DataType dataType = createDataType(columnType, dataTypeName);
             IColumn column = table.createColumn(columnName, dataType);
             if (isNullable.equals("no")) {
@@ -89,4 +98,7 @@ public class MySQLModelSynchronizer implements IModelSynchronizer {
     }
 
 
+    public Model synchronizePrimaryKey(Model model) {
+        return null;  //To change body of created methods use File | Settings | File Templates.
+    }
 }

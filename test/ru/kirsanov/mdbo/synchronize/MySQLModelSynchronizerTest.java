@@ -25,13 +25,18 @@ public class MySQLModelSynchronizerTest {
 
     @Before
     public void setUp() throws ColumnAlreadyExistsException, ColumnNotFoundException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        cm = new ConnectionManger(new ConnectionData("localhost", "information_schema", "mysql", "lqip32", "4f3v6"));
         testModel = new MysqlModel("testbase");
+    }
+
+    @Test
+    public void createDataTypeTest() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, ColumnAlreadyExistsException {
+
         ISchema schema = testModel.createSchema("testbase");
         Table testFkTable = new Table("test_fk");
         schema.addTable(testFkTable);
         IColumn idFkColumn = testFkTable.createColumn("id", new SimpleDatatype("int", 11));
         idFkColumn.setNullable(false);
-        // testFkTable.createPrimaryKey(idFkColumn);
         IColumn testId = testFkTable.createColumn("test_id", new SimpleDatatype("int", 11));
         testId.setNullable(true);
         Table testTable = new Table("test");
@@ -46,8 +51,6 @@ public class MySQLModelSynchronizerTest {
         IColumn testRealColumn = testTable.createColumn("test_real", new SimpleDatatype("double", 10, 10));
         testRealColumn.setNullable(true);
 
-
-        cm = new ConnectionManger(new ConnectionData("localhost", "information_schema", "mysql", "lqip32", "4f3v6"));
         ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "testbase", "mysql", "lqip32", "4f3v6"));
         Statement statement = conn.getConnection().createStatement();
         try {
@@ -69,10 +72,6 @@ public class MySQLModelSynchronizerTest {
         } finally {
             statement.close();
         }
-    }
-
-    @Test
-    public void createDataTypeTest() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         MySQLModelSynchronizer mySqlModel = new MySQLModelSynchronizer(cm.getConnection());
         DataType dataType = mySqlModel.createDataType("integer(1,1)", "integer");
         DataType integerType = new SimpleDatatype("integer", 1, 1);
@@ -86,4 +85,33 @@ public class MySQLModelSynchronizerTest {
         Model mysqlModel = mySqlModel.execute(model);
         assertEquals(testModel, mysqlModel);
     }
+
+    @Test
+    public void primaryKeyTest() throws SQLException, IncorrectDataBaseType, ConnectionNotSet, ColumnAlreadyExistsException, ColumnNotFoundException, ModelSynchronizerNotFound, ClassNotFoundException, InstantiationException, IllegalAccessException {
+        ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "testbase", "mysql", "lqip32", "4f3v6"));
+        Statement statement = conn.getConnection().createStatement();
+        statement
+                .executeUpdate("DROP TABLE IF EXISTS t1;");
+        statement.executeUpdate("CREATE TABLE t1\n" +
+                "(\n" +
+                "    s1 INT,\n" +
+                "    s2 INT,\n" +
+                "    s3 INT,\n" +
+                "    PRIMARY KEY(s3)\n" +
+                ") ENGINE=InnoDB;");
+        Model model = new MysqlModel("testbase");
+        ISchema schema = testModel.createSchema("testbase");
+        ITable table = new Table("t1");
+        schema.addTable(table);
+        DataType intDataType = new SimpleDatatype("INT", 11);
+        table.createColumn("s1", intDataType);
+        table.createColumn("s2", intDataType);
+        IColumn pColumn = table.createColumn("s3", intDataType);
+        table.createPrimaryKey(pColumn);
+        MySQLModelSynchronizer mySqlModel = new MySQLModelSynchronizer(cm.getConnection());
+        Model mysqlModel = mySqlModel.synchronizePrimaryKey(model);
+        assertEquals(testModel, mysqlModel);
+    }
+
+
 }

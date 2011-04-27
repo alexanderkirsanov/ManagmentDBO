@@ -2,6 +2,7 @@ package ru.kirsanov.mdbo.synchronize;
 
 import ru.kirsanov.mdbo.metamodel.entity.Model;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 import ru.kirsanov.mdbo.synchronize.exception.ConnectionNotSet;
 import ru.kirsanov.mdbo.synchronize.exception.IncorrectDataBaseType;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;
@@ -16,5 +17,5 @@ import java.sql.SQLException;
  * To change this template use File | Settings | File Templates.
  */
 public interface ISynchronizer {
-    Model synchronize(Model model) throws ModelSynchronizerNotFound, IncorrectDataBaseType, ConnectionNotSet, SQLException, ColumnAlreadyExistsException;
+    Model synchronize(Model model) throws ModelSynchronizerNotFound, IncorrectDataBaseType, ConnectionNotSet, SQLException, ColumnAlreadyExistsException, ColumnNotFoundException;
 }
