@@ -1,5 +1,7 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
+import ru.kirsanov.mdbo.synchronize.exception.TableNotFound;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,6 +27,16 @@ public class Schema extends MetaObject implements ISchema {
     @Override
     public List<ITable> getTables() {
         return this.tables;
+    }
+
+    @Override
+    public ITable getTable(String str) throws TableNotFound {
+        for (ITable table : tables) {
+            if (table.getName().equals(str)) {
+                return table;
+            }
+        }
+        throw new TableNotFound();
     }
 
     public Container getParent() {

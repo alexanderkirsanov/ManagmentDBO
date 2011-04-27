@@ -1,5 +1,7 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
+import ru.kirsanov.mdbo.synchronize.exception.TableNotFound;
+
 import java.util.List;
 
 /**
@@ -15,4 +17,6 @@ public interface ISchema extends Container {
     void removeTable(ITable table);
 
     List<ITable> getTables();
+
+    ITable getTable(String str) throws TableNotFound;
 }

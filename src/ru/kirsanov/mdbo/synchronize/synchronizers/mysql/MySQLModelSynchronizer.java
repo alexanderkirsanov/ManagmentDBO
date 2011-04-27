@@ -8,6 +8,7 @@ import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 import ru.kirsanov.mdbo.synchronize.exception.ConnectionNotSet;
 import ru.kirsanov.mdbo.synchronize.exception.IncorrectDataBaseType;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;
+import ru.kirsanov.mdbo.synchronize.exception.TableNotFound;
 import ru.kirsanov.mdbo.synchronize.synchronizers.IModelSynchronizer;
 
 import java.sql.Connection;
@@ -27,6 +28,7 @@ public class MySQLModelSynchronizer implements IModelSynchronizer {
     private static final String DATA_TYPE = "DATA_TYPE";
     private static final String COLUMN_DEFAULT = "COLUMN_DEFAULT";
     private static final String COLUMN_KEY = "COLUMN_KEY";
+    private static final String CONSTRAINT_NAME = "CONSTRAINT_NAME";
     private Connection connection;
 
     public MySQLModelSynchronizer(Connection connection) {
@@ -57,7 +59,6 @@ public class MySQLModelSynchronizer implements IModelSynchronizer {
             String columnType = resultSetOfTable.getString(COLUMN_TYPE).toLowerCase();
             String dataTypeName = resultSetOfTable.getString(DATA_TYPE).toLowerCase();
             String columnDefault = resultSetOfTable.getString(COLUMN_DEFAULT);
-            String isPrimari = resultSetOfTable.getString(COLUMN_KEY);
             DataType dataType = createDataType(columnType, dataTypeName);
             IColumn column = table.createColumn(columnName, dataType);
             if (isNullable.equals("no")) {
@@ -83,10 +84,10 @@ public class MySQLModelSynchronizer implements IModelSynchronizer {
         DataType dataType;
         StringBuffer sb = new StringBuffer(columnType);
         if (sb.indexOf("(") != -1) {
-            int precisionEnd = (sb.indexOf(",") != -1) ? (sb.indexOf(",") ) : (sb.indexOf(")"));
-            int precision = Integer.valueOf(sb.substring(sb.indexOf("(") +1, precisionEnd));
+            int precisionEnd = (sb.indexOf(",") != -1) ? (sb.indexOf(",")) : (sb.indexOf(")"));
+            int precision = Integer.valueOf(sb.substring(sb.indexOf("(") + 1, precisionEnd));
             if (sb.indexOf(",") != -1) {
-                int scale = Integer.valueOf(sb.substring(sb.indexOf(",") + 1, sb.indexOf(")") ));
+                int scale = Integer.valueOf(sb.substring(sb.indexOf(",") + 1, sb.indexOf(")")));
                 dataType = new SimpleDatatype(dataTypeName, precision, scale);
             } else {
                 dataType = new SimpleDatatype(dataTypeName, precision);
@@ -98,7 +99,23 @@ public class MySQLModelSynchronizer implements IModelSynchronizer {
     }
 
 
-    public Model synchronizePrimaryKey(Model model) {
-        return null;  //To change body of created methods use File | Settings | File Templates.
+    public Model synchronizePrimaryKey(Model model) throws SQLException, ModelSynchronizerNotFound, TableNotFound, ColumnNotFoundException {
+        if (!(model instanceof MysqlModel)) throw new ModelSynchronizerNotFound();
+        PreparedStatement selectInformationFromSysTable = connection
+                .prepareStatement("SELECT * FROM key_column_usage WHERE constraint_schema = ?");
+        selectInformationFromSysTable.setString(1, model.getName());
+        connection.setAutoCommit(false);
+        ResultSet resultSetOfConstraintTable = selectInformationFromSysTable.executeQuery();
+        while (resultSetOfConstraintTable.next()) {
+            String tableName = resultSetOfConstraintTable.getString(TABLE__NAME);
+            String columnName = resultSetOfConstraintTable.getString(COLUMN_NAME);
+            String constraintName = resultSetOfConstraintTable.getString(CONSTRAINT_NAME);
+            ITable table = model.getSchemas().get(0).getTable(tableName);
+            IColumn column = table.getColumn(columnName);
+            if (constraintName.toLowerCase().equals("primary")) {
+                table.createPrimaryKey(column);
+            }
+        }
+        return model;
     }
 }
