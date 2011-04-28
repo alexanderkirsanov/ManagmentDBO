@@ -1,6 +1,12 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
 import org.junit.Test;
+import ru.kirsanov.mdbo.metamodel.constraint.ForeignKey;
+import ru.kirsanov.mdbo.metamodel.datatype.DataType;
+import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
+import ru.kirsanov.mdbo.synchronize.exception.ForeignKeyNotFound;
 import ru.kirsanov.mdbo.synchronize.exception.TableNotFound;
 
 import static org.junit.Assert.assertEquals;
@@ -24,5 +30,21 @@ public class SchemaTest {
         ITable table = new Table(myTable);
         schema.addTable(table);
         assertEquals(table, schema.getTable(myTable));
+    }
+
+    @Test
+    public void foreignKeyTest() throws Exception, TableNotFound, ColumnAlreadyExistsException, ColumnNotFoundException, ForeignKeyNotFound {
+        ISchema schema = new Schema("mySchema");
+        myTable = "myTable";
+        ITable table = new Table(myTable);
+        String secondMyTable = "secondMyTable";
+        DataType dataType = new SimpleDatatype("int");
+        IColumn firstColumn = table.createColumn("fisrtColumn", dataType);
+        ITable secondTable = new Table(secondMyTable);
+        IColumn secondColumn = secondTable.createColumn("secondColumn", dataType);
+        String myForeignKey = "myForeignKey";
+        ForeignKey foreignKey = schema.createForeignKey(myForeignKey, table, secondTable);
+        foreignKey.addColumnMapping(firstColumn, secondColumn);
+        assertEquals(foreignKey, schema.getForeignKey(myForeignKey));
     }
 }

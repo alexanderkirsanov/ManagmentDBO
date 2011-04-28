@@ -1,5 +1,7 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
+import ru.kirsanov.mdbo.metamodel.constraint.ForeignKey;
+import ru.kirsanov.mdbo.synchronize.exception.ForeignKeyNotFound;
 import ru.kirsanov.mdbo.synchronize.exception.TableNotFound;
 
 import java.util.List;
@@ -18,5 +20,11 @@ public interface ISchema extends Container {
 
     List<ITable> getTables();
 
-    ITable getTable(String str) throws TableNotFound;
+    ITable getTable(String tableName) throws TableNotFound;
+
+    ForeignKey createForeignKey(String name, ITable sourceTable, ITable targetTable);
+
+    List<ForeignKey> getForeignKeys();
+    ForeignKey getForeignKey(String name) throws ForeignKeyNotFound;
+
 }

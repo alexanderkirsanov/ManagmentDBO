@@ -106,6 +106,41 @@ public class MySQLModelSynchronizerTest {
                     "    PRIMARY KEY(s3)\n" +
                     ") ENGINE=InnoDB;");
             Model model = new MysqlModel("testbase");
+            ISchema schema = testModel.createSchema("testbase");
+            ITable table = new Table("t1");
+            schema.addTable(table);
+            DataType intDataType = new SimpleDatatype("INT", 11);
+            IColumn s1Column =  table.createColumn("s1", intDataType);
+            s1Column.setNullable(true);
+            IColumn s2Column = table.createColumn("s2", intDataType);
+            s2Column.setNullable(true);
+            IColumn pColumn = table.createColumn("s3", intDataType);
+            table.createPrimaryKey(pColumn);
+            MySQLModelSynchronizer mySQLModelSynchronizer = new MySQLModelSynchronizer(cm.getConnection());
+            Model synchroinizeModel = mySQLModelSynchronizer.execute(model);
+            Model pkSynchronizeModel = mySQLModelSynchronizer.synchronizePrimaryKey(synchroinizeModel);
+            assertEquals(testModel, pkSynchronizeModel);
+        } finally {
+            statement.close();
+        }
+    }
+
+      @Test
+    public void foreignKeyTest() throws SQLException, IncorrectDataBaseType, ConnectionNotSet, ColumnAlreadyExistsException, ColumnNotFoundException, ModelSynchronizerNotFound, ClassNotFoundException, InstantiationException, IllegalAccessException, TableNotFound {
+        ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "testbase", "mysql", "lqip32", "4f3v6"));
+        Statement statement = null;
+        try {
+            statement = conn.getConnection().createStatement();
+            statement
+                    .executeUpdate("DROP TABLE IF EXISTS t1;");
+            statement.executeUpdate("CREATE TABLE t1\n" +
+                    "(\n" +
+                    "    s1 INT,\n" +
+                    "    s2 INT,\n" +
+                    "    s3 INT,\n" +
+                    "    PRIMARY KEY(s3)\n" +
+                    ") ENGINE=InnoDB;");
+            Model model = new MysqlModel("testbase");
 
             ISchema schema = testModel.createSchema("testbase");
             ITable table = new Table("t1");

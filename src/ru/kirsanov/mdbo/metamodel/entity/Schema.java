@@ -1,13 +1,17 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
+import ru.kirsanov.mdbo.metamodel.constraint.ForeignKey;
+import ru.kirsanov.mdbo.synchronize.exception.ForeignKeyNotFound;
 import ru.kirsanov.mdbo.synchronize.exception.TableNotFound;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
 public class Schema extends MetaObject implements ISchema {
     private List<ITable> tables;
     private Container container;
+    private ArrayList<ForeignKey> foreignKeys = new ArrayList<ForeignKey>();
 
     public Schema(final String name) {
         super(name);
@@ -37,6 +41,28 @@ public class Schema extends MetaObject implements ISchema {
             }
         }
         throw new TableNotFound();
+    }
+
+    @Override
+    public ForeignKey createForeignKey(String name, ITable sourceTable, ITable targetTable) {
+        ForeignKey foreignKey = new ForeignKey(sourceTable, targetTable, name);
+        foreignKeys.add(foreignKey);
+        return foreignKey;
+    }
+
+    @Override
+    public List<ForeignKey> getForeignKeys() {
+        return this.foreignKeys;
+    }
+
+    @Override
+    public ForeignKey getForeignKey(String name) throws ForeignKeyNotFound {
+        for (ForeignKey foreignKey : foreignKeys) {
+            if (foreignKey.getName().equals(name)) {
+                return foreignKey;
+            }
+        }
+        throw new ForeignKeyNotFound();
     }
 
     public Container getParent() {
