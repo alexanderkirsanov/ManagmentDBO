@@ -87,7 +87,7 @@ public class ForeignKey extends AbstractConstraint implements Constraint {
         if (deleteRule != that.deleteRule) return false;
         if (targetColumns != null ? !targetColumns.equals(that.targetColumns) : that.targetColumns != null)
             return false;
-        if (targetTable != null ? !targetTable.equals(that.targetTable) : that.targetTable != null) return false;
+        if (targetTable != null ? !targetTable.getName().equals(that.targetTable.getName()) : that.targetTable != null) return false;
         if (updateRule != that.updateRule) return false;
 
         return true;
@@ -95,7 +95,7 @@ public class ForeignKey extends AbstractConstraint implements Constraint {
 
     @Override
     public int hashCode() {
-        int result = targetTable != null ? targetTable.hashCode() : 0;
+        int result = targetTable != null ? targetTable.getName().hashCode() : 0;
         result = 31 * result + (targetColumns != null ? targetColumns.hashCode() : 0);
         result = 31 * result + (deleteRule != null ? deleteRule.hashCode() : 0);
         result = 31 * result + (updateRule != null ? updateRule.hashCode() : 0);

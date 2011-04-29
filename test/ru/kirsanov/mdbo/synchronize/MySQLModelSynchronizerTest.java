@@ -3,6 +3,7 @@ package ru.kirsanov.mdbo.synchronize;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import ru.kirsanov.mdbo.metamodel.constraint.ForeignKey;
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
 import ru.kirsanov.mdbo.metamodel.entity.*;
@@ -110,7 +111,7 @@ public class MySQLModelSynchronizerTest {
             ITable table = new Table("t1");
             schema.addTable(table);
             DataType intDataType = new SimpleDatatype("INT", 11);
-            IColumn s1Column =  table.createColumn("s1", intDataType);
+            IColumn s1Column = table.createColumn("s1", intDataType);
             s1Column.setNullable(true);
             IColumn s2Column = table.createColumn("s2", intDataType);
             s2Column.setNullable(true);
@@ -125,37 +126,49 @@ public class MySQLModelSynchronizerTest {
         }
     }
 
-      @Test
+    @Test
     public void foreignKeyTest() throws SQLException, IncorrectDataBaseType, ConnectionNotSet, ColumnAlreadyExistsException, ColumnNotFoundException, ModelSynchronizerNotFound, ClassNotFoundException, InstantiationException, IllegalAccessException, TableNotFound {
+
         ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "testbase", "mysql", "lqip32", "4f3v6"));
         Statement statement = null;
         try {
             statement = conn.getConnection().createStatement();
             statement
-                    .executeUpdate("DROP TABLE IF EXISTS t1;");
-            statement.executeUpdate("CREATE TABLE t1\n" +
-                    "(\n" +
-                    "    s1 INT,\n" +
-                    "    s2 INT,\n" +
-                    "    s3 INT,\n" +
-                    "    PRIMARY KEY(s3)\n" +
-                    ") ENGINE=InnoDB;");
-            Model model = new MysqlModel("testbase");
+                    .executeUpdate("DROP TABLE IF EXISTS childs;");
 
+            statement
+                    .executeUpdate("DROP TABLE IF EXISTS parents;");
+            statement
+                    .executeUpdate("CREATE TABLE parents (id INT NOT NULL,\n" +
+                            "                     PRIMARY KEY (id)\n" +
+                            ") ENGINE=INNODB;\n");
+            statement
+                    .executeUpdate("CREATE TABLE childs (id INT, parent_id INT,\n" +
+                            "                    FOREIGN KEY (parent_id) REFERENCES parents(id)\n" +
+                            "                      ON DELETE CASCADE\n" +
+                            ") ENGINE=INNODB;");
+            Model model = new MysqlModel("testbase");
             ISchema schema = testModel.createSchema("testbase");
-            ITable table = new Table("t1");
-            schema.addTable(table);
+            ITable parentsTable = new Table("parents");
+            schema.addTable(parentsTable);
             DataType intDataType = new SimpleDatatype("INT", 11);
-            IColumn s1Column =  table.createColumn("s1", intDataType);
-            s1Column.setNullable(true);
-            IColumn s2Column = table.createColumn("s2", intDataType);
-            s2Column.setNullable(true);
-            IColumn pColumn = table.createColumn("s3", intDataType);
-            table.createPrimaryKey(pColumn);
+            IColumn parentsIdColumn = parentsTable.createColumn("id", intDataType);
+            parentsIdColumn.setNullable(false);
+            parentsTable.createPrimaryKey(parentsIdColumn);
+            ITable childsTable = new Table("childs");
+            schema.addTable(childsTable);
+            IColumn childsIdColumn = childsTable.createColumn("id", intDataType);
+            childsIdColumn.setNullable(true);
+            IColumn childsParentIdColumn = childsTable.createColumn("parent_id", intDataType);
+            childsParentIdColumn.setNullable(true);
+
             MySQLModelSynchronizer mySQLModelSynchronizer = new MySQLModelSynchronizer(cm.getConnection());
             Model synchroinizeModel = mySQLModelSynchronizer.execute(model);
             Model pkSynchronizeModel = mySQLModelSynchronizer.synchronizePrimaryKey(synchroinizeModel);
-            assertEquals(testModel, pkSynchronizeModel);
+            Model fkSynchronizeModel = mySQLModelSynchronizer.synchronizeForeignKey(pkSynchronizeModel);
+             ForeignKey fk = schema.createForeignKey("childs_ibfk_1", childsTable, parentsTable);
+            fk.addColumnMapping(childsParentIdColumn, parentsIdColumn);
+            assertEquals(testModel, fkSynchronizeModel);
         } finally {
             statement.close();
         }
@@ -163,7 +176,8 @@ public class MySQLModelSynchronizerTest {
     }
 
     @After
-    public void tearDown() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    public void tearDown
+            () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "testbase", "mysql", "lqip32", "4f3v6"));
         Statement statement = conn.getConnection().createStatement();
         statement.executeUpdate("DROP TABLE IF EXISTS t1;");
@@ -171,6 +185,10 @@ public class MySQLModelSynchronizerTest {
                 .executeUpdate("DROP TABLE IF EXISTS test;");
         statement
                 .executeUpdate("DROP TABLE IF EXISTS test_fk;");
+        statement
+                .executeUpdate("DROP TABLE IF EXISTS childs;");
+        statement
+                .executeUpdate("DROP TABLE IF EXISTS parents;");
         statement.close();
     }
 
