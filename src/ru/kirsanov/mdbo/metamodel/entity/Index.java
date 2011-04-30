@@ -60,7 +60,7 @@ public class Index extends MetaObject implements IIndex {
         if (type != index.type) return false;
         if (column != null ? !column.equals(index.column) : index.column != null) return false;
         if (constraint != null ? !constraint.equals(index.constraint) : index.constraint != null) return false;
-        if (table != null ? !table.equals(index.table) : index.table != null) return false;
+        if (table != null ? !table.getName().equals(index.table.getName()) : index.table != null) return false;
 
         return true;
     }

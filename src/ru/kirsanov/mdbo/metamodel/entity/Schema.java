@@ -2,6 +2,7 @@ package ru.kirsanov.mdbo.metamodel.entity;
 
 import ru.kirsanov.mdbo.metamodel.constraint.ForeignKey;
 import ru.kirsanov.mdbo.metamodel.exception.ForeignKeyNotFound;
+import ru.kirsanov.mdbo.metamodel.exception.IndexNotFoundException;
 import ru.kirsanov.mdbo.metamodel.exception.TableNotFound;
 import ru.kirsanov.mdbo.metamodel.exception.ViewNotFound;
 
@@ -14,6 +15,7 @@ public class Schema extends MetaObject implements ISchema {
     private Container container;
     private ArrayList<ForeignKey> foreignKeys = new ArrayList<ForeignKey>();
     private ArrayList<IView> views = new ArrayList<IView>();
+    private List<IIndex> indexes = new ArrayList<IIndex>();
 
     public Schema(final String name) {
         super(name);
@@ -87,6 +89,28 @@ public class Schema extends MetaObject implements ISchema {
     @Override
     public List<IView> getViews() {
         return views;
+    }
+
+    @Override
+    public IIndex createIndex(String name, IColumn column, int count) {
+        IIndex index = new Index(name, column, count);
+        indexes.add(index);
+        return index;
+    }
+
+    @Override
+    public IIndex getIndex(String name) throws IndexNotFoundException {
+        for (IIndex index : indexes) {
+            if (index.getName().equals(name)) {
+                return index;
+            }
+        }
+        throw  new IndexNotFoundException();
+    }
+
+    @Override
+    public List<IIndex> getIndexes() {
+        return indexes;
     }
 
     public Container getParent() {

@@ -1,6 +1,7 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
 import ru.kirsanov.mdbo.metamodel.constraint.ForeignKey;
+import ru.kirsanov.mdbo.metamodel.exception.IndexNotFoundException;
 import ru.kirsanov.mdbo.metamodel.exception.TableNotFound;
 import ru.kirsanov.mdbo.metamodel.exception.ViewNotFound;
 import ru.kirsanov.mdbo.metamodel.exception.ForeignKeyNotFound;
@@ -34,4 +35,10 @@ public interface ISchema extends Container {
     IView getView(String name) throws ViewNotFound;
 
     List<IView> getViews();
+
+    IIndex createIndex(String name, IColumn column, int count);
+
+    IIndex getIndex(String name) throws IndexNotFoundException;
+
+    List<IIndex> getIndexes();
 }
