@@ -2,34 +2,35 @@ package ru.kirsanov.mdbo.metamodel.entity;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
-import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ViewTest {
-    private IColumn column;
-    private ITable table;
     private IView view;
+    private String definition;
 
     @Before
-    public void setUp() throws ColumnAlreadyExistsException {
-        view = new View("MyView");
-        table = new Table("MyTable");
-        column = table.createColumn("myColumn", new SimpleDatatype("VARCHAR", 60));
-
+    public void setUp() {
+        definition = "select testbase.t.s1 AS s1,testbase.t.s2 AS s2,testbase.t2.s3 AS s3,testbase.t2.s4 AS s4 from testbase.t join testbase.t2 where (testbase.t.s1 = testbase.t.s2)";
+        view = new View("MyView", definition);
     }
 
     @Test
-    public void columnsTest() throws Exception {
-        view.addColumn(column);
-        assertEquals(column, view.getColumns().get(0));
+    public void definitionTest() throws Exception {
+        assertEquals(definition, view.getDefinition());
     }
 
     @Test
-    public void constraintsTest() throws Exception {
-        view.addColumn(column);
-        view.createConstraint(column, ">0");
-        assertEquals(">0", view.getConstraints().get(0).getConstraintString());
+    public void updatableTest() throws Exception {
+        view.setUpdatable(true);
+        assertTrue(view.isUpdatable());
+    }
+
+    @Test
+    public void checkOptionTest() throws Exception {
+        String checkOption = "INSERT";
+        view.setCheckOption(checkOption);
+        assertEquals(checkOption, view.getCheckOption());
     }
 }

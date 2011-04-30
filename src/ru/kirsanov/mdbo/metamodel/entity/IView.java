@@ -1,10 +1,5 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
-import ru.kirsanov.mdbo.metamodel.constraint.Constraint;
-import ru.kirsanov.mdbo.metamodel.constraint.EntityConstraint;
-
-import java.util.List;
-
 /**
  * Created by IntelliJ IDEA.
  * User: lqip32
@@ -12,12 +7,13 @@ import java.util.List;
  * Time: 16:33
  * To change this template use File | Settings | File Templates.
  */
-public interface IView {
-    void addColumn(IColumn column);
+public interface IView extends Container{
+    String getDefinition();
 
-    List<IColumn> getColumns();
+    String getCheckOption();
+    void setCheckOption(String str);
 
-    Constraint createConstraint(IColumn column, String constraint);
+    boolean isUpdatable();
+    void setUpdatable(boolean value);
 
-    List<EntityConstraint> getConstraints();
 }

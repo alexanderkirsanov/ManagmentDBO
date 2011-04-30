@@ -1,4 +1,4 @@
-package ru.kirsanov.mdbo.synchronize.exception;
+package ru.kirsanov.mdbo.metamodel.exception;
 
 public class TableNotFound extends Throwable {
 }

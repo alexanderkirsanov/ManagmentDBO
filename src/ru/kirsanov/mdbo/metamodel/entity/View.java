@@ -1,42 +1,50 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
-import ru.kirsanov.mdbo.metamodel.constraint.Constraint;
-import ru.kirsanov.mdbo.metamodel.constraint.EntityConstraint;
-
-import java.util.ArrayList;
-import java.util.List;
-
 public class View extends MetaObject implements IView {
-    private List<IColumn> columns;
-    private List<EntityConstraint> constraints;
 
-    public View(final String name) {
+    private String definition;
+    private String checkOption = "none";
+    private boolean updatable;
+    private Container parent;
+
+    public View(final String name, final String definition) {
         super(name);
-        constraints = new ArrayList<EntityConstraint>();
-        columns = new ArrayList<IColumn>();
+        this.definition = definition;
+    }
+
+
+    @Override
+    public String getDefinition() {
+        return this.definition;
     }
 
     @Override
-    public void addColumn(IColumn column) {
-        this.columns.add(column);
+    public String getCheckOption() {
+        return this.checkOption;
     }
 
     @Override
-    public List<IColumn> getColumns() {
-        return this.columns;
+    public void setCheckOption(String checkOption) {
+        this.checkOption = checkOption;
     }
 
     @Override
-    public Constraint createConstraint(IColumn column, String constraint) {
-        EntityConstraint entityConstraint = new EntityConstraint(column, constraint);
-        this.constraints.add(entityConstraint);
-        return entityConstraint;
+    public boolean isUpdatable() {
+        return this.updatable;
     }
 
     @Override
-    public List<EntityConstraint> getConstraints() {
-        return this.constraints;
+    public void setUpdatable(boolean value) {
+        this.updatable = value;
     }
 
+    @Override
+    public Container getParent() {
+        return parent;
+    }
 
+    @Override
+    public void setContainer(Container container) {
+        this.parent = container;
+    }
 }

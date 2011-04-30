@@ -1,8 +1,9 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
 import ru.kirsanov.mdbo.metamodel.constraint.ForeignKey;
-import ru.kirsanov.mdbo.synchronize.exception.ForeignKeyNotFound;
-import ru.kirsanov.mdbo.synchronize.exception.TableNotFound;
+import ru.kirsanov.mdbo.metamodel.exception.ForeignKeyNotFound;
+import ru.kirsanov.mdbo.metamodel.exception.TableNotFound;
+import ru.kirsanov.mdbo.metamodel.exception.ViewNotFound;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -12,6 +13,7 @@ public class Schema extends MetaObject implements ISchema {
     private List<ITable> tables;
     private Container container;
     private ArrayList<ForeignKey> foreignKeys = new ArrayList<ForeignKey>();
+    private ArrayList<IView> views = new ArrayList<IView>();
 
     public Schema(final String name) {
         super(name);
@@ -63,6 +65,28 @@ public class Schema extends MetaObject implements ISchema {
             }
         }
         throw new ForeignKeyNotFound();
+    }
+
+    @Override
+    public IView createView(String name, String defenition) {
+        IView view = new View(name, defenition);
+        views.add(view);
+        return view;
+    }
+
+    @Override
+    public IView getView(String name) throws ViewNotFound {
+        for (IView view : views) {
+            if (view.getName().equals(name)) {
+                return view;
+            }
+        }
+        throw new ViewNotFound();
+    }
+
+    @Override
+    public List<IView> getViews() {
+        return views;
     }
 
     public Container getParent() {

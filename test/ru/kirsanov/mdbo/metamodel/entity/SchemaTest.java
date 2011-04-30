@@ -6,8 +6,8 @@ import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
-import ru.kirsanov.mdbo.synchronize.exception.ForeignKeyNotFound;
-import ru.kirsanov.mdbo.synchronize.exception.TableNotFound;
+import ru.kirsanov.mdbo.metamodel.exception.ForeignKeyNotFound;
+import ru.kirsanov.mdbo.metamodel.exception.TableNotFound;
 
 import static org.junit.Assert.assertEquals;
 
