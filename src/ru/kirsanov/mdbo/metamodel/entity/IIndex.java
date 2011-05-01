@@ -25,4 +25,8 @@ public interface IIndex {
     int getCount();
 
     String getName();
+
+    void setCount(int count);
+
+    void setType(int type);
 }

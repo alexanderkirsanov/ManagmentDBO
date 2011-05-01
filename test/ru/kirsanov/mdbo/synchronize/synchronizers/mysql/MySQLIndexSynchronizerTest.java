@@ -6,8 +6,6 @@ import org.junit.Test;
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
 import ru.kirsanov.mdbo.metamodel.entity.*;
-import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
-import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 import ru.kirsanov.mdbo.synchronize.utility.ConnectionData;
 import ru.kirsanov.mdbo.synchronize.utility.ConnectionManger;
 
@@ -16,12 +14,12 @@ import java.sql.Statement;
 
 import static org.junit.Assert.assertEquals;
 
-public class MySQLViewSynchronizerTest {
-    private ConnectionManger cm;
+public class MySQLIndexSynchronizerTest {
     private MysqlModel testModel;
+    private ConnectionManger cm;
 
     @Before
-    public void setUp() throws ColumnAlreadyExistsException, ColumnNotFoundException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+    public void setUp() {
         cm = new ConnectionManger(new ConnectionData("localhost", "information_schema", "mysql", "lqip32", "4f3v6"));
         testModel = new MysqlModel("testbase");
     }
@@ -32,16 +30,12 @@ public class MySQLViewSynchronizerTest {
         Statement statement = null;
         try {
             statement = conn.getConnection().createStatement();
-               statement
-                    .executeUpdate("DROP VIEW IF EXISTS views;");
             statement
                     .executeUpdate("DROP TABLE IF EXISTS t1;");
             statement
                     .executeUpdate("CREATE TABLE t1 (id INT NOT NULL);\n");
             statement
-                    .executeUpdate("CREATE VIEW views AS\n" +
-                            "  SELECT id FROM t1\n" +
-                            "  WHERE id > 5");
+                    .executeUpdate("CREATE Index myIndex ON t1(id) ");
             Model model = new MysqlModel("testbase");
             ISchema schema = testModel.createSchema("testbase");
             ITable t1Table = new Table("t1");
@@ -49,11 +43,10 @@ public class MySQLViewSynchronizerTest {
             IColumn t1IdColumn = t1Table.createColumn("id", intDataType);
             t1IdColumn.setNullable(false);
             schema.addTable(t1Table);
-            IView view = schema.createView("views", "select `testbase`.`t1`.`id` AS `id` from `testbase`.`t1` where (`testbase`.`t1`.`id` > 5");
-            view.setUpdatable(true);
+            schema.createIndex("myIndex", t1IdColumn);
             MySQLTableSynchronizer mySQLTableSynchronizer = new MySQLTableSynchronizer(cm.getConnection());
-            MySQLViewSynchronizer mySQlViewSynchronizer = new MySQLViewSynchronizer(cm.getConnection());
-            Model synchronizeModel = mySQlViewSynchronizer.execute(mySQLTableSynchronizer.execute(model));
+            MySQLIndexSynchronizer mySQlIndexSynchronizer = new MySQLIndexSynchronizer(cm.getConnection());
+            Model synchronizeModel = mySQlIndexSynchronizer.execute(mySQLTableSynchronizer.execute(model));
             assertEquals(testModel, synchronizeModel);
         } finally {
             statement.close();
@@ -67,12 +60,9 @@ public class MySQLViewSynchronizerTest {
         ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "testbase", "mysql", "lqip32", "4f3v6"));
         Statement statement = conn.getConnection().createStatement();
         statement
-                .executeUpdate("DROP VIEW IF EXISTS views;");
-        statement
                 .executeUpdate("DROP TABLE IF EXISTS t1;");
-
         statement.close();
         conn.getConnection().close();
     }
-
 }
+

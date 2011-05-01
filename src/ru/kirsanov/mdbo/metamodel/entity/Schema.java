@@ -92,8 +92,8 @@ public class Schema extends MetaObject implements ISchema {
     }
 
     @Override
-    public IIndex createIndex(String name, IColumn column, int count) {
-        IIndex index = new Index(name, column, count);
+    public IIndex createIndex(String name, IColumn column) {
+        IIndex index = new Index(name, column);
         indexes.add(index);
         return index;
     }
@@ -105,7 +105,7 @@ public class Schema extends MetaObject implements ISchema {
                 return index;
             }
         }
-        throw  new IndexNotFoundException();
+        throw new IndexNotFoundException();
     }
 
     @Override

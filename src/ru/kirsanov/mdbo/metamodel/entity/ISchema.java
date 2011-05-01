@@ -36,7 +36,7 @@ public interface ISchema extends Container {
 
     List<IView> getViews();
 
-    IIndex createIndex(String name, IColumn column, int count);
+    IIndex createIndex(String name, IColumn column);
 
     IIndex getIndex(String name) throws IndexNotFoundException;
 

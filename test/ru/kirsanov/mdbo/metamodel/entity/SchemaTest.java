@@ -66,7 +66,7 @@ public class SchemaTest {
         DataType dataType = new SimpleDatatype("int");
         IColumn firstColumn = table.createColumn("fisrtColumn", dataType);
         String indexName = "index";
-        IIndex index = schema.createIndex(indexName,firstColumn,4);
+        IIndex index = schema.createIndex(indexName,firstColumn);
         assertEquals(index, schema.getIndex(indexName));
     }
 }

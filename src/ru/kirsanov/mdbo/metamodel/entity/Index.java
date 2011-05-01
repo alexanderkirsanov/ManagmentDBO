@@ -22,11 +22,25 @@ public class Index extends MetaObject implements IIndex {
         this.type = type;
     }
 
+    public Index(final String name, IColumn column) {
+        super(name);
+        this.column = column;
+        this.table = column.getTable();
+    }
+
     @Override
     public Constraint createConstraint(String constraint) {
         EntityConstraint entityConstraint = new EntityConstraint(column, constraint);
         this.constraint = entityConstraint;
         return entityConstraint;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
     }
 
     @Override

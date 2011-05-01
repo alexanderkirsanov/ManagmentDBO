@@ -27,11 +27,22 @@ public class IndexTest {
 
     @Test
     public void indexTest() throws Exception {
-
         assertEquals(column, index.getColumn());
         assertEquals(19, index.getCount());
         assertEquals(index.UNIQUE, index.getType());
     }
 
+    @Test
+    public void countTest() throws Exception {
+        int count = 10;
+        index.setCount(count);
+        assertEquals(count, index.getCount());
+    }
+
+    @Test
+    public void typeTest() throws Exception {
+        index.setType(IIndex.FULL_TEXT_SEARCH);
+        assertEquals(IIndex.FULL_TEXT_SEARCH, index.getType());
+    }
 
 }
