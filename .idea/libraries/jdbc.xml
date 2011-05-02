@@ -2,6 +2,7 @@
   <library name="jdbc">
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/mysql-connector-java-5.1.15.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/postgresql-9.0-801.jdbc4.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

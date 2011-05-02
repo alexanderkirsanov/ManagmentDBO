@@ -1,15 +1,11 @@
 package ru.kirsanov.mdbo.synchronize.synchronizers.builders;
 
 import ru.kirsanov.mdbo.synchronize.synchronizers.IEntitySynchronizer;
-import ru.kirsanov.mdbo.synchronize.synchronizers.mysql.MySQLForeignKeySynchronizer;
-import ru.kirsanov.mdbo.synchronize.synchronizers.mysql.MySQLPrimaryKeySynchronizer;
-import ru.kirsanov.mdbo.synchronize.synchronizers.mysql.MySQLTableSynchronizer;
+import ru.kirsanov.mdbo.synchronize.synchronizers.mysql.*;
 
 import java.sql.Connection;
-import java.util.ArrayList;
-import java.util.List;
 
-public class MySQLSynchronizersBuilder implements ISynchronizersBuilder {
+public class MySQLSynchronizersBuilder implements SynchronizersBuilder {
 
     private Connection connection;
 
@@ -18,17 +14,28 @@ public class MySQLSynchronizersBuilder implements ISynchronizersBuilder {
     }
 
     @Override
-    public List<IEntitySynchronizer> getSynchronizers() {
-        IEntitySynchronizer mySQLTableSynchronizer = new MySQLTableSynchronizer(connection);
-        IEntitySynchronizer mySQLPrimaryKeySynchronizer = new MySQLPrimaryKeySynchronizer(connection);
-        IEntitySynchronizer mySQLForeignKeySynchronizer = new MySQLForeignKeySynchronizer(connection);
-        IEntitySynchronizer mySQLViewSynchronizer = new MySQLForeignKeySynchronizer(connection);
-        List<IEntitySynchronizer> synchronizers = new ArrayList<IEntitySynchronizer>();
-        synchronizers.add(mySQLTableSynchronizer);
-        synchronizers.add(mySQLPrimaryKeySynchronizer);
-        synchronizers.add(mySQLForeignKeySynchronizer);
-        synchronizers.add(mySQLViewSynchronizer);
-        return synchronizers;
+    public IEntitySynchronizer createTableSynchronizer(){
+        return new MySQLTableSynchronizer(connection);
+    }
+
+    @Override
+    public IEntitySynchronizer createPrimaryKeySynchronizer(){
+        return new MySQLPrimaryKeySynchronizer(connection);
+    }
+
+    @Override
+    public IEntitySynchronizer createForeignKeySynchronizer(){
+        return new MySQLForeignKeySynchronizer(connection);
+    }
+
+    @Override
+    public IEntitySynchronizer createViewSynchronizer(){
+        return new MySQLViewSynchronizer(connection);
+    }
+
+    @Override
+    public IEntitySynchronizer createIndexSynchronizer(){
+        return new MySQLIndexSynchronizer(connection);
     }
 
 }
