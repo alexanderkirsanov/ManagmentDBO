@@ -121,6 +121,7 @@ public class Schema extends MetaObject implements ISchema {
         this.container = container;
     }
 
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -128,8 +129,11 @@ public class Schema extends MetaObject implements ISchema {
 
         Schema schema = (Schema) o;
 
-        if (container != null ? !container.equals(schema.container) : schema.container != null) return false;
+        if (container != null ? !container.getName().equals(schema.container.getName()) : schema.container != null) return false;
+        if (foreignKeys != null ? !foreignKeys.equals(schema.foreignKeys) : schema.foreignKeys != null) return false;
+        if (indexes != null ? !indexes.equals(schema.indexes) : schema.indexes != null) return false;
         if (tables != null ? !tables.equals(schema.tables) : schema.tables != null) return false;
+        if (views != null ? !views.equals(schema.views) : schema.views != null) return false;
 
         return true;
     }
@@ -138,6 +142,9 @@ public class Schema extends MetaObject implements ISchema {
     public int hashCode() {
         int result = tables != null ? tables.hashCode() : 0;
         result = 31 * result + (container != null ? container.hashCode() : 0);
+        result = 31 * result + (foreignKeys != null ? foreignKeys.hashCode() : 0);
+        result = 31 * result + (views != null ? views.hashCode() : 0);
+        result = 31 * result + (indexes != null ? indexes.hashCode() : 0);
         return result;
     }
 }

@@ -98,7 +98,7 @@ public class PostgresTableSynchronizer implements IEntitySynchronizer {
         return model;
     }
 
-    private String lower(String string) {
+    public static String lower(String string) {
         if (string != null) {
             return string.toLowerCase();
         } else {

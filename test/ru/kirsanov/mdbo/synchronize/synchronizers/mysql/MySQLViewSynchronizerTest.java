@@ -45,12 +45,14 @@ public class MySQLViewSynchronizerTest {
             Model model = new MysqlModel("testbase");
             ISchema schema = testModel.createSchema("testbase");
             ITable t1Table = new Table("t1");
-            DataType intDataType = new SimpleDatatype("INT", 11);
+            DataType intDataType = new SimpleDatatype("int", 11);
             IColumn t1IdColumn = t1Table.createColumn("id", intDataType);
             t1IdColumn.setNullable(false);
             schema.addTable(t1Table);
-            IView view = schema.createView("views", "select `testbase`.`t1`.`id` AS `id` from `testbase`.`t1` where (`testbase`.`t1`.`id` > 5");
+            IView view = schema.createView("views", "select `testbase`.`t1`.`id` as `id` from `testbase`.`t1` where (`testbase`.`t1`.`id` > 5)");
             view.setUpdatable(true);
+            IColumn column = new Column(view,"id",intDataType);
+            view.addColumn(column);
             MySQLTableSynchronizer mySQLTableSynchronizer = new MySQLTableSynchronizer(cm.getConnection());
             MySQLViewSynchronizer mySQlViewSynchronizer = new MySQLViewSynchronizer(cm.getConnection());
             Model synchronizeModel = mySQlViewSynchronizer.execute(mySQLTableSynchronizer.execute(model));

@@ -2,6 +2,10 @@ package ru.kirsanov.mdbo.metamodel.entity;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.kirsanov.mdbo.metamodel.datatype.DataType;
+import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -32,5 +36,35 @@ public class ViewTest {
         String checkOption = "INSERT";
         view.setCheckOption(checkOption);
         assertEquals(checkOption, view.getCheckOption());
+    }
+
+    @Test
+    public void columnTest() throws ColumnAlreadyExistsException {
+        DataType dataType = new SimpleDatatype("integer", 32);
+        Table table = new Table("myTable");
+        IColumn column = table.createColumn("first", dataType);
+        view.addColumn(column);
+        assertEquals(column, view.getColumns().get(0));
+    }
+
+    @Test
+    public void getColumnByNameTest() throws ColumnAlreadyExistsException, ColumnNotFoundException {
+        DataType dataType = new SimpleDatatype("integer", 32);
+        Table table = new Table("myTable");
+        String first = "first";
+        IColumn column = table.createColumn(first, dataType);
+        view.addColumn(column);
+        assertEquals(column, view.getColumnByName(first));
+    }
+
+    @Test(expected = ColumnNotFoundException.class)
+    public void getNotExistsColumnByNameTest() throws ColumnAlreadyExistsException, ColumnNotFoundException {
+        DataType dataType = new SimpleDatatype("integer", 32);
+        Table table = new Table("myTable");
+        String existsColumnName = "existsColumnName";
+        String notExistsColumnName = "notExistsColumnName";
+        IColumn column = table.createColumn(existsColumnName, dataType);
+        view.addColumn(column);
+        view.getColumnByName(notExistsColumnName);
     }
 }

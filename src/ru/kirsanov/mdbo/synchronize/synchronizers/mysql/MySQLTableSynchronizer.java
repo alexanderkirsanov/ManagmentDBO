@@ -32,8 +32,9 @@ public class MySQLTableSynchronizer implements IEntitySynchronizer {
     public Model execute(Model model) throws Throwable {
         if (!(model instanceof MysqlModel)) throw new ModelSynchronizerNotFound();
         PreparedStatement selectInformationFromSysTable = connection
-                .prepareStatement("SELECT * FROM columns WHERE Table_Schema = ? AND table_name NOT IN (SELECT table_name from views)");
+                .prepareStatement("SELECT * FROM columns WHERE Table_Schema = ? AND table_name NOT IN (SELECT table_name from views WHERE Table_Schema = ?)");
         selectInformationFromSysTable.setString(1, model.getName());
+        selectInformationFromSysTable.setString(2, model.getName());
         ISchema mySQLSchema = model.createSchema(model.getName());
         connection.setAutoCommit(false);
         ResultSet resultSetOfTable = selectInformationFromSysTable.executeQuery();
@@ -73,7 +74,7 @@ public class MySQLTableSynchronizer implements IEntitySynchronizer {
         return model;
     }
 
-    public DataType createDataType(String columnType, String dataTypeName) {
+    public static DataType createDataType(String columnType, String dataTypeName) {
         DataType dataType;
         StringBuffer sb = new StringBuffer(columnType);
         if (sb.indexOf("(") != -1) {

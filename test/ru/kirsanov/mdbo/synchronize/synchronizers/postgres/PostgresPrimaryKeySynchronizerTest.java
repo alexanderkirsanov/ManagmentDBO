@@ -31,7 +31,7 @@ public class PostgresPrimaryKeySynchronizerTest {
               ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "test", "postgresql", "lqip32", "4f3v6"));
             statement = conn.getConnection().createStatement();
             statement
-                    .executeUpdate("DROP TABLE IF EXISTS t1;");
+                    .executeUpdate("DROP TABLE IF EXISTS t1 CASCADE ;");
             statement.executeUpdate("CREATE TABLE t1\n" +
                     "(\n" +
                     "    s1 INT,\n" +

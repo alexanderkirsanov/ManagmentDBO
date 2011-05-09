@@ -1,9 +1,7 @@
 package ru.kirsanov.mdbo.synchronize.synchronizers.mysql;
 
-import ru.kirsanov.mdbo.metamodel.entity.ISchema;
-import ru.kirsanov.mdbo.metamodel.entity.IView;
-import ru.kirsanov.mdbo.metamodel.entity.Model;
-import ru.kirsanov.mdbo.metamodel.entity.MysqlModel;
+import ru.kirsanov.mdbo.metamodel.datatype.DataType;
+import ru.kirsanov.mdbo.metamodel.entity.*;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;
 import ru.kirsanov.mdbo.synchronize.synchronizers.IEntitySynchronizer;
 
@@ -14,9 +12,11 @@ import java.sql.ResultSet;
 public class MySQLViewSynchronizer implements IEntitySynchronizer {
     private static final String CHECK__OPTION = "CHECK_OPTION";
     private static final String IS_UPDATABLE = "IS_UPDATABLE";
-
+    private static final String COLUMN_TYPE = "COLUMN_TYPE";
+    private static final String DATA_TYPE = "DATA_TYPE";
     private static final String TABLE_NAME = "TABLE_NAME";
     private static final String VIEW_DEFINITION = "VIEW_DEFINITION";
+    private static final String COLUMN_NAME = "COLUMN_NAME";
     private Connection connection;
 
     public MySQLViewSynchronizer(Connection connection) {
@@ -41,6 +41,22 @@ public class MySQLViewSynchronizer implements IEntitySynchronizer {
             view.setCheckOption(checkOption);
             view.setUpdatable(isUpdatable.equals("yes"));
         }
+        PreparedStatement columnInformationFromSysTable = connection
+                .prepareStatement("SELECT * FROM columns WHERE Table_Schema = ? AND table_name IN (SELECT table_name from views WHERE Table_Schema = ?)");
+        columnInformationFromSysTable.setString(1, model.getName());
+        columnInformationFromSysTable.setString(2, model.getName());
+        ResultSet resultSetOfColumnTable = columnInformationFromSysTable.executeQuery();
+        while (resultSetOfColumnTable.next()) {
+            String columnName = resultSetOfColumnTable.getString(COLUMN_NAME).toLowerCase();
+            String tableName = resultSetOfColumnTable.getString(TABLE_NAME).toLowerCase();
+            String columnType = resultSetOfColumnTable.getString(COLUMN_TYPE).toLowerCase();
+            String dataTypeName = resultSetOfColumnTable.getString(DATA_TYPE).toLowerCase();
+            DataType dataType = MySQLTableSynchronizer.createDataType(columnType, dataTypeName);
+            IView view = model.getSchemas().get(0).getView(tableName);
+            IColumn column = new Column(view, columnName, dataType);
+            view.addColumn(column);
+        }
+
         connection.setAutoCommit(true);
         return model;
     }

@@ -13,9 +13,9 @@ public class Column extends MetaObject implements IColumn {
     private boolean nullable;
     private boolean unique;
     private String defaultValue;
-    private ITable table;
+    private Container table;
 
-    public Column(final ITable table, final String name, final DataType dataType) {
+    public Column(final Container table, final String name, final DataType dataType) {
         super(name);
         setContainer(table);
         this.table = table;
@@ -30,7 +30,11 @@ public class Column extends MetaObject implements IColumn {
 
     @Override
     public ITable getTable() {
-        return this.table;
+        if (this.table instanceof ITable){
+            return (ITable)this.table;
+        } else {
+            return null;
+        }
     }
 
     @Override

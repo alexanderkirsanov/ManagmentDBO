@@ -31,7 +31,7 @@ public class PostgresIndexSynchronizerTest {
         try {
             statement = conn.getConnection().createStatement();
             statement
-                    .executeUpdate("DROP TABLE IF EXISTS t1;");
+                    .executeUpdate("DROP TABLE IF EXISTS t1 CASCADE;");
             statement
                     .executeUpdate("CREATE TABLE t1 (id INT NOT NULL);\n");
             statement

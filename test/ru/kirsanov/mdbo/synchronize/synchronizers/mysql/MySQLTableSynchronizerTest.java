@@ -68,7 +68,6 @@ public class MySQLTableSynchronizerTest {
                     "  test varchar(30) DEFAULT 'text'," +
                     "  test_real double(10,10)\n" +
                     ");");
-            statement.executeUpdate("DROP TABLE IF EXISTS test_fk;\n");
             statement.executeUpdate(
                     "CREATE TABLE test_fk (\n" +
                             "  id int(11) NOT NULL,\n" +

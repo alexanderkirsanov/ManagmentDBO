@@ -32,7 +32,7 @@ public class PostgresViewSynchronizerTest {
         Statement statement = null;
         try {
             statement = conn.getConnection().createStatement();
-               statement
+            statement
                     .executeUpdate("DROP VIEW IF EXISTS views;");
             statement
                     .executeUpdate("DROP TABLE IF EXISTS t1;");
@@ -43,14 +43,16 @@ public class PostgresViewSynchronizerTest {
                             "  SELECT id FROM t1\n" +
                             "  WHERE id > 5");
             Model model = new PostgresModel("testbase");
-            ISchema schema = testModel.createSchema("testbase");
+            ISchema schema = testModel.createSchema("public");
             ITable t1Table = new Table("t1");
             DataType intDataType = new SimpleDatatype("integer", 32);
             IColumn t1IdColumn = t1Table.createColumn("id", intDataType);
             t1IdColumn.setNullable(false);
             schema.addTable(t1Table);
-            IView view = schema.createView("views", "SELECT t1.id FROM t1 WHERE (t1.id > 5);");
+            IView view = schema.createView("views", "select t1.id from t1 where (t1.id > 5);");
             view.setUpdatable(false);
+            IColumn column = new Column(view, "ida", intDataType);
+            view.addColumn(column);
             PostgresTableSynchronizer postgresTableSynchronizer = new PostgresTableSynchronizer(cm.getConnection());
             PostgresViewSynchronizer postgresViewSynchronizer = new PostgresViewSynchronizer(cm.getConnection());
             Model synchronizeModel = postgresViewSynchronizer.execute(postgresTableSynchronizer.execute(model));
