@@ -37,12 +37,7 @@ public class MySQLTableSynchronizerTest {
     @Test
     public void synchronizeTest() throws Throwable {
         ISchema schema = testModel.createSchema("testbase");
-        Table testFkTable = new Table("test_fk");
-        schema.addTable(testFkTable);
-        IColumn idFkColumn = testFkTable.createColumn("id", new SimpleDatatype("int", 11));
-        idFkColumn.setNullable(false);
-        IColumn testId = testFkTable.createColumn("test_id", new SimpleDatatype("int", 11));
-        testId.setNullable(true);
+
         Table testTable = new Table("test");
         schema.addTable(testTable);
         IColumn idColumn = testTable.createColumn("id", new SimpleDatatype("int", 11));
@@ -54,7 +49,12 @@ public class MySQLTableSynchronizerTest {
         testColumn.setNullable(true);
         IColumn testRealColumn = testTable.createColumn("test_real", new SimpleDatatype("double", 10, 10));
         testRealColumn.setNullable(true);
-
+        Table testFkTable = new Table("test_fk");
+        schema.addTable(testFkTable);
+        IColumn idFkColumn = testFkTable.createColumn("id", new SimpleDatatype("int", 11));
+        idFkColumn.setNullable(false);
+        IColumn testId = testFkTable.createColumn("test_id", new SimpleDatatype("int", 11));
+        testId.setNullable(true);
         ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "testbase", "mysql", "lqip32", "4f3v6"));
         Statement statement = conn.getConnection().createStatement();
         try {

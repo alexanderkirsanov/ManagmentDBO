@@ -49,25 +49,27 @@ public class MySQLForeignKeySynchronizerTest {
                             ") ENGINE=INNODB;");
             Model model = new MysqlModel("testbase");
             ISchema schema = testModel.createSchema("testbase");
-            ITable parentsTable = new Table("parents");
-            schema.addTable(parentsTable);
             DataType intDataType = new SimpleDatatype("INT", 11);
-            IColumn parentsIdColumn = parentsTable.createColumn("id", intDataType);
-            parentsIdColumn.setNullable(false);
-            parentsTable.createPrimaryKey(parentsIdColumn);
             ITable childsTable = new Table("childs");
             schema.addTable(childsTable);
             IColumn childsIdColumn = childsTable.createColumn("id", intDataType);
             childsIdColumn.setNullable(true);
             IColumn childsParentIdColumn = childsTable.createColumn("parent_id", intDataType);
             childsParentIdColumn.setNullable(true);
+            ITable parentsTable = new Table("parents");
+            schema.addTable(parentsTable);
+
+            IColumn parentsIdColumn = parentsTable.createColumn("id", intDataType);
+            parentsIdColumn.setNullable(false);
+            parentsTable.createPrimaryKey(parentsIdColumn);
+
             MySQLTableSynchronizer mySQLTableSynchronizer = new MySQLTableSynchronizer(cm.getConnection());
             MySQLPrimaryKeySynchronizer mySQLPrimaryKeySynchronizer = new MySQLPrimaryKeySynchronizer(cm.getConnection());
             MySQLForeignKeySynchronizer mySQLForeignKeySynchronizer = new MySQLForeignKeySynchronizer(cm.getConnection());
             Model synchronizeModel = mySQLForeignKeySynchronizer.execute(mySQLPrimaryKeySynchronizer.execute(mySQLTableSynchronizer.execute(model)));
             ForeignKey fk = schema.createForeignKey("childs_ibfk_1", childsTable, parentsTable);
             fk.addColumnMapping(childsParentIdColumn, parentsIdColumn);
-            assertEquals(testModel,synchronizeModel);
+            assertEquals(testModel, synchronizeModel);
         } finally {
             statement.close();
         }

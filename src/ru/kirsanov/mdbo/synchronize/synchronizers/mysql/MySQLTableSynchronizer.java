@@ -3,6 +3,7 @@ package ru.kirsanov.mdbo.synchronize.synchronizers.mysql;
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
 import ru.kirsanov.mdbo.metamodel.entity.*;
+import ru.kirsanov.mdbo.metamodel.exception.TableNotFound;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;
 import ru.kirsanov.mdbo.synchronize.synchronizers.IEntitySynchronizer;
 
@@ -10,9 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 
 public class MySQLTableSynchronizer implements IEntitySynchronizer {
@@ -22,7 +21,9 @@ public class MySQLTableSynchronizer implements IEntitySynchronizer {
     private static final String COLUMN_TYPE = "COLUMN_TYPE";
     private static final String DATA_TYPE = "DATA_TYPE";
     private static final String COLUMN_DEFAULT = "COLUMN_DEFAULT";
+    private static final String TABLE_SCHEMA = "TABLE_SCHEMA";
     private Connection connection;
+    private Map<String, ISchema> schemas = new HashMap<String, ISchema>();
 
     public MySQLTableSynchronizer(Connection connection) {
         this.connection = connection;
@@ -35,18 +36,24 @@ public class MySQLTableSynchronizer implements IEntitySynchronizer {
                 .prepareStatement("SELECT * FROM columns WHERE Table_Schema = ? AND table_name NOT IN (SELECT table_name from views WHERE Table_Schema = ?)");
         selectInformationFromSysTable.setString(1, model.getName());
         selectInformationFromSysTable.setString(2, model.getName());
-        ISchema mySQLSchema = model.createSchema(model.getName());
         connection.setAutoCommit(false);
         ResultSet resultSetOfTable = selectInformationFromSysTable.executeQuery();
-        Map<String, ITable> tables = new HashMap<String, ITable>();
         while (resultSetOfTable.next()) {
+            String schemaName = resultSetOfTable.getString(TABLE_SCHEMA);
+            ISchema schema = null;
+            if (schemas.containsKey(schemaName)) {
+                schema = schemas.get(schemaName);
+            } else {
+                schema = model.createSchema(schemaName);
+                schemas.put(schemaName, schema);
+            }
             String tableName = resultSetOfTable.getString(TABLE_NAME);
             ITable table = null;
-            if (tables.containsKey(tableName)) {
-                table = tables.get(tableName);
-            } else {
+            try {
+                table = schema.getTable(tableName);
+            } catch (TableNotFound e) {
                 table = new Table(tableName);
-                tables.put(tableName, table);
+                schema.addTable(table);
             }
             String columnName = resultSetOfTable.getString(COLUMN_NAME).toLowerCase();
             String isNullable = resultSetOfTable.getString(IS_NULLABLE).toLowerCase();
@@ -63,12 +70,6 @@ public class MySQLTableSynchronizer implements IEntitySynchronizer {
             if (columnDefault != null) {
                 column.setDefaultValue(columnDefault);
             }
-        }
-        Set<? extends Map.Entry<String, ? extends ITable>> tablesSet = tables.entrySet();
-        Iterator<? extends Map.Entry<String, ? extends ITable>> iterator = tablesSet.iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<String, ? extends ITable> record = iterator.next();
-            mySQLSchema.addTable(record.getValue());
         }
         connection.setAutoCommit(true);
         return model;
