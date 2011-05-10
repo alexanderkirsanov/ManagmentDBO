@@ -2,8 +2,6 @@ package ru.kirsanov.mdbo.metamodel.entity;
 
 import ru.kirsanov.mdbo.metamodel.constraint.PrimaryKey;
 import ru.kirsanov.mdbo.metamodel.constraint.UniqueKey;
-import ru.kirsanov.mdbo.metamodel.datatype.DataType;
-import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 import ru.kirsanov.mdbo.metamodel.exception.ElementNotFoundException;
 
@@ -11,10 +9,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Table extends MetaObject implements ITable {
+public class Table extends ColumnContainer implements ITable {
 
-    private List<IColumn> columns;
-    private Container container;
     private PrimaryKey primaryKey = null;
     private UniqueKey uniqueKey = null;
 
@@ -30,31 +26,6 @@ public class Table extends MetaObject implements ITable {
     }
 
     @Override
-    public IColumn createColumn(final String name, final DataType dataType) throws ColumnAlreadyExistsException {
-        if (!(getColumn(name) == null)) throw new ColumnAlreadyExistsException();
-        Column column = new Column(this, name, dataType);
-        this.columns.add(column);
-        return column;
-    }
-
-    @Override
-    public IColumn getColumn(String name) {
-        Column foundColumn = null;
-        for (IColumn column : columns) {
-            if (column.getName().equals(name)) {
-                return column;
-            }
-        }
-        return foundColumn;
-    }
-
-    @Override
-    public void removeColumn(final IColumn column) throws ColumnNotFoundException {
-        if (getColumn(column.getName()) == null) throw new ColumnNotFoundException();
-        this.columns.remove(column);
-    }
-
-    @Override
     public PrimaryKey createPrimaryKey(IColumn column) throws ColumnNotFoundException {
         if (columns.contains(column)) {
             primaryKey = new PrimaryKey(this, column.getName());
@@ -65,10 +36,7 @@ public class Table extends MetaObject implements ITable {
         }
     }
 
-    @Override
-    public List<IColumn> getColumns() {
-        return this.columns;
-    }
+
 
     @Override
     public UniqueKey createUniqueKey(IColumn column) throws ColumnNotFoundException {
@@ -80,14 +48,6 @@ public class Table extends MetaObject implements ITable {
     @Override
     public UniqueKey getUniqueKey() {
         return uniqueKey;
-    }
-
-    public Container getParent() {
-        return this.container;
-    }
-
-    public void setContainer(Container container) {
-        this.container = container;
     }
 
     @Override
@@ -140,7 +100,8 @@ public class Table extends MetaObject implements ITable {
         Table table = (Table) o;
 
         if (columns != null ? !columns.equals(table.columns) : table.columns != null) return false;
-        if (container != null ? !container.getName().equals(table.container.getName()) : table.container != null) return false;
+        if (container != null ? !container.getName().equals(table.container.getName()) : table.container != null)
+            return false;
         if (primaryKey != null ? !primaryKey.equals(table.primaryKey) : table.primaryKey != null) return false;
         if (uniqueKey != null ? !uniqueKey.equals(table.uniqueKey) : table.uniqueKey != null) return false;
 

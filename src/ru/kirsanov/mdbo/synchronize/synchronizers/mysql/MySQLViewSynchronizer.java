@@ -53,8 +53,7 @@ public class MySQLViewSynchronizer implements IEntitySynchronizer {
             String dataTypeName = resultSetOfColumnTable.getString(DATA_TYPE).toLowerCase();
             DataType dataType = MySQLTableSynchronizer.createDataType(columnType, dataTypeName);
             IView view = model.getSchemas().get(0).getView(tableName);
-            IColumn column = new Column(view, columnName, dataType);
-            view.addColumn(column);
+            view.createColumn(columnName, dataType);;
         }
 
         connection.setAutoCommit(true);

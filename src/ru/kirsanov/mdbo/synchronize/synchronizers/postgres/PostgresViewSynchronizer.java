@@ -3,6 +3,7 @@ package ru.kirsanov.mdbo.synchronize.synchronizers.postgres;
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
 import ru.kirsanov.mdbo.metamodel.entity.*;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.ViewNotFound;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;
 
@@ -30,7 +31,7 @@ public class PostgresViewSynchronizer {
         this.connection = connection;
     }
 
-    public Model execute(Model model) throws SQLException, ModelSynchronizerNotFound, ViewNotFound {
+    public Model execute(Model model) throws SQLException, ModelSynchronizerNotFound, ViewNotFound, ColumnAlreadyExistsException {
         if (!(model instanceof PostgresModel)) throw new ModelSynchronizerNotFound();
         PreparedStatement selectInformationFromSysTable = connection
                 .prepareStatement("SELECT * FROM information_schema.views WHERE table_schema not in('pg_catalog', 'information_schema')");
@@ -90,8 +91,7 @@ public class PostgresViewSynchronizer {
                     } else {
                         dataType = new SimpleDatatype(dataTypeName, Integer.parseInt(characterMaximumLength));
                     }
-                    Column column = new Column(view, columnName, dataType);
-                    view.addColumn(column);
+                    view.createColumn(columnName, dataType);
                 }
             }
         }

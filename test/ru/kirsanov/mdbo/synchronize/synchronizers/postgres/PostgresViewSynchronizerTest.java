@@ -51,8 +51,7 @@ public class PostgresViewSynchronizerTest {
             schema.addTable(t1Table);
             IView view = schema.createView("views", "select t1.id from t1 where (t1.id > 5);");
             view.setUpdatable(false);
-            IColumn column = new Column(view, "ida", intDataType);
-            view.addColumn(column);
+            view.createColumn("ida", intDataType);
             PostgresTableSynchronizer postgresTableSynchronizer = new PostgresTableSynchronizer(cm.getConnection());
             PostgresViewSynchronizer postgresViewSynchronizer = new PostgresViewSynchronizer(cm.getConnection());
             Model synchronizeModel = postgresViewSynchronizer.execute(postgresTableSynchronizer.execute(model));

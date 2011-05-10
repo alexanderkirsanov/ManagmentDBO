@@ -19,7 +19,7 @@ import java.util.List;
 public interface ITable extends Container {
     IColumn createColumn(String name, DataType dataType) throws ColumnAlreadyExistsException;
 
-    IColumn getColumn(String name);
+    IColumn getColumn(String name) throws ColumnNotFoundException;
 
     void removeColumn(IColumn column) throws ColumnNotFoundException;
 

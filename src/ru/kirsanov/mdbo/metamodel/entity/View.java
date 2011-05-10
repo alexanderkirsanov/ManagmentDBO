@@ -1,17 +1,10 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
-import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class View extends MetaObject implements IView {
+public class View extends ColumnContainer implements IView {
 
     private String definition;
     private String checkOption = "none";
     private boolean updatable;
-    private Container parent;
-    private List<IColumn> columns = new ArrayList<IColumn>();
 
     public View(final String name, final String definition) {
         super(name);
@@ -45,38 +38,13 @@ public class View extends MetaObject implements IView {
     }
 
     @Override
-    public void addColumn(IColumn column) {
-        this.columns.add(column);
-    }
-
-    @Override
-    public List<IColumn> getColumns() {
-        return columns;
-    }
-
-    @Override
-    public void removeColumn(IColumn column) {
-        columns.remove(column);
-    }
-
-    @Override
-    public IColumn getColumnByName(String name) throws ColumnNotFoundException {
-        for (IColumn column : columns) {
-            if (column.getName().equals(name)) {
-                return column;
-            }
-        }
-        throw new ColumnNotFoundException();
-    }
-
-    @Override
     public Container getParent() {
-        return parent;
+        return container;
     }
 
     @Override
     public void setContainer(Container container) {
-        this.parent = container;
+        this.container = container;
     }
 
     @Override
@@ -90,7 +58,7 @@ public class View extends MetaObject implements IView {
         if (checkOption != null ? !checkOption.equals(view.checkOption) : view.checkOption != null) return false;
         if (columns != null ? !columns.equals(view.columns) : view.columns != null) return false;
         if (definition != null ? !definition.equals(view.definition) : view.definition != null) return false;
-        if (parent != null ? !parent.getName().equals(view.parent.getName()) : view.parent != null) return false;
+        if (container != null ? !container.getName().equals(view.container.getName()) : view.container != null) return false;
         return true;
     }
 
@@ -99,7 +67,7 @@ public class View extends MetaObject implements IView {
         int result = definition != null ? definition.hashCode() : 0;
         result = 31 * result + (checkOption != null ? checkOption.hashCode() : 0);
         result = 31 * result + (updatable ? 1 : 0);
-        result = 31 * result + (parent != null ? parent.hashCode() : 0);
+        result = 31 * result + (container != null ? container.hashCode() : 0);
         result = 31 * result + (columns != null ? columns.hashCode() : 0);
         return result;
     }

@@ -1,5 +1,7 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
+import ru.kirsanov.mdbo.metamodel.datatype.DataType;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 
 import java.util.List;
@@ -22,11 +24,11 @@ public interface IView extends Container {
 
     void setUpdatable(boolean value);
 
-    void addColumn(IColumn column);
+    IColumn createColumn(String columnName, DataType dataType)  throws ColumnAlreadyExistsException;
 
     List<IColumn> getColumns();
 
-    void removeColumn(IColumn column);
+    void removeColumn(IColumn column) throws ColumnNotFoundException ;
 
-    IColumn getColumnByName(String name) throws ColumnNotFoundException;
+    IColumn getColumn(String name) throws ColumnNotFoundException;
 }

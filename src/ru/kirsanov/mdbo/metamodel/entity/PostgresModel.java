@@ -10,7 +10,7 @@ public class PostgresModel extends Model {
         super(name);
     }
 
-    public Schema createSchema(String name) {
+    public ISchema createSchema(String name) {
         Schema schema = new Schema(name);
         schemas.add(schema);
         return schema;

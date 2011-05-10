@@ -42,8 +42,7 @@ public class ViewTest {
     public void columnTest() throws ColumnAlreadyExistsException {
         DataType dataType = new SimpleDatatype("integer", 32);
         Table table = new Table("myTable");
-        IColumn column = table.createColumn("first", dataType);
-        view.addColumn(column);
+        IColumn column= view.createColumn("first", dataType);
         assertEquals(column, view.getColumns().get(0));
     }
 
@@ -52,9 +51,8 @@ public class ViewTest {
         DataType dataType = new SimpleDatatype("integer", 32);
         Table table = new Table("myTable");
         String first = "first";
-        IColumn column = table.createColumn(first, dataType);
-        view.addColumn(column);
-        assertEquals(column, view.getColumnByName(first));
+         IColumn column =view.createColumn(first, dataType);
+        assertEquals(column, view.getColumn(first));
     }
 
     @Test(expected = ColumnNotFoundException.class)
@@ -63,8 +61,7 @@ public class ViewTest {
         Table table = new Table("myTable");
         String existsColumnName = "existsColumnName";
         String notExistsColumnName = "notExistsColumnName";
-        IColumn column = table.createColumn(existsColumnName, dataType);
-        view.addColumn(column);
-        view.getColumnByName(notExistsColumnName);
+        IColumn column = view.createColumn(existsColumnName, dataType);
+        view.getColumn(notExistsColumnName);
     }
 }
