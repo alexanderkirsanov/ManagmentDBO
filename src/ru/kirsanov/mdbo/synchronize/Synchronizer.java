@@ -4,9 +4,7 @@ import ru.kirsanov.mdbo.metamodel.entity.Model;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 import ru.kirsanov.mdbo.metamodel.exception.TableNotFound;
-import ru.kirsanov.mdbo.metamodel.exception.ViewNotFound;
-import ru.kirsanov.mdbo.synchronize.exception.ConnectionNotSet;
-import ru.kirsanov.mdbo.synchronize.exception.IncorrectDataBaseType;
+import ru.kirsanov.mdbo.metamodel.exception.ViewNotFoundException;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;
 import ru.kirsanov.mdbo.synchronize.synchronizers.Configurator;
 import ru.kirsanov.mdbo.synchronize.synchronizers.IEntitySynchronizer;
@@ -23,7 +21,7 @@ public class Synchronizer implements ISynchronizer {
     }
 
     @Override
-    public Model synchronize(Model model) throws IncorrectDataBaseType, ConnectionNotSet, SQLException, ColumnAlreadyExistsException, ColumnNotFoundException, ModelSynchronizerNotFound, TableNotFound, ViewNotFound {
+    public Model synchronize(Model model) throws SQLException, ColumnAlreadyExistsException, ColumnNotFoundException, ModelSynchronizerNotFound, TableNotFound, ViewNotFoundException {
         IEntitySynchronizer entitySynchronizer = configurator.getSynchronizers(model);
         return entitySynchronizer.execute(model);
     }

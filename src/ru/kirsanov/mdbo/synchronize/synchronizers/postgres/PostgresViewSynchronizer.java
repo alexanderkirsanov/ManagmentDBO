@@ -7,7 +7,7 @@ import ru.kirsanov.mdbo.metamodel.entity.IView;
 import ru.kirsanov.mdbo.metamodel.entity.Model;
 import ru.kirsanov.mdbo.metamodel.entity.PostgresModel;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
-import ru.kirsanov.mdbo.metamodel.exception.ViewNotFound;
+import ru.kirsanov.mdbo.metamodel.exception.ViewNotFoundException;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;
 import ru.kirsanov.mdbo.synchronize.synchronizers.IEntitySynchronizer;
 
@@ -35,7 +35,7 @@ public class PostgresViewSynchronizer implements IEntitySynchronizer{
         this.connection = connection;
     }
 
-    public Model execute(Model model) throws SQLException, ModelSynchronizerNotFound, ViewNotFound, ColumnAlreadyExistsException {
+    public Model execute(Model model) throws SQLException, ModelSynchronizerNotFound, ViewNotFoundException, ColumnAlreadyExistsException {
         if (!(model instanceof PostgresModel)) throw new ModelSynchronizerNotFound();
         PreparedStatement selectInformationFromSysTable = connection
                 .prepareStatement("SELECT * FROM information_schema.views WHERE table_schema not in('pg_catalog', 'information_schema')");

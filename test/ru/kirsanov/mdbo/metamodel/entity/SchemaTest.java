@@ -47,15 +47,32 @@ public class SchemaTest {
     }
 
     @Test
-    public void viewTest() throws ViewNotFound, ColumnAlreadyExistsException {
+    public void viewTest() throws ViewNotFoundException, ColumnAlreadyExistsException {
+        ISchema schema = new Schema("mySchema");
+        String viewName = "view";
+        IView view = schema.createView(viewName, "Select test");
+        assertEquals(view, schema.getView(viewName));
+    }
+
+    @Test(expected = ViewNotFoundException.class)
+    public void notFoundViewMustThrowExceptionTest() throws ViewNotFoundException, ColumnAlreadyExistsException {
         ISchema schema = new Schema("mySchema");
         myTable = "myTable";
-        ITable table = new Table(myTable);
-        DataType dataType = new SimpleDatatype("int");
-        table.createColumn("fisrtColumn", dataType);
         String viewName = "view";
-        IView view = schema.createView(viewName,"Select test");
-        assertEquals(view, schema.getView(viewName));
+        String otherViewName = "view2";
+        schema.createView(viewName, "Select test");
+        schema.getView(otherViewName);
+    }
+
+
+    @Test(expected = ColumnAlreadyExistsException.class)
+    public void addAlreadyExistsColumnMustThrowExceptionTest() throws ViewNotFoundException, ColumnAlreadyExistsException {
+        ISchema schema = new Schema("mySchema");
+        DataType dataType = new SimpleDatatype("int");
+        String viewName = "view";
+        IView view = schema.createView(viewName, "Select test");
+        view.createColumn("fisrtColumn", dataType);
+        view.createColumn("fisrtColumn", dataType);
     }
 
     @Test
@@ -66,7 +83,7 @@ public class SchemaTest {
         DataType dataType = new SimpleDatatype("int");
         IColumn firstColumn = table.createColumn("fisrtColumn", dataType);
         String indexName = "index";
-        IIndex index = schema.createIndex(indexName,firstColumn);
+        IIndex index = schema.createIndex(indexName, firstColumn);
         assertEquals(index, schema.getIndex(indexName));
     }
 }

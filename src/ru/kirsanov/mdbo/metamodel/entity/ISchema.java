@@ -3,7 +3,7 @@ package ru.kirsanov.mdbo.metamodel.entity;
 import ru.kirsanov.mdbo.metamodel.constraint.ForeignKey;
 import ru.kirsanov.mdbo.metamodel.exception.IndexNotFoundException;
 import ru.kirsanov.mdbo.metamodel.exception.TableNotFound;
-import ru.kirsanov.mdbo.metamodel.exception.ViewNotFound;
+import ru.kirsanov.mdbo.metamodel.exception.ViewNotFoundException;
 import ru.kirsanov.mdbo.metamodel.exception.ForeignKeyNotFound;
 
 import java.util.List;
@@ -32,7 +32,7 @@ public interface ISchema extends Container {
 
     IView createView(String name, String defenition);
 
-    IView getView(String name) throws ViewNotFound;
+    IView getView(String name) throws ViewNotFoundException;
 
     List<IView> getViews();
 

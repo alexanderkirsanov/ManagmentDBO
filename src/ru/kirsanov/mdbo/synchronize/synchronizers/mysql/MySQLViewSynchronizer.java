@@ -3,7 +3,7 @@ package ru.kirsanov.mdbo.synchronize.synchronizers.mysql;
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.entity.*;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
-import ru.kirsanov.mdbo.metamodel.exception.ViewNotFound;
+import ru.kirsanov.mdbo.metamodel.exception.ViewNotFoundException;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;
 import ru.kirsanov.mdbo.synchronize.synchronizers.IEntitySynchronizer;
 
@@ -27,7 +27,7 @@ public class MySQLViewSynchronizer implements IEntitySynchronizer {
     }
 
     @Override
-    public Model execute(Model model) throws ModelSynchronizerNotFound, SQLException, ViewNotFound, ColumnAlreadyExistsException {
+    public Model execute(Model model) throws ModelSynchronizerNotFound, SQLException, ViewNotFoundException, ColumnAlreadyExistsException {
         if (!(model instanceof MysqlModel)) throw new ModelSynchronizerNotFound();
         PreparedStatement selectInformationFromSysTable = connection
                 .prepareStatement("SELECT * FROM views WHERE table_schema = ?");

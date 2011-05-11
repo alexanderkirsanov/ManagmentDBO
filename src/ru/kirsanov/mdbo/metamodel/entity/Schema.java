@@ -4,7 +4,7 @@ import ru.kirsanov.mdbo.metamodel.constraint.ForeignKey;
 import ru.kirsanov.mdbo.metamodel.exception.ForeignKeyNotFound;
 import ru.kirsanov.mdbo.metamodel.exception.IndexNotFoundException;
 import ru.kirsanov.mdbo.metamodel.exception.TableNotFound;
-import ru.kirsanov.mdbo.metamodel.exception.ViewNotFound;
+import ru.kirsanov.mdbo.metamodel.exception.ViewNotFoundException;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -77,13 +77,13 @@ public class Schema extends MetaObject implements ISchema {
     }
 
     @Override
-    public IView getView(String name) throws ViewNotFound {
+    public IView getView(String name) throws ViewNotFoundException {
         for (IView view : views) {
             if (view.getName().equals(name)) {
                 return view;
             }
         }
-        throw new ViewNotFound();
+        throw new ViewNotFoundException();
     }
 
     @Override
