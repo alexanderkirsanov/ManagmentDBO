@@ -6,6 +6,7 @@ import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
+import ru.kirsanov.mdbo.metamodel.exception.ViewNotFoundException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -42,7 +43,7 @@ public class ViewTest {
     public void columnTest() throws ColumnAlreadyExistsException {
         DataType dataType = new SimpleDatatype("integer", 32);
         Table table = new Table("myTable");
-        IColumn column= view.createColumn("first", dataType);
+        IColumn column = view.createColumn("first", dataType);
         assertEquals(column, view.getColumns().get(0));
     }
 
@@ -51,7 +52,7 @@ public class ViewTest {
         DataType dataType = new SimpleDatatype("integer", 32);
         Table table = new Table("myTable");
         String first = "first";
-         IColumn column =view.createColumn(first, dataType);
+        IColumn column = view.createColumn(first, dataType);
         assertEquals(column, view.getColumn(first));
     }
 
@@ -63,5 +64,22 @@ public class ViewTest {
         String notExistsColumnName = "notExistsColumnName";
         IColumn column = view.createColumn(existsColumnName, dataType);
         view.getColumn(notExistsColumnName);
+    }
+
+    @Test(expected = ColumnAlreadyExistsException.class)
+    public void addAlreadyExistsColumnMustThrowExceptionTest() throws ViewNotFoundException, ColumnAlreadyExistsException {
+        ISchema schema = new Schema("mySchema");
+        DataType dataType = new SimpleDatatype("int");
+        String viewName = "view";
+        IView view = schema.createView(viewName, "Select test");
+        view.createColumn("fisrtColumn", dataType);
+        view.createColumn("fisrtColumn", dataType);
+    }
+
+    @Test
+    public void containerTest(){
+        ISchema schema = new Schema("test");
+        view.setContainer(schema);
+        assertEquals(schema,view.getParent());
     }
 }

@@ -42,12 +42,6 @@ public class ForeignKey extends AbstractConstraint implements Constraint {
                 : targetColumns;
     }
 
-    @Override
-    @Deprecated
-    public void addColumn(IColumn column) throws ColumnNotFoundException {
-        addColumnMapping(column, null);
-    }
-
     public void addColumnMapping(IColumn sourceColumn, IColumn targetColumn) throws ColumnNotFoundException {
         if (getSourceTable().getColumns().contains(sourceColumn) && getTargetTable().getColumns().contains(targetColumn)) {
             if (targetColumns == null) {

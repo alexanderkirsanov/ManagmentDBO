@@ -64,17 +64,6 @@ public class SchemaTest {
         schema.getView(otherViewName);
     }
 
-
-    @Test(expected = ColumnAlreadyExistsException.class)
-    public void addAlreadyExistsColumnMustThrowExceptionTest() throws ViewNotFoundException, ColumnAlreadyExistsException {
-        ISchema schema = new Schema("mySchema");
-        DataType dataType = new SimpleDatatype("int");
-        String viewName = "view";
-        IView view = schema.createView(viewName, "Select test");
-        view.createColumn("fisrtColumn", dataType);
-        view.createColumn("fisrtColumn", dataType);
-    }
-
     @Test
     public void indexTest() throws ColumnAlreadyExistsException, IndexNotFoundException {
         ISchema schema = new Schema("mySchema");
@@ -85,5 +74,18 @@ public class SchemaTest {
         String indexName = "index";
         IIndex index = schema.createIndex(indexName, firstColumn);
         assertEquals(index, schema.getIndex(indexName));
+    }
+
+    @Test(expected = IndexNotFoundException.class)
+    public void getNotExistsIndexSholdBeThrowsExceptionTest() throws ColumnAlreadyExistsException, IndexNotFoundException {
+        ISchema schema = new Schema("mySchema");
+        myTable = "myTable";
+        ITable table = new Table(myTable);
+        DataType dataType = new SimpleDatatype("int");
+        IColumn firstColumn = table.createColumn("fisrtColumn", dataType);
+        String indexName = "index";
+        String notExistsIndexName = "index2";
+        schema.createIndex(indexName, firstColumn);
+        schema.getIndex(notExistsIndexName);
     }
 }
