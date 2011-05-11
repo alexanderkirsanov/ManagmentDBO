@@ -88,4 +88,21 @@ public class SchemaTest {
         schema.createIndex(indexName, firstColumn);
         schema.getIndex(notExistsIndexName);
     }
+
+    @Test(expected = ForeignKeyNotFound.class)
+    public void getNotExistsForeignKeyShouldBeThrowsExceptionTest() throws ColumnAlreadyExistsException, ColumnNotFoundException, ForeignKeyNotFound {
+        ISchema schema = new Schema("mySchema");
+        myTable = "myTable";
+        ITable table = new Table(myTable);
+        String secondMyTable = "secondMyTable";
+        DataType dataType = new SimpleDatatype("int");
+        IColumn firstColumn = table.createColumn("fisrtColumn", dataType);
+        ITable secondTable = new Table(secondMyTable);
+        IColumn secondColumn = secondTable.createColumn("secondColumn", dataType);
+        String correctForeignKeyName = "myForeignKey";
+        String inCorrectForeignKeyName = "inCorrect";
+        ForeignKey foreignKey = schema.createForeignKey(correctForeignKeyName, table, secondTable);
+        foreignKey.addColumnMapping(firstColumn, secondColumn);
+        schema.getForeignKey(inCorrectForeignKeyName);
+    }
 }
