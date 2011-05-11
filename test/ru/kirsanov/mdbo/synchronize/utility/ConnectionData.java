@@ -15,6 +15,14 @@ public class ConnectionData {
         this.userName = userName;
         this.password = password;
     }
+    public ConnectionData(String dbName, String dbms) {
+        this.serverName = "localhost";
+        this.dbName = dbName;
+        this.dbms = dbms;
+        this.userName = "lqip32";
+        this.password = "4f3v6";
+    }
+
 
     public String getDbms() {
         return dbms;

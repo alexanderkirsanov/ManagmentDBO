@@ -21,7 +21,7 @@ public class PostgresTableSynchronizerTest {
 
     @Before
     public void setUp() throws ColumnAlreadyExistsException, ColumnNotFoundException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        cm = new ConnectionManger(new ConnectionData("localhost", "test", "postgresql", "lqip32", "4f3v6"));
+        cm = new ConnectionManger(new ConnectionData("test", "postgresql"));
         testModel = new PostgresModel("testbase");
     }
 
@@ -35,7 +35,7 @@ public class PostgresTableSynchronizerTest {
         IColumn testName = testTable.createColumn("name", new SimpleDatatype("character varying",12));
         testName.setNullable(true);
 
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "test", "postgresql", "lqip32", "4f3v6"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
         Statement statement = conn.getConnection().createStatement();
         try {
             statement
@@ -57,7 +57,7 @@ public class PostgresTableSynchronizerTest {
     @After
     public void tearDown
             () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "test", "postgresql", "lqip32", "4f3v6"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
         Statement statement = conn.getConnection().createStatement();
            statement
                     .executeUpdate("DROP TABLE IF EXISTS table2;");

@@ -22,13 +22,13 @@ public class MySQLViewSynchronizerTest {
 
     @Before
     public void setUp() throws ColumnAlreadyExistsException, ColumnNotFoundException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        cm = new ConnectionManger(new ConnectionData("localhost", "information_schema", "mysql", "lqip32", "4f3v6"));
+        cm = new ConnectionManger(new ConnectionData("information_schema", "mysql"));
         testModel = new MysqlModel("testbase");
     }
 
     @Test
     public void executeTest() throws Throwable {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "testbase", "mysql", "lqip32", "4f3v6"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData("testbase", "mysql"));
         Statement statement = null;
         try {
             statement = conn.getConnection().createStatement();
@@ -65,7 +65,7 @@ public class MySQLViewSynchronizerTest {
     @After
     public void tearDown
             () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "testbase", "mysql", "lqip32", "4f3v6"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData("testbase", "mysql"));
         Statement statement = conn.getConnection().createStatement();
         statement
                 .executeUpdate("DROP VIEW IF EXISTS views;");

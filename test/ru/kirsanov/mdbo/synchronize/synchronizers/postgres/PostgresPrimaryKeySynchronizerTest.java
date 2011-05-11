@@ -20,7 +20,7 @@ public class PostgresPrimaryKeySynchronizerTest {
 
     @Before
     public void setUp() throws Throwable {
-        cm = new ConnectionManger(new ConnectionData("localhost", "test", "postgresql", "lqip32", "4f3v6"));
+        cm = new ConnectionManger(new ConnectionData("test", "postgresql"));
         testModel = new PostgresModel("testbase");
     }
 
@@ -28,7 +28,7 @@ public class PostgresPrimaryKeySynchronizerTest {
     public void executeTest() throws Throwable {
         Statement statement = null;
         try {
-              ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "test", "postgresql", "lqip32", "4f3v6"));
+              ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
             statement = conn.getConnection().createStatement();
             statement
                     .executeUpdate("DROP TABLE IF EXISTS t1 CASCADE ;");
@@ -63,7 +63,7 @@ public class PostgresPrimaryKeySynchronizerTest {
     @After
     public void tearDown
             () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "test", "postgresql", "lqip32", "4f3v6"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
         Statement statement = conn.getConnection().createStatement();
         statement.executeUpdate("DROP TABLE IF EXISTS t1;");
         statement.close();

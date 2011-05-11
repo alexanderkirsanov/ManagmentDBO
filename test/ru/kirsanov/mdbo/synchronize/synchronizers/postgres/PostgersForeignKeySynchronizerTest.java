@@ -23,13 +23,13 @@ public class PostgersForeignKeySynchronizerTest {
 
     @Before
     public void setUp() throws ColumnAlreadyExistsException, ColumnNotFoundException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-       cm = new ConnectionManger(new ConnectionData("localhost", "test", "postgresql", "lqip32", "4f3v6"));
+       cm = new ConnectionManger(new ConnectionData("test", "postgresql"));
         testModel = new PostgresModel("testbase");
     }
 
     @Test
     public void executeTest() throws Throwable {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "test", "postgresql", "lqip32", "4f3v6"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
         Statement statement = null;
         try {
             statement = conn.getConnection().createStatement();
@@ -75,7 +75,7 @@ public class PostgersForeignKeySynchronizerTest {
     @After
     public void tearDown
             () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "test", "postgresql", "lqip32", "4f3v6"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
         Statement statement = conn.getConnection().createStatement();
         statement
                 .executeUpdate("DROP TABLE IF EXISTS childs;");

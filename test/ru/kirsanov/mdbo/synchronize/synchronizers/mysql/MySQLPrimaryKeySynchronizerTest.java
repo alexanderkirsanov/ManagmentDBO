@@ -20,7 +20,7 @@ public class MySQLPrimaryKeySynchronizerTest {
 
     @Before
     public void setUp() throws Throwable {
-        cm = new ConnectionManger(new ConnectionData("localhost", "information_schema", "mysql", "lqip32", "4f3v6"));
+        cm = new ConnectionManger(new ConnectionData("information_schema", "mysql"));
         testModel = new MysqlModel("testbase");
 
     }
@@ -29,7 +29,7 @@ public class MySQLPrimaryKeySynchronizerTest {
     public void executeTest() throws Throwable {
         Statement statement = null;
         try {
-              ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "testbase", "mysql", "lqip32", "4f3v6"));
+              ConnectionManger conn = new ConnectionManger(new ConnectionData("testbase", "mysql"));
             statement = conn.getConnection().createStatement();
             statement
                     .executeUpdate("DROP TABLE IF EXISTS t1;");
@@ -64,7 +64,7 @@ public class MySQLPrimaryKeySynchronizerTest {
     @After
     public void tearDown
             () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("localhost", "testbase", "mysql", "lqip32", "4f3v6"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData("testbase", "mysql"));
         Statement statement = conn.getConnection().createStatement();
         statement.executeUpdate("DROP TABLE IF EXISTS t1;");
         statement.close();
