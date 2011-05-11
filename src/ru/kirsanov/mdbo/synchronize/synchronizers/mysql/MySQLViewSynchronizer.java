@@ -2,12 +2,15 @@ package ru.kirsanov.mdbo.synchronize.synchronizers.mysql;
 
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.entity.*;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
+import ru.kirsanov.mdbo.metamodel.exception.ViewNotFound;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;
 import ru.kirsanov.mdbo.synchronize.synchronizers.IEntitySynchronizer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class MySQLViewSynchronizer implements IEntitySynchronizer {
     private static final String CHECK__OPTION = "CHECK_OPTION";
@@ -24,7 +27,7 @@ public class MySQLViewSynchronizer implements IEntitySynchronizer {
     }
 
     @Override
-    public Model execute(Model model) throws Throwable {
+    public Model execute(Model model) throws ModelSynchronizerNotFound, SQLException, ViewNotFound, ColumnAlreadyExistsException {
         if (!(model instanceof MysqlModel)) throw new ModelSynchronizerNotFound();
         PreparedStatement selectInformationFromSysTable = connection
                 .prepareStatement("SELECT * FROM views WHERE table_schema = ?");
@@ -53,7 +56,7 @@ public class MySQLViewSynchronizer implements IEntitySynchronizer {
             String dataTypeName = resultSetOfColumnTable.getString(DATA_TYPE).toLowerCase();
             DataType dataType = MySQLTableSynchronizer.createDataType(columnType, dataTypeName);
             IView view = model.getSchemas().get(0).getView(tableName);
-            view.createColumn(columnName, dataType);;
+            view.createColumn(columnName, dataType);
         }
 
         connection.setAutoCommit(true);

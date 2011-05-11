@@ -2,10 +2,14 @@ package ru.kirsanov.mdbo.synchronize.synchronizers.postgres;
 
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
-import ru.kirsanov.mdbo.metamodel.entity.*;
+import ru.kirsanov.mdbo.metamodel.entity.ISchema;
+import ru.kirsanov.mdbo.metamodel.entity.IView;
+import ru.kirsanov.mdbo.metamodel.entity.Model;
+import ru.kirsanov.mdbo.metamodel.entity.PostgresModel;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.ViewNotFound;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;
+import ru.kirsanov.mdbo.synchronize.synchronizers.IEntitySynchronizer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,7 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class PostgresViewSynchronizer {
+public class PostgresViewSynchronizer implements IEntitySynchronizer{
     private static final String TABLE_SCHEMA = "TABLE_SCHEMA";
     private Connection connection;
     private static final String CHECK_OPTION = "CHECK_OPTION";

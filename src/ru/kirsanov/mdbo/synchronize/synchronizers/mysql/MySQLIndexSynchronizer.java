@@ -1,12 +1,15 @@
 package ru.kirsanov.mdbo.synchronize.synchronizers.mysql;
 
 import ru.kirsanov.mdbo.metamodel.entity.*;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
+import ru.kirsanov.mdbo.metamodel.exception.TableNotFound;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;
 import ru.kirsanov.mdbo.synchronize.synchronizers.IEntitySynchronizer;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class MySQLIndexSynchronizer implements IEntitySynchronizer {
 
@@ -21,7 +24,7 @@ public class MySQLIndexSynchronizer implements IEntitySynchronizer {
     }
 
     @Override
-    public Model execute(Model model) throws Throwable {
+    public Model execute(Model model) throws ModelSynchronizerNotFound, SQLException, TableNotFound, ColumnNotFoundException {
         if (!(model instanceof MysqlModel)) throw new ModelSynchronizerNotFound();
         PreparedStatement selectInformationFromSysTable = connection
                 .prepareStatement("SELECT * FROM statistics WHERE index_schema = ? AND INDEX_NAME <> 'PRIMARY'");

@@ -3,6 +3,7 @@ package ru.kirsanov.mdbo.synchronize.synchronizers.postgres;
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
 import ru.kirsanov.mdbo.metamodel.entity.*;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.TableNotFound;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;
 import ru.kirsanov.mdbo.synchronize.synchronizers.IEntitySynchronizer;
@@ -10,6 +11,7 @@ import ru.kirsanov.mdbo.synchronize.synchronizers.IEntitySynchronizer;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +35,7 @@ public class PostgresTableSynchronizer implements IEntitySynchronizer {
     }
 
     @Override
-    public Model execute(Model model) throws Throwable {
+    public Model execute(Model model) throws ModelSynchronizerNotFound, SQLException, ColumnAlreadyExistsException {
         if (!(model instanceof PostgresModel)) throw new ModelSynchronizerNotFound();
         PreparedStatement selectInformationFromSysTable = connection
                 .prepareStatement(
