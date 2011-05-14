@@ -17,7 +17,7 @@ public class CSVDumperTest {
     @Before
     public void setUp() throws FileNotFoundException, UnsupportedEncodingException {
         mockedPrintWriter = mock(PrintWriter.class);
-        writer = new CVSWriter(mockedPrintWriter);
+        writer = new CSVWriter(mockedPrintWriter);
     }
 
     @Test
@@ -44,12 +44,21 @@ public class CSVDumperTest {
         verify(mockedPrintWriter).write("a as,b,c");
     }
 
-        @Test
+    @Test
     public void textWithSpaceAndSpaceDelimiterWriteTest() {
         String[] line = {"a as", "b", "c"};
         writer.setDelimiter(' ');
         writer.write(line);
         writer.close();
         verify(mockedPrintWriter).write("\"a as\" b c");
+    }
+
+    @Test
+    public void textWithSpecialSymbolsWriteTest() {
+        String[] line = {"a\\as", "b", "c"};
+        writer.setDelimiter(';');
+        writer.write(line);
+        writer.close();
+        verify(mockedPrintWriter).write("\"a\\as\";b;c");
     }
 }
