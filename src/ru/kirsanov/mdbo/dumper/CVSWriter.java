@@ -40,4 +40,9 @@ public class CVSWriter implements IWriter {
         printWriter.flush();
         printWriter.close();
     }
+
+    @Override
+    public void setDelimiter(char delimiter) {
+        this.delimiter = delimiter;
+    }
 }

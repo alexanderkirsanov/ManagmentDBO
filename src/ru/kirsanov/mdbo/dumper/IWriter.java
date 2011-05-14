@@ -14,4 +14,6 @@ public interface IWriter {
     void write(String[] line);
 
     void close();
+
+    void setDelimiter(char delimiter);
 }

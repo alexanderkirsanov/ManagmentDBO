@@ -27,4 +27,29 @@ public class CSVDumperTest {
         writer.close();
         verify(mockedPrintWriter).write("a,b,c");
     }
+
+    @Test
+    public void textWithDelimiterWriteTest() {
+        String[] line = {"a,as", "b", "c"};
+        writer.write(line);
+        writer.close();
+        verify(mockedPrintWriter).write("\"a,as\",b,c");
+    }
+
+    @Test
+    public void textWithSpaceWriteTest() {
+        String[] line = {"a as", "b", "c"};
+        writer.write(line);
+        writer.close();
+        verify(mockedPrintWriter).write("a as,b,c");
+    }
+
+        @Test
+    public void textWithSpaceAndSpaceDelimiterWriteTest() {
+        String[] line = {"a as", "b", "c"};
+        writer.setDelimiter(' ');
+        writer.write(line);
+        writer.close();
+        verify(mockedPrintWriter).write("\"a as\" b c");
+    }
 }
