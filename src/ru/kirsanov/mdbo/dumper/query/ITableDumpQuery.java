@@ -1,4 +1,4 @@
-package ru.kirsanov.mdbo.dumper;
+package ru.kirsanov.mdbo.dumper.query;
 
 import ru.kirsanov.mdbo.dumper.exception.NoColumnForDumpException;
 
@@ -9,7 +9,7 @@ import ru.kirsanov.mdbo.dumper.exception.NoColumnForDumpException;
  * Time: 23:57
  * To change this template use File | Settings | File Templates.
  */
-public interface ITableDumper {
+public interface ITableDumpQuery {
     void addColumn(String id);
 
     String getSql() throws NoColumnForDumpException;

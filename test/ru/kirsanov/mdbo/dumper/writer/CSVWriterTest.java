@@ -1,4 +1,4 @@
-package ru.kirsanov.mdbo.dumper;
+package ru.kirsanov.mdbo.dumper.writer;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -10,7 +10,7 @@ import java.io.UnsupportedEncodingException;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class CSVDumperTest {
+public class CSVWriterTest {
     private IWriter writer;
     private PrintWriter mockedPrintWriter;
 

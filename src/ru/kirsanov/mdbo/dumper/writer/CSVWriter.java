@@ -1,4 +1,4 @@
-package ru.kirsanov.mdbo.dumper;
+package ru.kirsanov.mdbo.dumper.writer;
 
 import ru.kirsanov.mdbo.dumper.validator.Validator;
 

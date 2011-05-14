@@ -1,15 +1,15 @@
-package ru.kirsanov.mdbo.dumper;
+package ru.kirsanov.mdbo.dumper.query;
 
 import ru.kirsanov.mdbo.dumper.exception.NoColumnForDumpException;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TableDumper implements ITableDumper {
+public class TableDumpQuery implements ITableDumpQuery {
     private String tableName;
     private List<String> columns = new ArrayList<String>();
 
-    public TableDumper(String tableName) {
+    public TableDumpQuery(String tableName) {
         this.tableName = tableName;
     }
 
