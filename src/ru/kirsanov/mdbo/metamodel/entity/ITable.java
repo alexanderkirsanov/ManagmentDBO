@@ -32,10 +32,4 @@ public interface ITable extends Container {
     UniqueKey getUniqueKey();
 
     PrimaryKey getPrimaryKey();
-
-    void addTuple(String... value) throws IllegalArgumentException;
-
-    List<String> getTuple(int id) throws ElementNotFoundException;
-
-    void removeTuple(int id) throws ElementNotFoundException;
 }

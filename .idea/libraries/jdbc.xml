@@ -3,6 +3,7 @@
     <CLASSES>
       <root url="jar://$PROJECT_DIR$/lib/postgresql-9.0-801.jdbc4.jar!/" />
       <root url="jar://$PROJECT_DIR$/lib/mysql-connector-java-5.1.13-bin.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/mockito-all-1.8.5.jar!/" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

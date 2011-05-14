@@ -8,7 +8,6 @@ import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.datatype.SimpleDatatype;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
-import ru.kirsanov.mdbo.metamodel.exception.ElementNotFoundException;
 
 import static org.junit.Assert.assertEquals;
 
@@ -97,38 +96,6 @@ public class TableTest {
         UniqueKey uk = table.createUniqueKey(table.getColumn("test"));
         Column column = new Column(new Table("test"), "test", new SimpleDatatype("VARCHAR", 60));
         uk.addColumn(column);
-    }
-
-    @Test
-    public void tupleTest() throws ColumnAlreadyExistsException, ColumnNotFoundException, ElementNotFoundException {
-        DataType integerDataType = new SimpleDatatype("INTEGER");
-        DataType varcharDataType = new SimpleDatatype("VARCHAR", 10);
-        IColumn idColumn = table.createColumn("id", integerDataType);
-        table.createPrimaryKey(idColumn);
-        table.createColumn("name", varcharDataType);
-        table.addTuple("1", "Alexandr");
-        assertEquals("1", table.getTuple(0).get(0));
-    }
-
-    @Test(expected = ElementNotFoundException.class)
-    public void notFoundTupleTest() throws ColumnAlreadyExistsException, ColumnNotFoundException, ElementNotFoundException {
-        DataType integerDataType = new SimpleDatatype("INTEGER");
-        DataType varcharDataType = new SimpleDatatype("VARCHAR", 10);
-        IColumn idColumn = table.createColumn("id", integerDataType);
-        table.createPrimaryKey(idColumn);
-        table.createColumn("name", varcharDataType);
-        table.addTuple("1", "Alexandr");
-        table.removeTuple(0);
-        table.getTuple(1);
-    }
-
-    @Test(expected = ElementNotFoundException.class)
-    public void removeNotExistsTupleTest() throws ColumnAlreadyExistsException, ColumnNotFoundException, ElementNotFoundException {
-        DataType integerDataType = new SimpleDatatype("INTEGER");
-        DataType varcharDataType = new SimpleDatatype("VARCHAR", 10);
-        IColumn idColumn = table.createColumn("id", integerDataType);
-        table.createPrimaryKey(idColumn);
-        table.removeTuple(0);
     }
 
     @Test
