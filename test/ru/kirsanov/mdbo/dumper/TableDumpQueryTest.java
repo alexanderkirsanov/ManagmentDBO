@@ -38,6 +38,11 @@ public class TableDumpQueryTest {
 
     @Test(expected = NoColumnForDumpException.class)
     public void getSqlForNoColumnShouldBeThrowsExceptionTest() throws NoColumnForDumpException {
-        tableDumpQuery.getSql().toLowerCase();
+        tableDumpQuery.getSql();
+    }
+
+    @Test
+    public void getEntityNameTest(){
+       assertEquals(tableName, tableDumpQuery.getEntityName());
     }
 }

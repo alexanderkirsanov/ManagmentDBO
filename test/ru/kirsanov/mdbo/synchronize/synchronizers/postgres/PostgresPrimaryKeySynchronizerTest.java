@@ -28,7 +28,7 @@ public class PostgresPrimaryKeySynchronizerTest {
     public void executeTest() throws Throwable {
         Statement statement = null;
         try {
-              ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
+            ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
             statement = conn.getConnection().createStatement();
             statement
                     .executeUpdate("DROP TABLE IF EXISTS t1 CASCADE ;");
@@ -55,7 +55,9 @@ public class PostgresPrimaryKeySynchronizerTest {
             Model pkSynchronizeModel = postgresPrimaryKeySynchronizer.execute(modelWithTable);
             assertEquals(testModel, pkSynchronizeModel);
         } finally {
-            statement.close();
+            if (statement != null) {
+                statement.close();
+            }
             cm.getConnection().close();
         }
     }

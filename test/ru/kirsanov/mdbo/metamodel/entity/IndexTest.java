@@ -8,15 +8,14 @@ import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import static org.junit.Assert.assertEquals;
 
 public class IndexTest {
-    private ITable table;
     private IColumn column;
     private IIndex index;
 
     @Before
     public void setUp() throws ColumnAlreadyExistsException {
-        table = new Table("MyTable");
+        ITable table = new Table("MyTable");
         column = table.createColumn("myColumn", new SimpleDatatype("VARCHAR", 60));
-        index = new Index("test", column, 19, index.UNIQUE);
+        index = new Index("test", column, 19, IIndex.UNIQUE);
     }
 
     @Test
@@ -29,7 +28,7 @@ public class IndexTest {
     public void indexTest() throws Exception {
         assertEquals(column, index.getColumn());
         assertEquals(19, index.getCount());
-        assertEquals(index.UNIQUE, index.getType());
+        assertEquals(IIndex.UNIQUE, index.getType());
     }
 
     @Test

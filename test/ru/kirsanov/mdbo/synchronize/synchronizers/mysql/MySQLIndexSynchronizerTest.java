@@ -49,7 +49,9 @@ public class MySQLIndexSynchronizerTest {
             Model synchronizeModel = mySQlIndexSynchronizer.execute(mySQLTableSynchronizer.execute(model));
             assertEquals(testModel, synchronizeModel);
         } finally {
-            statement.close();
+            if (statement != null) {
+                statement.close();
+            }
         }
 
     }

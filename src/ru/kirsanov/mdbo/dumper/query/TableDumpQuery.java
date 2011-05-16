@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TableDumpQuery implements ITableDumpQuery {
-    private String tableName;
+    private String entityName;
     private List<String> columns = new ArrayList<String>();
 
-    public TableDumpQuery(String tableName) {
-        this.tableName = tableName;
+    public TableDumpQuery(String entityName) {
+        this.entityName = entityName;
     }
 
 
@@ -31,11 +31,16 @@ public class TableDumpQuery implements ITableDumpQuery {
         }
 
         selectStringBuilder.append(" FROM ");
-        selectStringBuilder.append(tableName);
+        selectStringBuilder.append(entityName);
         selectStringBuilder.append(";");
         return selectStringBuilder.toString();
     } else  {
             throw new NoColumnForDumpException();
         }
+    }
+
+    @Override
+    public String getEntityName() {
+        return this.entityName;
     }
 }

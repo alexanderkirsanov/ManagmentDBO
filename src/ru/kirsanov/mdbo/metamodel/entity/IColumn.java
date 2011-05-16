@@ -1,7 +1,6 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
-import ru.kirsanov.mdbo.metamodel.exception.ElementNotFoundException;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,14 +19,6 @@ public interface IColumn extends Container {
     void setDataType(DataType dataType);
 
     DataType getDataType();
-
-    void addVariable(String variable);
-
-    void removeVariable(int id) throws ElementNotFoundException;
-
-    String getVariable(int id) throws ElementNotFoundException;
-
-    void changeVariable(String variable, int id) throws ElementNotFoundException;
 
     boolean isNullable();
 

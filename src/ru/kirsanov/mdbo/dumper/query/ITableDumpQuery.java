@@ -13,4 +13,6 @@ public interface ITableDumpQuery {
     void addColumn(String id);
 
     String getSql() throws NoColumnForDumpException;
+
+    String getEntityName();
 }

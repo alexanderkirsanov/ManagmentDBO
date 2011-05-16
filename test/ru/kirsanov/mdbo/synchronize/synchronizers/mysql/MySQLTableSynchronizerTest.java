@@ -29,7 +29,7 @@ public class MySQLTableSynchronizerTest {
     @Test
     public void createDataTypeTest() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, ColumnAlreadyExistsException {
         MySQLTableSynchronizer mySqlModel = new MySQLTableSynchronizer(cm.getConnection());
-        DataType dataType = mySqlModel.createDataType("integer(1,1)", "integer");
+        DataType dataType = MySQLTableSynchronizer.createDataType("integer(1,1)", "integer");
         DataType integerType = new SimpleDatatype("integer", 1, 1);
         assertEquals(integerType, dataType);
     }

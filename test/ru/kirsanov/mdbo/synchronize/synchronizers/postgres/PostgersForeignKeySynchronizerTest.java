@@ -23,7 +23,7 @@ public class PostgersForeignKeySynchronizerTest {
 
     @Before
     public void setUp() throws ColumnAlreadyExistsException, ColumnNotFoundException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-       cm = new ConnectionManger(new ConnectionData("test", "postgresql"));
+        cm = new ConnectionManger(new ConnectionData("test", "postgresql"));
         testModel = new PostgresModel("testbase");
     }
 
@@ -65,9 +65,11 @@ public class PostgersForeignKeySynchronizerTest {
             Model synchronizeModel = postgresForeignKeySynchronizer.execute(postgresTableSynchronizer.execute(model));
             ForeignKey fk = schema.createForeignKey("childs_parent_id_fkey", childsTable, parentsTable);
             fk.addColumnMapping(childsParentIdColumn, parentsIdColumn);
-            assertEquals(testModel,synchronizeModel);
+            assertEquals(testModel, synchronizeModel);
         } finally {
-            statement.close();
+            if (statement != null) {
+                statement.close();
+            }
         }
 
     }

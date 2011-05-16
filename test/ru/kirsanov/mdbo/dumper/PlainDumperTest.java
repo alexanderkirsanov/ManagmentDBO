@@ -5,19 +5,15 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.kirsanov.mdbo.dumper.exception.NoColumnForDumpException;
 import ru.kirsanov.mdbo.dumper.query.TableDumpQuery;
-import ru.kirsanov.mdbo.dumper.writer.PlainWriter;
 import ru.kirsanov.mdbo.dumper.writer.IWriter;
 import ru.kirsanov.mdbo.synchronize.utility.ConnectionData;
 import ru.kirsanov.mdbo.synchronize.utility.ConnectionManger;
 
 import java.io.FileNotFoundException;
-import java.io.PrintWriter;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Statement;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 public class PlainDumperTest {
 
@@ -40,30 +36,48 @@ public class PlainDumperTest {
             statement
                     .executeUpdate("INSERT INTO parents (id) VALUES (1),(2),(3)");
         } finally {
-            statement.close();
+            if (statement != null) {
+                statement.close();
+            }
         }
     }
 
     @Test
-    public void executeTest() throws NoColumnForDumpException, FileNotFoundException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        PrintWriter mockedPrintWriter = mock(PrintWriter.class);
-        IWriter writer = new PlainWriter(mockedPrintWriter);
-        PlainDumper plainDumper = new PlainDumper(cm.getConnection(), writer);
+    public void executeWithTrueEncodingTest() throws NoColumnForDumpException, FileNotFoundException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        PlainDumper plainDumper = new PlainDumper(cm.getConnection());
+        plainDumper.setEncoding(IWriter.CP1251);
         TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
         tableDumpQuery.addColumn("id");
         plainDumper.execute(tableDumpQuery);
-        verify(mockedPrintWriter).write("3");
     }
 
     @Test
-    public void executeWithTrueEncodingTest() throws NoColumnForDumpException, FileNotFoundException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        IWriter writer = new PlainWriter("text.txt", PlainWriter.CP1251);
-        PlainDumper plainDumper = new PlainDumper(cm.getConnection(), writer);
+    public void executeWithTruePathTest() throws NoColumnForDumpException, IOException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        PlainDumper plainDumper = new PlainDumper(cm.getConnection());
+        plainDumper.setPath("/home/lqip32/");
         TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
         tableDumpQuery.addColumn("id");
         plainDumper.execute(tableDumpQuery);
     }
 
+    @Test(expected = IOException.class)
+    public void setNotExistsPathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        PlainDumper plainDumper = new PlainDumper(cm.getConnection());
+        plainDumper.setPath("/home/desktop/lqip322");
+
+    }
+
+    @Test(expected = IOException.class)
+    public void setNullPathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        PlainDumper plainDumper = new PlainDumper(cm.getConnection());
+        plainDumper.setPath("");
+    }
+
+    @Test(expected = IOException.class)
+    public void setNotWritablePathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        PlainDumper plainDumper = new PlainDumper(cm.getConnection());
+        plainDumper.setPath("/");
+    }
 
     @After
     public void tearDown() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {

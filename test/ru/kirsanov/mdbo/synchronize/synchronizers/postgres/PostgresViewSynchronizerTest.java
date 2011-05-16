@@ -57,7 +57,9 @@ public class PostgresViewSynchronizerTest {
             Model synchronizeModel = postgresViewSynchronizer.execute(postgresTableSynchronizer.execute(model));
             assertEquals(testModel, synchronizeModel);
         } finally {
-            statement.close();
+            if (statement != null) {
+                statement.close();
+            }
         }
 
     }
