@@ -1,7 +1,10 @@
 package ru.kirsanov.mdbo.synchronize.synchronizers.postgres;
 
 import ru.kirsanov.mdbo.metamodel.constraint.ForeignKey;
-import ru.kirsanov.mdbo.metamodel.entity.*;
+import ru.kirsanov.mdbo.metamodel.entity.ISchema;
+import ru.kirsanov.mdbo.metamodel.entity.ITable;
+import ru.kirsanov.mdbo.metamodel.entity.Model;
+import ru.kirsanov.mdbo.metamodel.entity.PostgresModel;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
 import ru.kirsanov.mdbo.metamodel.exception.TableNotFound;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;

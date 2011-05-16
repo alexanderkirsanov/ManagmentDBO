@@ -1,7 +1,10 @@
 package ru.kirsanov.mdbo.synchronize.synchronizers.mysql;
 
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
-import ru.kirsanov.mdbo.metamodel.entity.*;
+import ru.kirsanov.mdbo.metamodel.entity.ISchema;
+import ru.kirsanov.mdbo.metamodel.entity.IView;
+import ru.kirsanov.mdbo.metamodel.entity.Model;
+import ru.kirsanov.mdbo.metamodel.entity.MysqlModel;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.ViewNotFoundException;
 import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;

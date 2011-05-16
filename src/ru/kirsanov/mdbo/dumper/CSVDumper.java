@@ -28,12 +28,16 @@ public class CSVDumper {
         ResultSet resultSetOfData = selectDataFromTable.executeQuery();
         ResultSetMetaData resultSetMetaData = resultSetOfData.getMetaData();
         int columnCount = resultSetMetaData.getColumnCount();
+        String[] inf = new String[columnCount];
+
+        for (int i = 1; i <= columnCount; i++) {
+            inf[i - 1] = resultSetMetaData.getColumnName(i);
+        }
+        writer.write(inf);
         String[] line = new String[columnCount];
         while (resultSetOfData.next()) {
             for (int i = 1; i <= columnCount; i++) {
-
-                line[i-1] = resultSetOfData.getString(i);
-
+                line[i - 1] = resultSetOfData.getString(i);
             }
             writer.write(line);
         }

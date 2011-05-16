@@ -5,7 +5,6 @@ import ru.kirsanov.mdbo.metamodel.constraint.UniqueKey;
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
 import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
-import ru.kirsanov.mdbo.metamodel.exception.ElementNotFoundException;
 
 import java.util.List;
 

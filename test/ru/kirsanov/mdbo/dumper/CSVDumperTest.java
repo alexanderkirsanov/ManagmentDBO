@@ -10,7 +10,9 @@ import ru.kirsanov.mdbo.dumper.writer.IWriter;
 import ru.kirsanov.mdbo.synchronize.utility.ConnectionData;
 import ru.kirsanov.mdbo.synchronize.utility.ConnectionManger;
 
+import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -22,12 +24,8 @@ public class CSVDumperTest {
     private ConnectionManger cm;
 
     @Before
-    public void setUp() {
+    public void setUp() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         cm = new ConnectionManger(new ConnectionData("test", "postgresql"));
-    }
-
-    @Test
-    public void executeTest() throws Exception, NoColumnForDumpException {
         ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
         Statement statement = null;
         try {
@@ -41,17 +39,31 @@ public class CSVDumperTest {
                             ") \n");
             statement
                     .executeUpdate("INSERT INTO parents (id) VALUES (1),(2),(3)");
-            PrintWriter mockedPrintWriter = mock(PrintWriter.class);
-            IWriter writer = new CSVWriter(mockedPrintWriter);
-            CSVDumper csvDumper = new CSVDumper(cm.getConnection(), writer);
-            TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
-            tableDumpQuery.addColumn("id");
-            csvDumper.execute(tableDumpQuery);
-            verify(mockedPrintWriter).write("3");
         } finally {
             statement.close();
         }
     }
+
+    @Test
+    public void executeTest() throws NoColumnForDumpException, FileNotFoundException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        PrintWriter mockedPrintWriter = mock(PrintWriter.class);
+        IWriter writer = new CSVWriter(mockedPrintWriter);
+        CSVDumper csvDumper = new CSVDumper(cm.getConnection(), writer);
+        TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
+        tableDumpQuery.addColumn("id");
+        csvDumper.execute(tableDumpQuery);
+        verify(mockedPrintWriter).write("3");
+    }
+
+    @Test
+    public void executeWithTrueEncodingTest() throws NoColumnForDumpException, FileNotFoundException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        IWriter writer = new CSVWriter("text.txt", CSVWriter.CP1251);
+        CSVDumper csvDumper = new CSVDumper(cm.getConnection(), writer);
+        TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
+        tableDumpQuery.addColumn("id");
+        csvDumper.execute(tableDumpQuery);
+    }
+
 
     @After
     public void tearDown() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {

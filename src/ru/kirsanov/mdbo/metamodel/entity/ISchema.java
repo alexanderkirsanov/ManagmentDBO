@@ -1,10 +1,10 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
 import ru.kirsanov.mdbo.metamodel.constraint.ForeignKey;
+import ru.kirsanov.mdbo.metamodel.exception.ForeignKeyNotFound;
 import ru.kirsanov.mdbo.metamodel.exception.IndexNotFoundException;
 import ru.kirsanov.mdbo.metamodel.exception.TableNotFound;
 import ru.kirsanov.mdbo.metamodel.exception.ViewNotFoundException;
-import ru.kirsanov.mdbo.metamodel.exception.ForeignKeyNotFound;
 
 import java.util.List;
 

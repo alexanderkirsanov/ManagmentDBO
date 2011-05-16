@@ -2,10 +2,12 @@ package ru.kirsanov.mdbo.dumper.writer;
 
 import org.junit.Before;
 import org.junit.Test;
+import ru.kirsanov.mdbo.dumper.exception.NoColumnForDumpException;
 
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.sql.SQLException;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -61,4 +63,10 @@ public class CSVWriterTest {
         writer.close();
         verify(mockedPrintWriter).write("\"a\\as\";b;c");
     }
+
+    @Test(expected = UnsupportedEncodingException.class)
+    public void executeWithIncorrectEncodingShouldBeThrowExceptionTest() throws NoColumnForDumpException, FileNotFoundException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        IWriter writer = new CSVWriter("text.txt", "Incorrect encoding");
+    }
+
 }
