@@ -6,13 +6,13 @@ import ru.kirsanov.mdbo.dumper.writer.IWriter;
 
 import java.sql.*;
 
-public class CSVDumper {
+public class PlainDumper {
     private Connection connection;
     private ITableDumpQuery query;
     private Character delimiter;
     private IWriter writer;
 
-    public CSVDumper(Connection connection, IWriter writer) {
+    public PlainDumper(Connection connection, IWriter writer) {
         this.connection = connection;
         this.writer = writer;
     }
@@ -29,7 +29,6 @@ public class CSVDumper {
         ResultSetMetaData resultSetMetaData = resultSetOfData.getMetaData();
         int columnCount = resultSetMetaData.getColumnCount();
         String[] inf = new String[columnCount];
-
         for (int i = 1; i <= columnCount; i++) {
             inf[i - 1] = resultSetMetaData.getColumnName(i);
         }
@@ -43,6 +42,4 @@ public class CSVDumper {
         }
         connection.setAutoCommit(true);
     }
-
-
 }

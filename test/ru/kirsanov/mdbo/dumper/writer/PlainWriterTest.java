@@ -12,14 +12,14 @@ import java.sql.SQLException;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class CSVWriterTest {
+public class PlainWriterTest {
     private IWriter writer;
     private PrintWriter mockedPrintWriter;
 
     @Before
     public void setUp() throws FileNotFoundException, UnsupportedEncodingException {
         mockedPrintWriter = mock(PrintWriter.class);
-        writer = new CSVWriter(mockedPrintWriter);
+        writer = new PlainWriter(mockedPrintWriter);
     }
 
     @Test
@@ -66,7 +66,7 @@ public class CSVWriterTest {
 
     @Test(expected = UnsupportedEncodingException.class)
     public void executeWithIncorrectEncodingShouldBeThrowExceptionTest() throws NoColumnForDumpException, FileNotFoundException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        IWriter writer = new CSVWriter("text.txt", "Incorrect encoding");
+        IWriter writer = new PlainWriter("text.txt", "Incorrect encoding");
     }
 
 }

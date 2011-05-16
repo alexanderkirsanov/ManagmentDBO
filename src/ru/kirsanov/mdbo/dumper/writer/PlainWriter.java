@@ -7,16 +7,16 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
-public class CSVWriter implements IWriter {
+public class PlainWriter implements IWriter {
     private char delimiter = ',';
     private PrintWriter printWriter;
     private StringBuilder stringBuilder = new StringBuilder();
 
-    public CSVWriter(PrintWriter printWriter) throws FileNotFoundException, UnsupportedEncodingException {
+    public PlainWriter(PrintWriter printWriter) throws FileNotFoundException, UnsupportedEncodingException {
         this.printWriter = printWriter;
     }
 
-    public CSVWriter(String s, String encoding) throws FileNotFoundException, UnsupportedEncodingException {
+    public PlainWriter(String s, String encoding) throws FileNotFoundException, UnsupportedEncodingException {
         this(new PrintWriter(new File(s), encoding));
     }
 
@@ -29,7 +29,6 @@ public class CSVWriter implements IWriter {
             if (i < line.length) {
                 stringBuilder.append(delimiter);
             }
-
         }
         printWriter.write(stringBuilder.toString());
         stringBuilder.delete(0, Integer.MAX_VALUE);

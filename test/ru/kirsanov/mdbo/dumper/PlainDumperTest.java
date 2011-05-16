@@ -5,7 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.kirsanov.mdbo.dumper.exception.NoColumnForDumpException;
 import ru.kirsanov.mdbo.dumper.query.TableDumpQuery;
-import ru.kirsanov.mdbo.dumper.writer.CSVWriter;
+import ru.kirsanov.mdbo.dumper.writer.PlainWriter;
 import ru.kirsanov.mdbo.dumper.writer.IWriter;
 import ru.kirsanov.mdbo.synchronize.utility.ConnectionData;
 import ru.kirsanov.mdbo.synchronize.utility.ConnectionManger;
@@ -19,7 +19,7 @@ import java.sql.Statement;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-public class CSVDumperTest {
+public class PlainDumperTest {
 
     private ConnectionManger cm;
 
@@ -47,21 +47,21 @@ public class CSVDumperTest {
     @Test
     public void executeTest() throws NoColumnForDumpException, FileNotFoundException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         PrintWriter mockedPrintWriter = mock(PrintWriter.class);
-        IWriter writer = new CSVWriter(mockedPrintWriter);
-        CSVDumper csvDumper = new CSVDumper(cm.getConnection(), writer);
+        IWriter writer = new PlainWriter(mockedPrintWriter);
+        PlainDumper plainDumper = new PlainDumper(cm.getConnection(), writer);
         TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
         tableDumpQuery.addColumn("id");
-        csvDumper.execute(tableDumpQuery);
+        plainDumper.execute(tableDumpQuery);
         verify(mockedPrintWriter).write("3");
     }
 
     @Test
     public void executeWithTrueEncodingTest() throws NoColumnForDumpException, FileNotFoundException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        IWriter writer = new CSVWriter("text.txt", CSVWriter.CP1251);
-        CSVDumper csvDumper = new CSVDumper(cm.getConnection(), writer);
+        IWriter writer = new PlainWriter("text.txt", PlainWriter.CP1251);
+        PlainDumper plainDumper = new PlainDumper(cm.getConnection(), writer);
         TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
         tableDumpQuery.addColumn("id");
-        csvDumper.execute(tableDumpQuery);
+        plainDumper.execute(tableDumpQuery);
     }
 
 
