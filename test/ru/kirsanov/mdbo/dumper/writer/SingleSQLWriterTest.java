@@ -29,7 +29,7 @@ public class SingleSQLWriterTest {
     }
 
     @Test
-    public void writeTest() throws Exception {
+    public void writeMultipleLineTest() throws Exception {
         writer.write(new String[]{"1", "Alexandr"});
         writer.setEnd();
         writer.write(new String[]{"2", "Andrey"});
@@ -41,5 +41,30 @@ public class SingleSQLWriterTest {
         verify(mockedPrintWriter).write(secondLine);
         verify(mockedPrintWriter).write(thirdLine);
         verify(mockedPrintWriter).write(fourthLine);
+    }
+
+    @Test
+    public void writeOneLineTest() throws Exception {
+        writer.setEnd();
+        writer.write(new String[]{"1", "Alexandr"});
+        String firstLine = "INSERT INTO " + tableName + "(id, name) ";
+        String secondLine = " VALUES";
+        String thirdLine ="('1','Alexandr');";
+        verify(mockedPrintWriter).write(firstLine);
+        verify(mockedPrintWriter).write(secondLine);
+        verify(mockedPrintWriter).write(thirdLine);
+    }
+
+    @Test
+    public void writeOneLineWithSpecialCharacterTest() throws Exception {
+        writer.setEnd();
+        String name = "Alexandr\" ";
+        writer.write(new String[]{"1", name});
+        String firstLine = "INSERT INTO " + tableName + "(id, name) ";
+        String secondLine = " VALUES";
+        String thirdLine ="('1','Alexandr\\\" ');";
+        verify(mockedPrintWriter).write(firstLine);
+        verify(mockedPrintWriter).write(secondLine);
+        verify(mockedPrintWriter).write(thirdLine);
     }
 }
