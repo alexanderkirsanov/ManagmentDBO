@@ -8,9 +8,6 @@ package ru.kirsanov.mdbo.dumper.writer;
  * To change this template use File | Settings | File Templates.
  */
 public interface IWriter {
-    String CP1251 = "Cp1251";
-    String UTF8 = "UTF-8";
-
     void write(String[] line);
 
     void close();

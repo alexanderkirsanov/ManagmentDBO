@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.kirsanov.mdbo.dumper.exception.NoColumnForDumpException;
 import ru.kirsanov.mdbo.dumper.query.TableDumpQuery;
+import ru.kirsanov.mdbo.dumper.writer.Encoding;
 import ru.kirsanov.mdbo.dumper.writer.PlainWriter;
 import ru.kirsanov.mdbo.dumper.writer.IWriter;
 import ru.kirsanov.mdbo.synchronize.utility.ConnectionData;
@@ -57,7 +58,7 @@ public class PlainDumperTest {
 
     @Test
     public void executeWithTrueEncodingTest() throws NoColumnForDumpException, FileNotFoundException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        IWriter writer = new PlainWriter("text.txt", PlainWriter.CP1251);
+        IWriter writer = new PlainWriter("text.txt", Encoding.CP1251);
         PlainDumper plainDumper = new PlainDumper(cm.getConnection(), writer);
         TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
         tableDumpQuery.addColumn("id");
