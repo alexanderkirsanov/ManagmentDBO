@@ -19,7 +19,7 @@ public class MultipleSQLWriter extends SQLWriter {
     @Override
     public void write(String[] line) {
         stringBuilder.append(createHeader());
-        stringBuilder.append(" VALUES(");
+        stringBuilder.append("VALUES(");
         stringBuilder.append(prepareData(line));
         stringBuilder.append(");");
         writeLine(stringBuilder.toString());

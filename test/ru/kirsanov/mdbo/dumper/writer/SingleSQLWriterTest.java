@@ -35,7 +35,7 @@ public class SingleSQLWriterTest {
         writer.write(new String[]{"2", "Andrey"});
         String firstLine = "INSERT INTO " + tableName + "(id, name) ";
         String secondLine = " VALUES";
-        String thirdLine ="('1','Alexandr'),";
+        String thirdLine = "('1','Alexandr'),";
         String fourthLine = "('2','Andrey');";
         verify(mockedPrintWriter).write(firstLine);
         verify(mockedPrintWriter).write(secondLine);
@@ -49,7 +49,7 @@ public class SingleSQLWriterTest {
         writer.write(new String[]{"1", "Alexandr"});
         String firstLine = "INSERT INTO " + tableName + "(id, name) ";
         String secondLine = " VALUES";
-        String thirdLine ="('1','Alexandr');";
+        String thirdLine = "('1','Alexandr');";
         verify(mockedPrintWriter).write(firstLine);
         verify(mockedPrintWriter).write(secondLine);
         verify(mockedPrintWriter).write(thirdLine);
@@ -62,7 +62,8 @@ public class SingleSQLWriterTest {
         writer.write(new String[]{"1", name});
         String firstLine = "INSERT INTO " + tableName + "(id, name) ";
         String secondLine = " VALUES";
-        String thirdLine ="('1','Alexandr\\\" ');";
+        String thirdLine = "('1','Alexandr\\\" ');";
+        writer.close();
         verify(mockedPrintWriter).write(firstLine);
         verify(mockedPrintWriter).write(secondLine);
         verify(mockedPrintWriter).write(thirdLine);

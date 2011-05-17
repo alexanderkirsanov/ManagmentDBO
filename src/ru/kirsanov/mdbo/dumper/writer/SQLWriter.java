@@ -59,12 +59,4 @@ public abstract class SQLWriter implements IWriter {
         printWriter.flush();
         printWriter.close();
     }
-
-    public void setTable(String table) {
-        this.table = table;
-    }
-
-    public void setColumns(List<String> columns) {
-        this.columns = columns;
-    }
 }

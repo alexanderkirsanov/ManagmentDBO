@@ -1,7 +1,6 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
 import ru.kirsanov.mdbo.metamodel.datatype.DataType;
-import ru.kirsanov.mdbo.metamodel.exception.ElementNotFoundException;
 
 import java.util.ArrayList;
 
