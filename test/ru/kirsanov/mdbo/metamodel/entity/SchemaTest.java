@@ -10,7 +10,6 @@ import static org.junit.Assert.assertEquals;
 
 public class SchemaTest {
     private String myTable;
-    private String view;
 
     @Test
     public void tableTest() throws Exception {

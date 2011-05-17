@@ -29,7 +29,7 @@ public class MySQLPrimaryKeySynchronizerTest {
     public void executeTest() throws Throwable {
         Statement statement = null;
         try {
-              ConnectionManger conn = new ConnectionManger(new ConnectionData("testbase", "mysql"));
+            ConnectionManger conn = new ConnectionManger(new ConnectionData("testbase", "mysql"));
             statement = conn.getConnection().createStatement();
             statement
                     .executeUpdate("DROP TABLE IF EXISTS t1;");
@@ -56,7 +56,10 @@ public class MySQLPrimaryKeySynchronizerTest {
             Model pkSynchronizeModel = mySQLPrimaryKeySynchronizer.execute(modelWithTable);
             assertEquals(testModel, pkSynchronizeModel);
         } finally {
-            statement.close();
+            if (statement != null) {
+                statement.close();
+            }
+
             cm.getConnection().close();
         }
     }

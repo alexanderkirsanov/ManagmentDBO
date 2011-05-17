@@ -7,7 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 
-public class PlainWriter implements IWriter {
+public class PlainWriter implements IPlainWriter {
     private char delimiter = ',';
     private PrintWriter printWriter;
     private StringBuilder stringBuilder = new StringBuilder();

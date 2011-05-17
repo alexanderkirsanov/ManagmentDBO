@@ -15,13 +15,13 @@ import java.sql.Statement;
 import static org.junit.Assert.assertEquals;
 
 public class PostgresIndexSynchronizerTest {
-    private  PostgresModel testModel;
+    private PostgresModel testModel;
     private ConnectionManger cm;
 
     @Before
     public void setUp() {
         cm = new ConnectionManger(new ConnectionData("test", "postgresql"));
-        testModel = new  PostgresModel("testbase");
+        testModel = new PostgresModel("testbase");
     }
 
     @Test
@@ -49,7 +49,9 @@ public class PostgresIndexSynchronizerTest {
             Model synchronizeModel = postgresIndexSynchronizer.execute(postgresTableSynchronizer.execute(model));
             assertEquals(testModel, synchronizeModel);
         } finally {
-            statement.close();
+            if (statement != null) {
+                statement.close();
+            }
         }
 
     }

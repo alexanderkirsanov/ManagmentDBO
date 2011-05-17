@@ -3,8 +3,9 @@ package ru.kirsanov.mdbo.dumper.query;
 import org.junit.Before;
 import org.junit.Test;
 import ru.kirsanov.mdbo.dumper.exception.NoColumnForDumpException;
-import ru.kirsanov.mdbo.dumper.query.ITableDumpQuery;
-import ru.kirsanov.mdbo.dumper.query.TableDumpQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -38,6 +39,23 @@ public class TableDumpQueryTest {
 
     @Test(expected = NoColumnForDumpException.class)
     public void getSqlForNoColumnShouldBeThrowsExceptionTest() throws NoColumnForDumpException {
-        tableDumpQuery.getSql().toLowerCase();
+        tableDumpQuery.getSql();
+    }
+
+    @Test
+    public void getEntityNameTest() {
+        assertEquals(tableName, tableDumpQuery.getEntityName());
+    }
+
+    @Test
+    public void getColumnsTest() {
+        List<String> columns = new ArrayList<String>();
+        String firstColumnName = "id";
+        String secondColumnName = "name";
+        tableDumpQuery.addColumn(firstColumnName);
+        tableDumpQuery.addColumn(secondColumnName);
+        columns.add("id");
+        columns.add("name");
+        assertEquals(columns, tableDumpQuery.getColumnsList());
     }
 }

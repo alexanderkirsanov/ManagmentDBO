@@ -2,26 +2,55 @@ package ru.kirsanov.mdbo.dumper;
 
 import ru.kirsanov.mdbo.dumper.exception.NoColumnForDumpException;
 import ru.kirsanov.mdbo.dumper.query.ITableDumpQuery;
-import ru.kirsanov.mdbo.dumper.writer.IWriter;
+import ru.kirsanov.mdbo.dumper.writer.Encoding;
+import ru.kirsanov.mdbo.dumper.writer.IPlainWriter;
+import ru.kirsanov.mdbo.dumper.writer.PlainWriter;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.*;
 
 public class PlainDumper {
     private Connection connection;
     private ITableDumpQuery query;
     private Character delimiter;
-    private IWriter writer;
 
-    public PlainDumper(Connection connection, IWriter writer) {
+    private String encoding = Encoding.UTF8;
+    private String path = "";
+
+    public PlainDumper(Connection connection) {
         this.connection = connection;
-        this.writer = writer;
     }
 
     public void setDelimiter(Character delimiter) {
-        writer.setDelimiter(delimiter);
+        this.delimiter = delimiter;
     }
 
-    public void execute(ITableDumpQuery tableDumpQuery) throws SQLException, NoColumnForDumpException {
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
+    }
+
+    public void setPath(String path) throws IOException {
+        try {
+            File file = new File(path);
+            if (file.isDirectory()) {
+                if (file.canWrite()) {
+                    this.path = path;
+                } else {
+                    throw new IOException("File can not be write");
+                }
+            } else {
+                throw new IOException("This is not folder");
+            }
+        } catch (NullPointerException e) {
+            throw new IOException("Path not found");
+        }
+    }
+
+    public void execute(ITableDumpQuery tableDumpQuery) throws SQLException, NoColumnForDumpException, FileNotFoundException, UnsupportedEncodingException {
+        IPlainWriter writer = new PlainWriter(path + tableDumpQuery.getEntityName() + ".txt", encoding);
         PreparedStatement selectDataFromTable = connection
                 .prepareStatement(tableDumpQuery.getSql());
         connection.setAutoCommit(false);
@@ -40,6 +69,7 @@ public class PlainDumper {
             }
             writer.write(line);
         }
+        writer.close();
         connection.setAutoCommit(true);
     }
 }

@@ -12,11 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Configurator {
-    private Connection connection;
+
     private Map<String, IEntitySynchronizer> modelSynchronizers;
 
     public Configurator(Connection connection) {
-        this.connection = connection;
         modelSynchronizers = new HashMap<String, IEntitySynchronizer>();
         modelSynchronizers.put(MysqlModel.class.getSimpleName(), new DatabaseSynchronizer(new MySQLSynchronizersBuilder(connection)));
         modelSynchronizers.put(PostgresModel.class.getSimpleName(), new DatabaseSynchronizer(new PostgresSynchronizersBuilder(connection)));

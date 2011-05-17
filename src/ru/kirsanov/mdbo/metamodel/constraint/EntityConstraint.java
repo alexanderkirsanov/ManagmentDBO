@@ -4,11 +4,9 @@ import ru.kirsanov.mdbo.metamodel.entity.IColumn;
 
 public class EntityConstraint extends AbstractConstraint {
     private String constraintString;
-    private IColumn column;
 
     public EntityConstraint(IColumn column, String constraintString) {
         super(column.getTable(), null);
-        this.column = column;
         this.constraintString = constraintString;
     }
 

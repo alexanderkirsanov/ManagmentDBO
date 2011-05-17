@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TableDumpQuery implements ITableDumpQuery {
-    private String tableName;
+    private String entityName;
     private List<String> columns = new ArrayList<String>();
 
-    public TableDumpQuery(String tableName) {
-        this.tableName = tableName;
+    public TableDumpQuery(String entityName) {
+        this.entityName = entityName;
     }
 
 
@@ -21,21 +21,31 @@ public class TableDumpQuery implements ITableDumpQuery {
 
     @Override
     public String getSql() throws NoColumnForDumpException {
-        if (columns.size() > 0 ){
-        StringBuilder selectStringBuilder = new StringBuilder("SELECT ");
-        for (String columnName : columns) {
-            selectStringBuilder.append(columnName);
-            if (columns.lastIndexOf(columnName) + 1 != columns.size()) {
-                selectStringBuilder.append(" ,");
+        if (columns.size() > 0) {
+            StringBuilder selectStringBuilder = new StringBuilder("SELECT ");
+            for (String columnName : columns) {
+                selectStringBuilder.append(columnName);
+                if (columns.lastIndexOf(columnName) + 1 != columns.size()) {
+                    selectStringBuilder.append(" ,");
+                }
             }
-        }
 
-        selectStringBuilder.append(" FROM ");
-        selectStringBuilder.append(tableName);
-        selectStringBuilder.append(";");
-        return selectStringBuilder.toString();
-    } else  {
+            selectStringBuilder.append(" FROM ");
+            selectStringBuilder.append(entityName);
+            selectStringBuilder.append(";");
+            return selectStringBuilder.toString();
+        } else {
             throw new NoColumnForDumpException();
         }
+    }
+
+    @Override
+    public String getEntityName() {
+        return this.entityName;
+    }
+
+    @Override
+    public List<String> getColumnsList() {
+        return this.columns;
     }
 }

@@ -2,6 +2,8 @@ package ru.kirsanov.mdbo.dumper.query;
 
 import ru.kirsanov.mdbo.dumper.exception.NoColumnForDumpException;
 
+import java.util.List;
+
 /**
  * Created by IntelliJ IDEA.
  * User: lqip32
@@ -13,4 +15,8 @@ public interface ITableDumpQuery {
     void addColumn(String id);
 
     String getSql() throws NoColumnForDumpException;
+
+    String getEntityName();
+
+    List<String> getColumnsList();
 }

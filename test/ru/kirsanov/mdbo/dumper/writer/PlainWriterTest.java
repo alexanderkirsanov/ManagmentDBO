@@ -13,7 +13,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 public class PlainWriterTest {
-    private IWriter writer;
+    private IPlainWriter writer;
     private PrintWriter mockedPrintWriter;
 
     @Before

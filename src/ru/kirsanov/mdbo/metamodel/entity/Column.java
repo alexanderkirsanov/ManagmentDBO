@@ -30,8 +30,8 @@ public class Column extends MetaObject implements IColumn {
 
     @Override
     public ITable getTable() {
-        if (this.table instanceof ITable){
-            return (ITable)this.table;
+        if (this.table instanceof ITable) {
+            return (ITable) this.table;
         } else {
             return null;
         }
@@ -50,38 +50,6 @@ public class Column extends MetaObject implements IColumn {
     @Override
     public DataType getDataType() {
         return this.dataType;
-    }
-
-    @Override
-    public void addVariable(String variable) {
-        variableList.add(variable);
-    }
-
-    @Override
-    public void removeVariable(int id) throws ElementNotFoundException {
-        if (id < variableList.size()) {
-            variableList.remove(id);
-        } else {
-            throw new ElementNotFoundException();
-        }
-    }
-
-    @Override
-    public String getVariable(int id) throws ElementNotFoundException {
-        if (id < variableList.size()) {
-            return variableList.get(id);
-        } else {
-            throw new ElementNotFoundException();
-        }
-    }
-
-    @Override
-    public void changeVariable(String variable, int id) throws ElementNotFoundException {
-        if (id < variableList.size()) {
-            variableList.set(id, variable);
-        } else {
-            throw new ElementNotFoundException();
-        }
     }
 
     @Override
