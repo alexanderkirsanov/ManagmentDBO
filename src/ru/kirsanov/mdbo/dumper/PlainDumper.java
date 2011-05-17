@@ -42,7 +42,7 @@ public class PlainDumper {
                     throw new IOException("File can not be write");
                 }
             } else {
-                throw new IOException("This is not folder");
+                throw new IOException("It is not folder");
             }
         } catch (NullPointerException e) {
             throw new IOException("Path not found");
