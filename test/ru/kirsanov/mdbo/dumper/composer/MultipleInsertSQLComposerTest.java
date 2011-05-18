@@ -30,6 +30,6 @@ public class MultipleInsertSQLComposerTest {
     @Test
     public void testAddEnd() throws Exception {
         multipleInsertComposer.addEnd();
-        assertEquals(";", multipleInsertComposer.getResults());
+        assertEquals(";\n", multipleInsertComposer.getResults());
     }
 }

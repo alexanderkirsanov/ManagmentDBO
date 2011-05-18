@@ -22,7 +22,7 @@ public class PlainComposerTest {
         columns.add("id");
         columns.add("name");
         plainComposer.addHeader("table", columns);
-        assertEquals("# table:id, name", plainComposer.getResults());
+        assertEquals("# table:id, name\n", plainComposer.getResults());
     }
 
     @Test
@@ -65,6 +65,6 @@ public class PlainComposerTest {
     @Test
     public void addEndTest() throws Exception {
         plainComposer.addEnd();
-        assertEquals("#end", plainComposer.getResults());
+        assertEquals("\n#end", plainComposer.getResults());
     }
 }

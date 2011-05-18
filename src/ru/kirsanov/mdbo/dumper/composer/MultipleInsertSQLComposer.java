@@ -33,12 +33,12 @@ public class MultipleInsertSQLComposer implements IComposer {
 
     @Override
     public void addEnd() {
-        stringBuilder.append(";");
+        stringBuilder.append(";\n");
     }
 
     @Override
     public void addEndLine() {
-        stringBuilder.append('\n');
+        stringBuilder.append(";\n");
     }
 
     @Override

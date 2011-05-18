@@ -24,6 +24,7 @@ public class PlainComposer implements IComposer {
                 stringBuilder.append(", ");
             }
         }
+        stringBuilder.append("\n");
     }
 
     @Override
@@ -45,7 +46,7 @@ public class PlainComposer implements IComposer {
 
     @Override
     public void addEnd() {
-        stringBuilder.append("#end");
+        stringBuilder.append("\n#end");
     }
 
     @Override

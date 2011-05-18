@@ -3,9 +3,10 @@ package ru.kirsanov.mdbo.dumper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import ru.kirsanov.mdbo.dumper.composer.MultipleInsertSQLComposer;
+import ru.kirsanov.mdbo.dumper.composer.PlainComposer;
 import ru.kirsanov.mdbo.dumper.exception.NoColumnForDumpException;
 import ru.kirsanov.mdbo.dumper.query.TableDumpQuery;
-import ru.kirsanov.mdbo.dumper.writer.Encoding;
 import ru.kirsanov.mdbo.synchronize.utility.ConnectionData;
 import ru.kirsanov.mdbo.synchronize.utility.ConnectionManger;
 
@@ -15,7 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class PlainDumperTest {
+public class DumperTest {
 
     private ConnectionManger cm;
 
@@ -44,39 +45,35 @@ public class PlainDumperTest {
 
     @Test
     public void executeWithTrueEncodingTest() throws NoColumnForDumpException, FileNotFoundException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        PlainDumper plainDumper = new PlainDumper(cm.getConnection());
-        plainDumper.setEncoding(Encoding.CP1251);
+        Dumper dumper = new Dumper(cm.getConnection(), new MultipleInsertSQLComposer());
         TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
         tableDumpQuery.addColumn("id");
-        plainDumper.execute(tableDumpQuery);
+        dumper.execute(tableDumpQuery);
     }
 
     @Test
-    public void executeWithTruePathTest() throws NoColumnForDumpException, IOException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        PlainDumper plainDumper = new PlainDumper(cm.getConnection());
-        plainDumper.setPath("/home/lqip32/");
-        TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
-        tableDumpQuery.addColumn("id");
-        plainDumper.execute(tableDumpQuery);
+    public void executeWithTruePathTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        Dumper dumper = new Dumper(cm.getConnection(), new PlainComposer(','));
+        dumper.setPath("/home/lqip32/");
     }
 
     @Test(expected = IOException.class)
-    public void setNotExistsPathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        PlainDumper plainDumper = new PlainDumper(cm.getConnection());
-        plainDumper.setPath("/home/desktop/lqip322");
+    public void setNotExistsPathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        Dumper dumper = new Dumper(cm.getConnection(), new PlainComposer(','));
+        dumper.setPath("/home/desktop/lqip322");
 
     }
 
     @Test(expected = IOException.class)
-    public void setNullPathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        PlainDumper plainDumper = new PlainDumper(cm.getConnection());
-        plainDumper.setPath("");
+    public void setNullPathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        Dumper dumper = new Dumper(cm.getConnection(), new PlainComposer(','));
+        dumper.setPath("");
     }
 
     @Test(expected = IOException.class)
-    public void setNotWritablePathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        PlainDumper plainDumper = new PlainDumper(cm.getConnection());
-        plainDumper.setPath("/");
+    public void setNotWritablePathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+        Dumper dumper = new Dumper(cm.getConnection(), new PlainComposer(','));
+        dumper.setPath("/");
     }
 
     @After
@@ -88,7 +85,7 @@ public class PlainDumperTest {
             statement
                     .executeUpdate("DROP TABLE IF EXISTS parents;");
         } finally {
-            statement.close();
+            if (statement != null) statement.close();
         }
     }
 }
