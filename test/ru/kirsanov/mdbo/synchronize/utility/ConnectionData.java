@@ -8,13 +8,14 @@ public class ConnectionData {
     private String password;
     private String serverName;
 
-    public ConnectionData( String serverName, String dbName, String dbms, String userName, String password) {
+    public ConnectionData(String serverName, String dbName, String dbms, String userName, String password) {
         this.serverName = serverName;
         this.dbName = dbName;
         this.dbms = dbms;
         this.userName = userName;
         this.password = password;
     }
+
     public ConnectionData(String dbName, String dbms) {
         this.serverName = "localhost";
         this.dbName = dbName;

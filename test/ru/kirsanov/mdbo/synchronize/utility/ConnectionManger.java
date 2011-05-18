@@ -21,14 +21,14 @@ public class ConnectionManger {
     }
 
     public Connection getConnection() throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
-          Class.forName("com.mysql.jdbc.Driver").newInstance();
+        Class.forName("com.mysql.jdbc.Driver").newInstance();
         Connection conn = null;
         Properties connectionProps = new Properties();
         connectionProps.put("user", this.userName);
         connectionProps.put("password", this.password);
 
-            conn = DriverManager.
-                    getConnection("jdbc:" + this.dbms + "://" + this.serverName + "/" + this.dbName, connectionProps);
+        conn = DriverManager.
+                getConnection("jdbc:" + this.dbms + "://" + this.serverName + "/" + this.dbName, connectionProps);
 
         return conn;
     }

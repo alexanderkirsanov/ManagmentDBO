@@ -53,7 +53,7 @@ public class ForeignKeyTest {
 
     @Test(expected = ColumnNotFoundException.class)
     public void getNotExistsTargetColumnsShouldBeThrowsExceptionTest() throws ColumnNotFoundException {
-        sourceColumn = new Column(new Table("test"),"sourceColumn", new SimpleDatatype("Smallint"));
+        sourceColumn = new Column(new Table("test"), "sourceColumn", new SimpleDatatype("Smallint"));
         foreignKey.addColumnMapping(sourceColumn, targetColumn);
         foreignKey.getTargetColumns().get(0);
     }

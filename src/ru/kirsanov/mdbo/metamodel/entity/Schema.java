@@ -129,7 +129,8 @@ public class Schema extends MetaObject implements ISchema {
 
         Schema schema = (Schema) o;
 
-        if (container != null ? !container.getName().equals(schema.container.getName()) : schema.container != null) return false;
+        if (container != null ? !container.getName().equals(schema.container.getName()) : schema.container != null)
+            return false;
         if (foreignKeys != null ? !foreignKeys.equals(schema.foreignKeys) : schema.foreignKeys != null) return false;
         if (indexes != null ? !indexes.equals(schema.indexes) : schema.indexes != null) return false;
         if (tables != null ? !tables.equals(schema.tables) : schema.tables != null) return false;

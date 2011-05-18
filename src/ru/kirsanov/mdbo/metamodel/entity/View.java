@@ -58,7 +58,8 @@ public class View extends ColumnContainer implements IView {
         if (checkOption != null ? !checkOption.equals(view.checkOption) : view.checkOption != null) return false;
         if (columns != null ? !columns.equals(view.columns) : view.columns != null) return false;
         if (definition != null ? !definition.equals(view.definition) : view.definition != null) return false;
-        if (container != null ? !container.getName().equals(view.container.getName()) : view.container != null) return false;
+        if (container != null ? !container.getName().equals(view.container.getName()) : view.container != null)
+            return false;
         return true;
     }
 

@@ -14,27 +14,27 @@ public class MySQLSynchronizersBuilder implements SynchronizersBuilder {
     }
 
     @Override
-    public IEntitySynchronizer createTableSynchronizer(){
+    public IEntitySynchronizer createTableSynchronizer() {
         return new MySQLTableSynchronizer(connection);
     }
 
     @Override
-    public IEntitySynchronizer createPrimaryKeySynchronizer(){
+    public IEntitySynchronizer createPrimaryKeySynchronizer() {
         return new MySQLPrimaryKeySynchronizer(connection);
     }
 
     @Override
-    public IEntitySynchronizer createForeignKeySynchronizer(){
+    public IEntitySynchronizer createForeignKeySynchronizer() {
         return new MySQLForeignKeySynchronizer(connection);
     }
 
     @Override
-    public IEntitySynchronizer createViewSynchronizer(){
+    public IEntitySynchronizer createViewSynchronizer() {
         return new MySQLViewSynchronizer(connection);
     }
 
     @Override
-    public IEntitySynchronizer createIndexSynchronizer(){
+    public IEntitySynchronizer createIndexSynchronizer() {
         return new MySQLIndexSynchronizer(connection);
     }
 

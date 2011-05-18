@@ -32,7 +32,7 @@ public class PostgresTableSynchronizerTest {
         schema.addTable(testTable);
         IColumn testId = testTable.createColumn("id", new SimpleDatatype("integer", 32, 0));
         testId.setNullable(false);
-        IColumn testName = testTable.createColumn("name", new SimpleDatatype("character varying",12));
+        IColumn testName = testTable.createColumn("name", new SimpleDatatype("character varying", 12));
         testName.setNullable(true);
 
         ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
@@ -59,8 +59,8 @@ public class PostgresTableSynchronizerTest {
             () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
         Statement statement = conn.getConnection().createStatement();
-           statement
-                    .executeUpdate("DROP TABLE IF EXISTS table2;");
+        statement
+                .executeUpdate("DROP TABLE IF EXISTS table2;");
         statement
                 .executeUpdate("DROP TABLE IF EXISTS test;");
         statement.close();

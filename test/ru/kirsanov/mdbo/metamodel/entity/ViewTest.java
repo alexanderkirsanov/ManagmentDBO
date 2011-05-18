@@ -77,9 +77,9 @@ public class ViewTest {
     }
 
     @Test
-    public void containerTest(){
+    public void containerTest() {
         ISchema schema = new Schema("test");
         view.setContainer(schema);
-        assertEquals(schema,view.getParent());
+        assertEquals(schema, view.getParent());
     }
 }

@@ -44,22 +44,22 @@ public class PostgresForeignKeySynchronizer implements IEntitySynchronizer {
 
         List<ISchema> schemas = model.getSchemas();
         ResultSet resultSetOfSchema = selectInformationFromSysTable.executeQuery();
-        while(resultSetOfSchema.next()){
+        while (resultSetOfSchema.next()) {
             String constraintName = resultSetOfSchema.getString(CONSTRAINT_NAME).toLowerCase();
             String schemaName = resultSetOfSchema.getString(CONSTRAINT__SCHEMA).toLowerCase();
             String sourceTableName = resultSetOfSchema.getString(TABLE_NAME).toLowerCase();
             String sourceColumnName = resultSetOfSchema.getString(COLUMN_NAME).toLowerCase();
             String targetTableName = resultSetOfSchema.getString(FOREIGN__TABLE__NAME).toLowerCase();
             String targetColumnName = resultSetOfSchema.getString(FOREIGN__COLUMN__NAME).toLowerCase();
-           for (ISchema schema:schemas){
-               if (schema.getName().equals(schemaName)){
-                   ITable sourceTable = schema.getTable(sourceTableName);
-                   ITable targetTable = schema.getTable(targetTableName);
-                   ForeignKey foreignKey = schema.createForeignKey(constraintName, sourceTable, targetTable);
-                   foreignKey.addColumnMapping(sourceTable.getColumn(sourceColumnName),targetTable.getColumn(targetColumnName));
-                   break;
-               }
-           }
+            for (ISchema schema : schemas) {
+                if (schema.getName().equals(schemaName)) {
+                    ITable sourceTable = schema.getTable(sourceTableName);
+                    ITable targetTable = schema.getTable(targetTableName);
+                    ForeignKey foreignKey = schema.createForeignKey(constraintName, sourceTable, targetTable);
+                    foreignKey.addColumnMapping(sourceTable.getColumn(sourceColumnName), targetTable.getColumn(targetColumnName));
+                    break;
+                }
+            }
         }
         connection.setAutoCommit(false);
         return model;

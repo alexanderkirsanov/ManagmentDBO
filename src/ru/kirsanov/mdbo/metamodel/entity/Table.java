@@ -34,7 +34,6 @@ public class Table extends ColumnContainer implements ITable {
     }
 
 
-
     @Override
     public UniqueKey createUniqueKey(IColumn column) throws ColumnNotFoundException {
         uniqueKey = new UniqueKey(this, column.getName());

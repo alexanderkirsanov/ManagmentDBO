@@ -17,7 +17,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-public class PostgresViewSynchronizer implements IEntitySynchronizer{
+public class PostgresViewSynchronizer implements IEntitySynchronizer {
     private static final String TABLE_SCHEMA = "TABLE_SCHEMA";
     private Connection connection;
     private static final String CHECK_OPTION = "CHECK_OPTION";

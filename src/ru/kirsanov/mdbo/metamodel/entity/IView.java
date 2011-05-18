@@ -24,11 +24,11 @@ public interface IView extends Container {
 
     void setUpdatable(boolean value);
 
-    IColumn createColumn(String columnName, DataType dataType)  throws ColumnAlreadyExistsException;
+    IColumn createColumn(String columnName, DataType dataType) throws ColumnAlreadyExistsException;
 
     List<IColumn> getColumns();
 
-    void removeColumn(IColumn column) throws ColumnNotFoundException ;
+    void removeColumn(IColumn column) throws ColumnNotFoundException;
 
     IColumn getColumn(String name) throws ColumnNotFoundException;
 }

@@ -81,7 +81,8 @@ public class ForeignKey extends AbstractConstraint implements Constraint {
         if (deleteRule != that.deleteRule) return false;
         if (targetColumns != null ? !targetColumns.equals(that.targetColumns) : that.targetColumns != null)
             return false;
-        if (targetTable != null ? !targetTable.getName().equals(that.targetTable.getName()) : that.targetTable != null) return false;
+        if (targetTable != null ? !targetTable.getName().equals(that.targetTable.getName()) : that.targetTable != null)
+            return false;
         if (updateRule != that.updateRule) return false;
 
         return true;

@@ -23,7 +23,7 @@ public class MySQLForeignKeySynchronizerTest {
 
     @Before
     public void setUp() throws ColumnAlreadyExistsException, ColumnNotFoundException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        cm = new ConnectionManger(new ConnectionData( "information_schema", "mysql"));
+        cm = new ConnectionManger(new ConnectionData("information_schema", "mysql"));
         testModel = new MysqlModel("testbase");
     }
 

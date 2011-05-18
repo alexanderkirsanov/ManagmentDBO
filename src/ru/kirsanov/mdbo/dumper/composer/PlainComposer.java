@@ -15,7 +15,7 @@ public class PlainComposer implements IComposer {
 
     @Override
     public void addHeader(String tableName, List<String> columns) {
-        stringBuilder.append("#").append(tableName).append(":");
+        stringBuilder.append("# ").append(tableName).append(":");
         int i = 0;
         for (String column : columns) {
             stringBuilder.append(column);

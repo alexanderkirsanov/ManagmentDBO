@@ -13,16 +13,16 @@ public class SQLComposer implements IComposer {
 
     @Override
     public void addHeader(String tableName, List<String> columns) {
-        StringBuilder headerString = new StringBuilder("INSERT INTO ").append(tableName).append("(");
+       stringBuilder.append("INSERT INTO ").append(tableName).append("(");
         int i = 0;
         for (String column : columns) {
-            headerString.append(column);
+            stringBuilder.append(column);
             i++;
             if (i < columns.size()) {
-                headerString.append(", ");
+                stringBuilder.append(", ");
             }
         }
-        headerString.append(") VALUES");
+        stringBuilder.append(") VALUES");
     }
 
     @Override
