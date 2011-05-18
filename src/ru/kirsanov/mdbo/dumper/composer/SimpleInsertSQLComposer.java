@@ -4,10 +4,10 @@ import ru.kirsanov.mdbo.dumper.validator.Validator;
 
 import java.util.List;
 
-public class SQLComposer implements IComposer {
+public class SimpleInsertSQLComposer implements IComposer {
     private StringBuilder stringBuilder;
 
-    public SQLComposer() {
+    public SimpleInsertSQLComposer() {
         stringBuilder = new StringBuilder();
     }
 

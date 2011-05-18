@@ -8,42 +8,41 @@ import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 
-public class SQLComposerTest {
+public class SimpleInsertSQLComposerTest {
 
-    private SQLComposer sqlComposer;
+    private SimpleInsertSQLComposer simpleInsertSqlComposer;
 
     @Before
     public void setUp() throws Exception {
-        sqlComposer = new SQLComposer();
+        simpleInsertSqlComposer = new SimpleInsertSQLComposer();
     }
-
 
     @Test
     public void addHeaderTest() throws Exception {
         List<String> columns = new LinkedList<String>();
         columns.add("id");
         columns.add("name");
-        sqlComposer.addHeader("table", columns);
-        assertEquals("INSERT INTO table(id, name) VALUES", sqlComposer.getResults());
+        simpleInsertSqlComposer.addHeader("table", columns);
+        assertEquals("INSERT INTO table(id, name) VALUES", simpleInsertSqlComposer.getResults());
     }
 
     @Test
     public void addBodyTest() throws Exception {
         String[] line = new String[]{"id", "name"};
-        sqlComposer.addBody(line);
-        assertEquals("('id','name')", sqlComposer.getResults());
+        simpleInsertSqlComposer.addBody(line);
+        assertEquals("('id','name')", simpleInsertSqlComposer.getResults());
     }
 
     @Test
     public void addEndLineTest() throws Exception {
-        sqlComposer.addEndLine();
-        assertEquals(",", sqlComposer.getResults());
+        simpleInsertSqlComposer.addEndLine();
+        assertEquals(",", simpleInsertSqlComposer.getResults());
     }
 
     @Test
     public void addEndTest() throws Exception {
-        sqlComposer.addEnd();
-        assertEquals(";", sqlComposer.getResults());
+        simpleInsertSqlComposer.addEnd();
+        assertEquals(";", simpleInsertSqlComposer.getResults());
     }
 
 }
