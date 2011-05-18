@@ -19,4 +19,19 @@ public class Validator {
         if (needQuoting) result = "\"" + result + "\"";
         return result;
     }
+
+    public static StringBuilder prepareData(String[] line) {
+        StringBuilder stringBuilder = new StringBuilder();
+        int i = 0;
+        for (String currentLine : line) {
+            stringBuilder.append("'");
+            stringBuilder.append(currentLine.replace("\"", "\\\""));
+            stringBuilder.append("'");
+            i++;
+            if (i < line.length) {
+                stringBuilder.append(",");
+            }
+        }
+        return stringBuilder;
+    }
 }

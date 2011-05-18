@@ -14,18 +14,11 @@ import java.sql.*;
 
 public class PlainDumper {
     private Connection connection;
-    private ITableDumpQuery query;
-    private Character delimiter;
-
     private String encoding = Encoding.UTF8;
     private String path = "";
 
     public PlainDumper(Connection connection) {
         this.connection = connection;
-    }
-
-    public void setDelimiter(Character delimiter) {
-        this.delimiter = delimiter;
     }
 
     public void setEncoding(String encoding) {
