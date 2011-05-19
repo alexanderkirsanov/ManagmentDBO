@@ -1,34 +1,31 @@
 package ru.kirsanov.mdbo.dumper;
 
+import ru.kirsanov.mdbo.dumper.composer.Encoding;
 import ru.kirsanov.mdbo.dumper.composer.IComposer;
+import ru.kirsanov.mdbo.dumper.exception.DumperNotFound;
+import ru.kirsanov.mdbo.dumper.exception.IncorrectDumper;
 import ru.kirsanov.mdbo.dumper.exception.NoColumnForDumpException;
-import ru.kirsanov.mdbo.dumper.query.ITableDumpQuery;
-import ru.kirsanov.mdbo.dumper.writer.Encoding;
+import ru.kirsanov.mdbo.dumper.parser.Dumpable;
+import ru.kirsanov.mdbo.dumper.parser.Dumpers;
+import ru.kirsanov.mdbo.dumper.parser.IDumper;
 
-import java.io.*;
-import java.sql.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.sql.Connection;
+import java.sql.SQLException;
 
 public class Dumper {
-    private Connection connection;
-    private String encoding = Encoding.UTF8;
-    private String path = "";
-    private IComposer composer;
 
-    public Dumper(Connection connection, IComposer composer) {
-        this.connection = connection;
-        this.composer = composer;
-    }
+    private Dumpers dumpers;
 
-    public void setEncoding(String encoding) {
-        this.encoding = encoding;
-    }
-
-    public void setPath(String path) throws IOException {
+    public Dumper(Connection connection, IComposer composer, String encoding, String path) throws IOException {
         try {
             File file = new File(path);
             if (file.isDirectory()) {
                 if (file.canWrite()) {
-                    this.path = path;
+                    dumpers = new Dumpers(connection, path, encoding, composer);
                 } else {
                     throw new IOException("File can not be write");
                 }
@@ -40,31 +37,14 @@ public class Dumper {
         }
     }
 
-    public void execute(ITableDumpQuery tableDumpQuery) throws SQLException, NoColumnForDumpException, FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(path + tableDumpQuery.getEntityName() + ".txt", encoding);
-        PreparedStatement selectDataFromTable = connection
-                .prepareStatement(tableDumpQuery.getSql());
-        connection.setAutoCommit(false);
-        ResultSet resultSetOfData = selectDataFromTable.executeQuery();
-        ResultSetMetaData resultSetMetaData = resultSetOfData.getMetaData();
-        int columnCount = resultSetMetaData.getColumnCount();
-        composer.addHeader(tableDumpQuery.getEntityName(), tableDumpQuery.getColumnsList());
-        String[] line = new String[columnCount];
-        int j = 0;
-        while (resultSetOfData.next()) {
-            j++;
-            for (int i = 1; i <= columnCount; i++) {
-                line[i - 1] = resultSetOfData.getString(i);
-            }
-            composer.addBody(line);
-            if (resultSetOfData.isLast()) {
-                composer.addEnd();
-            } else {
-                composer.addEndLine();
-            }
-        }
-        writer.write(composer.getResults());
-        writer.close();
-        connection.setAutoCommit(true);
+    public Dumper(Connection connection, IComposer composer) throws IOException {
+        this(connection, composer, Encoding.UTF8, new File("").getCanonicalPath()+"/");
     }
+
+    public void dump(Dumpable dumpableEntity) throws DumperNotFound, IncorrectDumper, NoColumnForDumpException, SQLException, FileNotFoundException, UnsupportedEncodingException {
+        IDumper dumper = dumpers.find(dumpableEntity);
+        dumper.execute(dumpableEntity);
+    }
+
+
 }

@@ -12,5 +12,13 @@ public class MetaObjectTest {
         assertEquals(metaObjectString, metaObject.getName());
     }
 
+    @Test
+    public void renameTest() {
+        String metaObjectString = "MetaObject";
+        MetaObject metaObject = new MetaObject(metaObjectString);
+        String newName = "name";
+        metaObject.rename(newName);
+        assertEquals(newName, metaObject.getName());
+    }
 
 }

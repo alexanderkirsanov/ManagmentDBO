@@ -3,16 +3,25 @@ package ru.kirsanov.mdbo.dumper;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import ru.kirsanov.mdbo.dumper.composer.Encoding;
 import ru.kirsanov.mdbo.dumper.composer.MultipleInsertSQLComposer;
 import ru.kirsanov.mdbo.dumper.composer.PlainComposer;
+import ru.kirsanov.mdbo.dumper.exception.DumperNotFound;
+import ru.kirsanov.mdbo.dumper.exception.IncorrectDumper;
 import ru.kirsanov.mdbo.dumper.exception.NoColumnForDumpException;
 import ru.kirsanov.mdbo.dumper.query.TableDumpQuery;
+import ru.kirsanov.mdbo.metamodel.entity.Model;
+import ru.kirsanov.mdbo.metamodel.entity.PostgresModel;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnAlreadyExistsException;
+import ru.kirsanov.mdbo.metamodel.exception.ColumnNotFoundException;
+import ru.kirsanov.mdbo.metamodel.exception.TableNotFound;
+import ru.kirsanov.mdbo.metamodel.exception.ViewNotFoundException;
+import ru.kirsanov.mdbo.synchronize.Synchronizer;
+import ru.kirsanov.mdbo.synchronize.exception.ModelSynchronizerNotFound;
 import ru.kirsanov.mdbo.synchronize.utility.ConnectionData;
 import ru.kirsanov.mdbo.synchronize.utility.ConnectionManger;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -44,36 +53,49 @@ public class DumperTest {
     }
 
     @Test
-    public void executeWithTrueEncodingTest() throws NoColumnForDumpException, FileNotFoundException, UnsupportedEncodingException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
+    public void executeWithTrueEncodingTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, IncorrectDumper, DumperNotFound {
         Dumper dumper = new Dumper(cm.getConnection(), new MultipleInsertSQLComposer());
         TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
         tableDumpQuery.addColumn("id");
-        dumper.execute(tableDumpQuery);
+        dumper.dump(tableDumpQuery);
     }
 
     @Test
-    public void executeWithTruePathTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        Dumper dumper = new Dumper(cm.getConnection(), new PlainComposer(','));
-        dumper.setPath("/home/lqip32/");
+    public void executeWithModelTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, IncorrectDumper, DumperNotFound, ViewNotFoundException, ColumnAlreadyExistsException, TableNotFound, ColumnNotFoundException, ModelSynchronizerNotFound {
+        Dumper dumper = new Dumper(cm.getConnection(), new MultipleInsertSQLComposer());
+        Model model = new Synchronizer(cm.getConnection()).synchronize(new PostgresModel("test"));
+        dumper.dump(model);
+    }
+    @Test
+    public void executeWithTruePathTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, IncorrectDumper, DumperNotFound {
+        Dumper dumper = new Dumper(cm.getConnection(), new PlainComposer(','), Encoding.UTF8, "/home/lqip32/");
+        TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
+        tableDumpQuery.addColumn("id");
+        dumper.dump(tableDumpQuery);
     }
 
     @Test(expected = IOException.class)
-    public void setNotExistsPathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        Dumper dumper = new Dumper(cm.getConnection(), new PlainComposer(','));
-        dumper.setPath("/home/desktop/lqip322");
-
+    public void setNotExistsPathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, IncorrectDumper, DumperNotFound {
+        Dumper dumper = new Dumper(cm.getConnection(), new PlainComposer(','), Encoding.UTF8, "/home/lqip32222/");
+        TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
+        tableDumpQuery.addColumn("id");
+        dumper.dump(tableDumpQuery);
     }
 
     @Test(expected = IOException.class)
-    public void setNullPathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        Dumper dumper = new Dumper(cm.getConnection(), new PlainComposer(','));
-        dumper.setPath("");
+    public void setNullPathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, IncorrectDumper, DumperNotFound {
+        Dumper dumper = new Dumper(cm.getConnection(), new PlainComposer(','), Encoding.UTF8, "");
+        TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
+        tableDumpQuery.addColumn("id");
+        dumper.dump(tableDumpQuery);
     }
 
     @Test(expected = IOException.class)
-    public void setNotWritablePathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        Dumper dumper = new Dumper(cm.getConnection(), new PlainComposer(','));
-        dumper.setPath("/");
+    public void setNotWritablePathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, IncorrectDumper, DumperNotFound {
+        Dumper dumper = new Dumper(cm.getConnection(), new PlainComposer(','), Encoding.UTF8, "/");
+        TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
+        tableDumpQuery.addColumn("id");
+        dumper.dump(tableDumpQuery);
     }
 
     @After

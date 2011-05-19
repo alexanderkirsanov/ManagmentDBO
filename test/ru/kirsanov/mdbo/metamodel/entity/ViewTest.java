@@ -82,4 +82,12 @@ public class ViewTest {
         view.setContainer(schema);
         assertEquals(schema, view.getParent());
     }
+
+     @Test
+    public void removeColumnTest() throws ColumnNotFoundException, ColumnAlreadyExistsException {
+        DataType dataType = new SimpleDatatype("INTEGER");
+        IColumn column = view.createColumn("test", dataType);
+        view.removeColumn(column);
+        assertEquals(0, view.getColumns().size());
+    }
 }
