@@ -29,7 +29,6 @@ public class TableDumpQuery implements ITableDumpQuery {
                     selectStringBuilder.append(" ,");
                 }
             }
-
             selectStringBuilder.append(" FROM ");
             selectStringBuilder.append(entityName);
             selectStringBuilder.append(";");

@@ -8,13 +8,7 @@ import ru.kirsanov.mdbo.metamodel.exception.ViewNotFoundException;
 
 import java.util.List;
 
-/**
- * Created by IntelliJ IDEA.
- * User: lqip32
- * Date: 21.04.11
- * Time: 16:31
- * To change this template use File | Settings | File Templates.
- */
+
 public interface ISchema extends Container {
     void addTable(ITable table);
 
@@ -41,4 +35,6 @@ public interface ISchema extends Container {
     IIndex getIndex(String name) throws IndexNotFoundException;
 
     List<IIndex> getIndexes();
+
+    void rename(String newName);
 }

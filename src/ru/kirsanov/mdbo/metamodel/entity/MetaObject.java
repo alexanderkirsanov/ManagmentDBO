@@ -1,7 +1,7 @@
 package ru.kirsanov.mdbo.metamodel.entity;
 
 public class MetaObject {
-    private final String name;
+    private String name;
 
     public MetaObject(final String name) {
         this.name = name;
@@ -9,5 +9,9 @@ public class MetaObject {
 
     public String getName() {
         return this.name;
+    }
+
+    public void rename(String newName){
+        this.name = newName;
     }
 }
