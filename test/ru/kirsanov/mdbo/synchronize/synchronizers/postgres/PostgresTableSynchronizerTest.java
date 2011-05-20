@@ -21,8 +21,8 @@ public class PostgresTableSynchronizerTest {
 
     @Before
     public void setUp() throws ColumnAlreadyExistsException, ColumnNotFoundException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        cm = new ConnectionManger(new ConnectionData("test", "postgresql"));
-        testModel = new PostgresModel("testbase");
+        cm = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
+        testModel = new PostgresModel(ConnectionData.getBaseName());
     }
 
     @Test
@@ -35,7 +35,7 @@ public class PostgresTableSynchronizerTest {
         IColumn testName = testTable.createColumn("name", new SimpleDatatype("character varying", 12));
         testName.setNullable(true);
 
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
         Statement statement = conn.getConnection().createStatement();
         try {
             statement
@@ -44,7 +44,7 @@ public class PostgresTableSynchronizerTest {
                     "    id integer NOT NULL,\n" +
                     "    name character varying(12)\n" +
                     ");");
-            Model model = new PostgresModel("testbase");
+            Model model = new PostgresModel(ConnectionData.getBaseName());
             PostgresTableSynchronizer postgresTableSynchronizer = new PostgresTableSynchronizer(cm.getConnection());
             Model postgresModel = postgresTableSynchronizer.execute(model);
             assertEquals(testModel, postgresModel);
@@ -57,7 +57,7 @@ public class PostgresTableSynchronizerTest {
     @After
     public void tearDown
             () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
         Statement statement = conn.getConnection().createStatement();
         statement
                 .executeUpdate("DROP TABLE IF EXISTS table2;");

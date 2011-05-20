@@ -22,13 +22,13 @@ public class PostgresViewSynchronizerTest {
 
     @Before
     public void setUp() throws ColumnAlreadyExistsException, ColumnNotFoundException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        cm = new ConnectionManger(new ConnectionData("test", "postgresql"));
-        testModel = new PostgresModel("testbase");
+        cm = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
+        testModel = new PostgresModel(ConnectionData.getBaseName());
     }
 
     @Test
     public void executeTest() throws Throwable {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
         Statement statement = null;
         try {
             statement = conn.getConnection().createStatement();
@@ -42,7 +42,7 @@ public class PostgresViewSynchronizerTest {
                     .executeUpdate("CREATE VIEW views AS\n" +
                             "  SELECT id FROM t1\n" +
                             "  WHERE id > 5");
-            Model model = new PostgresModel("testbase");
+            Model model = new PostgresModel(ConnectionData.getBaseName());
             ISchema schema = testModel.createSchema("public");
             ITable t1Table = new Table("t1");
             DataType intDataType = new SimpleDatatype("integer", 32);
@@ -67,7 +67,7 @@ public class PostgresViewSynchronizerTest {
     @After
     public void tearDown
             () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
         Statement statement = conn.getConnection().createStatement();
         statement
                 .executeUpdate("DROP VIEW IF EXISTS views;");

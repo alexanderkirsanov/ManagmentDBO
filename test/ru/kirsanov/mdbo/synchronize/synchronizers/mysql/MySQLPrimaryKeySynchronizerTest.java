@@ -21,7 +21,7 @@ public class MySQLPrimaryKeySynchronizerTest {
     @Before
     public void setUp() throws Throwable {
         cm = new ConnectionManger(new ConnectionData("information_schema", "mysql"));
-        testModel = new MysqlModel("testbase");
+        testModel = new MysqlModel(ConnectionData.getBaseName());
 
     }
 
@@ -29,7 +29,7 @@ public class MySQLPrimaryKeySynchronizerTest {
     public void executeTest() throws Throwable {
         Statement statement = null;
         try {
-            ConnectionManger conn = new ConnectionManger(new ConnectionData("testbase", "mysql"));
+            ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "mysql"));
             statement = conn.getConnection().createStatement();
             statement
                     .executeUpdate("DROP TABLE IF EXISTS t1;");
@@ -42,8 +42,8 @@ public class MySQLPrimaryKeySynchronizerTest {
                     ") ENGINE=InnoDB;");
             MySQLTableSynchronizer mySQLTableSynchronizer = new MySQLTableSynchronizer(cm.getConnection());
             MySQLPrimaryKeySynchronizer mySQLPrimaryKeySynchronizer = new MySQLPrimaryKeySynchronizer(cm.getConnection());
-            Model modelWithTable = mySQLTableSynchronizer.execute(new MysqlModel("testbase"));
-            ISchema schema = testModel.createSchema("testbase");
+            Model modelWithTable = mySQLTableSynchronizer.execute(new MysqlModel(ConnectionData.getBaseName()));
+            ISchema schema = testModel.createSchema(ConnectionData.getBaseName());
             ITable table = new Table("t1");
             schema.addTable(table);
             DataType intDataType = new SimpleDatatype("INT", 11);
@@ -67,7 +67,7 @@ public class MySQLPrimaryKeySynchronizerTest {
     @After
     public void tearDown
             () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("testbase", "mysql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "mysql"));
         Statement statement = conn.getConnection().createStatement();
         statement.executeUpdate("DROP TABLE IF EXISTS t1;");
         statement.close();

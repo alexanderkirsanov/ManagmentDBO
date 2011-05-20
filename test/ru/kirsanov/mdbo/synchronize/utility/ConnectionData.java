@@ -2,11 +2,11 @@ package ru.kirsanov.mdbo.synchronize.utility;
 
 public class ConnectionData {
 
-    private String dbName;
+    private String dbName = "testbase";
     private String dbms;
-    private String userName;
-    private String password;
-    private String serverName;
+    private String userName = "lqip32";
+    private String password = "4f3v6";
+    private String serverName = "localhost";
 
     public ConnectionData(String serverName, String dbName, String dbms, String userName, String password) {
         this.serverName = serverName;
@@ -17,13 +17,13 @@ public class ConnectionData {
     }
 
     public ConnectionData(String dbName, String dbms) {
-        this.serverName = "localhost";
         this.dbName = dbName;
         this.dbms = dbms;
-        this.userName = "lqip32";
-        this.password = "4f3v6";
     }
 
+    public ConnectionData(String dbms) {
+        this.dbms = dbms;
+    }
 
     public String getDbms() {
         return dbms;
@@ -43,6 +43,10 @@ public class ConnectionData {
 
     public String getDbName() {
         return dbName;
+    }
+
+    public static String getBaseName(){
+        return "testbase";
     }
 
 

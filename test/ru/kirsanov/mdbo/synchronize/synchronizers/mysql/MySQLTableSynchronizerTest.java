@@ -23,7 +23,7 @@ public class MySQLTableSynchronizerTest {
     @Before
     public void setUp() throws ColumnAlreadyExistsException, ColumnNotFoundException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         cm = new ConnectionManger(new ConnectionData("information_schema", "mysql"));
-        testModel = new MysqlModel("testbase");
+        testModel = new MysqlModel(ConnectionData.getBaseName());
     }
 
     @Test
@@ -36,7 +36,7 @@ public class MySQLTableSynchronizerTest {
 
     @Test
     public void synchronizeTest() throws Throwable {
-        ISchema schema = testModel.createSchema("testbase");
+        ISchema schema = testModel.createSchema(ConnectionData.getBaseName());
 
         Table testTable = new Table("test");
         schema.addTable(testTable);
@@ -55,7 +55,7 @@ public class MySQLTableSynchronizerTest {
         idFkColumn.setNullable(false);
         IColumn testId = testFkTable.createColumn("test_id", new SimpleDatatype("int", 11));
         testId.setNullable(true);
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("testbase", "mysql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData("mysql"));
         Statement statement = conn.getConnection().createStatement();
         try {
             statement
@@ -75,7 +75,7 @@ public class MySQLTableSynchronizerTest {
                             "  PRIMARY KEY (id)\n" +
                             ");");
 
-            Model model = new MysqlModel("testbase");
+            Model model = new MysqlModel(ConnectionData.getBaseName());
             MySQLTableSynchronizer mySQLTableSynchronizer = new MySQLTableSynchronizer(cm.getConnection());
             Model mysqlModel = mySQLTableSynchronizer.execute(model);
             assertEquals(testModel, mysqlModel);
@@ -88,7 +88,7 @@ public class MySQLTableSynchronizerTest {
     @After
     public void tearDown
             () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("testbase", "mysql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "mysql"));
         Statement statement = conn.getConnection().createStatement();
         statement
                 .executeUpdate("DROP TABLE IF EXISTS test_fk;");

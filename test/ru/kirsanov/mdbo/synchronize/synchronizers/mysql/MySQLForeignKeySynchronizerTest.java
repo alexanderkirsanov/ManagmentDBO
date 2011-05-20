@@ -24,12 +24,12 @@ public class MySQLForeignKeySynchronizerTest {
     @Before
     public void setUp() throws ColumnAlreadyExistsException, ColumnNotFoundException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         cm = new ConnectionManger(new ConnectionData("information_schema", "mysql"));
-        testModel = new MysqlModel("testbase");
+        testModel = new MysqlModel(ConnectionData.getBaseName());
     }
 
     @Test
     public void executeTest() throws Throwable {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("testbase", "mysql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "mysql"));
         Statement statement = null;
         try {
             statement = conn.getConnection().createStatement();
@@ -47,8 +47,8 @@ public class MySQLForeignKeySynchronizerTest {
                             "                    FOREIGN KEY (parent_id) REFERENCES parents(id)\n" +
                             "                      ON DELETE CASCADE\n" +
                             ") ENGINE=INNODB;");
-            Model model = new MysqlModel("testbase");
-            ISchema schema = testModel.createSchema("testbase");
+            Model model = new MysqlModel(ConnectionData.getBaseName());
+            ISchema schema = testModel.createSchema(ConnectionData.getBaseName());
             DataType intDataType = new SimpleDatatype("INT", 11);
             ITable childsTable = new Table("childs");
             schema.addTable(childsTable);
@@ -79,7 +79,7 @@ public class MySQLForeignKeySynchronizerTest {
     @After
     public void tearDown
             () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("testbase", "mysql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "mysql"));
         Statement statement = conn.getConnection().createStatement();
         statement
                 .executeUpdate("DROP TABLE IF EXISTS childs;");

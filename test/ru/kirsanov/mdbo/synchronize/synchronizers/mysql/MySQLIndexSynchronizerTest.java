@@ -21,12 +21,12 @@ public class MySQLIndexSynchronizerTest {
     @Before
     public void setUp() {
         cm = new ConnectionManger(new ConnectionData("information_schema", "mysql"));
-        testModel = new MysqlModel("testbase");
+        testModel = new MysqlModel(ConnectionData.getBaseName());
     }
 
     @Test
     public void executeTest() throws Throwable {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("testbase", "mysql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "mysql"));
         Statement statement = null;
         try {
             statement = conn.getConnection().createStatement();
@@ -36,8 +36,8 @@ public class MySQLIndexSynchronizerTest {
                     .executeUpdate("CREATE TABLE t1 (id INT NOT NULL);\n");
             statement
                     .executeUpdate("CREATE Index myIndex ON t1(id) ");
-            Model model = new MysqlModel("testbase");
-            ISchema schema = testModel.createSchema("testbase");
+            Model model = new MysqlModel(ConnectionData.getBaseName());
+            ISchema schema = testModel.createSchema(ConnectionData.getBaseName());
             ITable t1Table = new Table("t1");
             DataType intDataType = new SimpleDatatype("INT", 11);
             IColumn t1IdColumn = t1Table.createColumn("id", intDataType);
@@ -59,7 +59,7 @@ public class MySQLIndexSynchronizerTest {
     @After
     public void tearDown
             () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("testbase", "mysql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "mysql"));
         Statement statement = conn.getConnection().createStatement();
         statement
                 .executeUpdate("DROP TABLE IF EXISTS t1;");

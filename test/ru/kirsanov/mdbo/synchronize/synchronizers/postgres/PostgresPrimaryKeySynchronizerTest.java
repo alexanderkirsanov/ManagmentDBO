@@ -20,15 +20,15 @@ public class PostgresPrimaryKeySynchronizerTest {
 
     @Before
     public void setUp() throws Throwable {
-        cm = new ConnectionManger(new ConnectionData("test", "postgresql"));
-        testModel = new PostgresModel("testbase");
+        cm = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
+        testModel = new PostgresModel(ConnectionData.getBaseName());
     }
 
     @Test
     public void executeTest() throws Throwable {
         Statement statement = null;
         try {
-            ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
+            ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
             statement = conn.getConnection().createStatement();
             statement
                     .executeUpdate("DROP TABLE IF EXISTS t1 CASCADE ;");
@@ -41,7 +41,7 @@ public class PostgresPrimaryKeySynchronizerTest {
                     ")");
             PostgresTableSynchronizer postgresTableSynchronizer = new PostgresTableSynchronizer(cm.getConnection());
             PostgresPrimaryKeySynchronizer postgresPrimaryKeySynchronizer = new PostgresPrimaryKeySynchronizer(cm.getConnection());
-            Model modelWithTable = postgresTableSynchronizer.execute(new PostgresModel("testbase"));
+            Model modelWithTable = postgresTableSynchronizer.execute(new PostgresModel(ConnectionData.getBaseName()));
             ISchema schema = testModel.createSchema("public");
             ITable table = new Table("t1");
             schema.addTable(table);
@@ -65,7 +65,7 @@ public class PostgresPrimaryKeySynchronizerTest {
     @After
     public void tearDown
             () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
         Statement statement = conn.getConnection().createStatement();
         statement.executeUpdate("DROP TABLE IF EXISTS t1;");
         statement.close();

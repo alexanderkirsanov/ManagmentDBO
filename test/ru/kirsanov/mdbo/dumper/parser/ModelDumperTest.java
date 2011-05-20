@@ -9,7 +9,7 @@ import ru.kirsanov.mdbo.synchronize.utility.ConnectionData;
 import ru.kirsanov.mdbo.synchronize.utility.ConnectionManger;
 
 public class ModelDumperTest {
-    private ConnectionManger cm = new ConnectionManger(new ConnectionData("test", "postgresql"));
+    private ConnectionManger cm = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
 
     @Test(expected = IncorrectDumper.class)
     public void executeModelDumperWithIncorrectDumperShouldThrowExceptionTest() throws Exception, IncorrectDumper, NoColumnForDumpException {

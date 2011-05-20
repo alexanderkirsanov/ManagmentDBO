@@ -20,13 +20,13 @@ public class PostgresIndexSynchronizerTest {
 
     @Before
     public void setUp() {
-        cm = new ConnectionManger(new ConnectionData("test", "postgresql"));
-        testModel = new PostgresModel("testbase");
+        cm = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
+        testModel = new PostgresModel(ConnectionData.getBaseName());
     }
 
     @Test
     public void executeTest() throws Throwable {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
         Statement statement = null;
         try {
             statement = conn.getConnection().createStatement();
@@ -36,8 +36,8 @@ public class PostgresIndexSynchronizerTest {
                     .executeUpdate("CREATE TABLE t1 (id INT NOT NULL);\n");
             statement
                     .executeUpdate("CREATE Index myIndex ON t1(id) ");
-            Model model = new PostgresModel("testbase");
-            ISchema schema = testModel.createSchema("testbase");
+            Model model = new PostgresModel(ConnectionData.getBaseName());
+            ISchema schema = testModel.createSchema(ConnectionData.getBaseName());
             ITable t1Table = new Table("t1");
             DataType intDataType = new SimpleDatatype("integer", 32);
             IColumn t1IdColumn = t1Table.createColumn("id", intDataType);
@@ -59,7 +59,7 @@ public class PostgresIndexSynchronizerTest {
     @After
     public void tearDown
             () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
         Statement statement = conn.getConnection().createStatement();
         statement
                 .executeUpdate("DROP TABLE IF EXISTS t1;");

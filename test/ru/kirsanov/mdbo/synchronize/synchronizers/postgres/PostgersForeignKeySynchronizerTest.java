@@ -23,13 +23,13 @@ public class PostgersForeignKeySynchronizerTest {
 
     @Before
     public void setUp() throws ColumnAlreadyExistsException, ColumnNotFoundException, SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        cm = new ConnectionManger(new ConnectionData("test", "postgresql"));
-        testModel = new PostgresModel("testbase");
+        cm = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
+        testModel = new PostgresModel(ConnectionData.getBaseName());
     }
 
     @Test
     public void executeTest() throws Throwable {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
         Statement statement = null;
         try {
             statement = conn.getConnection().createStatement();
@@ -47,7 +47,7 @@ public class PostgersForeignKeySynchronizerTest {
                             "                     REFERENCES parents(id)\n" +
                             "                      ON DELETE CASCADE\n" +
                             ")");
-            Model model = new PostgresModel("testbase");
+            Model model = new PostgresModel(ConnectionData.getBaseName());
             ISchema schema = testModel.createSchema("public");
             ITable parentsTable = new Table("parents");
             schema.addTable(parentsTable);
@@ -77,7 +77,7 @@ public class PostgersForeignKeySynchronizerTest {
     @After
     public void tearDown
             () throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
         Statement statement = conn.getConnection().createStatement();
         statement
                 .executeUpdate("DROP TABLE IF EXISTS childs;");

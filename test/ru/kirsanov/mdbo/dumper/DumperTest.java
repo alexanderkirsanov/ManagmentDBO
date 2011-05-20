@@ -31,8 +31,8 @@ public class DumperTest {
 
     @Before
     public void setUp() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        cm = new ConnectionManger(new ConnectionData("test", "postgresql"));
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
+        cm = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
         Statement statement = null;
         try {
             statement = conn.getConnection().createStatement();
@@ -100,7 +100,7 @@ public class DumperTest {
 
     @After
     public void tearDown() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
-        ConnectionManger conn = new ConnectionManger(new ConnectionData("test", "postgresql"));
+        ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
         Statement statement = null;
         try {
             statement = conn.getConnection().createStatement();
