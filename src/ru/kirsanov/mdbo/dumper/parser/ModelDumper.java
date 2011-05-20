@@ -5,10 +5,7 @@ import ru.kirsanov.mdbo.dumper.exception.IncorrectDumper;
 import ru.kirsanov.mdbo.dumper.exception.NoColumnForDumpException;
 import ru.kirsanov.mdbo.dumper.query.ITableDumpQuery;
 import ru.kirsanov.mdbo.dumper.query.TableDumpQuery;
-import ru.kirsanov.mdbo.metamodel.entity.IColumn;
-import ru.kirsanov.mdbo.metamodel.entity.ISchema;
-import ru.kirsanov.mdbo.metamodel.entity.ITable;
-import ru.kirsanov.mdbo.metamodel.entity.Model;
+import ru.kirsanov.mdbo.metamodel.entity.*;
 
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -35,7 +32,15 @@ public class ModelDumper implements IDumper {
                         }
                         queryDumper.execute(tableDumpQuery);
                     }
-
+                }
+                for (IView view : schema.getViews()) {
+                    ITableDumpQuery tableDumpQuery = new TableDumpQuery(view.getName());
+                    if (view.getColumns().size() != 0) {
+                        for (IColumn column : view.getColumns()) {
+                            tableDumpQuery.addColumn(column.getName());
+                        }
+                        queryDumper.execute(tableDumpQuery);
+                    }
                 }
             }
         } else {
