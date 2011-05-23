@@ -19,6 +19,7 @@ public class ConnectionData {
         this.password = configProperties.getProperty(USER_PASS);
         this.userName = configProperties.getProperty(USER_NAME);
         this.serverName = configProperties.getProperty(SERVER, "localhost");
+        this.dbName = "testbase";
     }
 
     public ConnectionData(String dbName, String dbms) {
