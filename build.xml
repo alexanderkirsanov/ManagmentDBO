@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. -->
+<project basedir="." default="build" name="TestMDBO">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../developing/eclipse/eclipse"/>
+    <property name="junit.output.dir" value="junit"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.6"/>
+    <property name="source" value="1.6"/>
+    <path id="jdbc.userclasspath"/>
+    <path id="JUnit 4.libraryclasspath">
+        <pathelement location="lib/junit.jar"/>
+        <pathelement location="lib/org.hamcrest.core_1.1.0.v20090501071000.jar"/>
+    </path>
+    <path id="TestMDBO.classpath">
+        <pathelement location="bin"/>
+        <path refid="jdbc.userclasspath"/>
+        <path refid="JUnit 4.libraryclasspath"/>
+        <pathelement location="lib/mockito-all-1.8.5.jar"/>
+        <pathelement location="lib/mysql-connector-java-5.1.13-bin.jar"/>
+        <pathelement location="lib/postgresql-9.0-801.jdbc4.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.uad"/>
+                <exclude name="**/*.ucd"/>
+                <exclude name="**/*.uld"/>
+                <exclude name="**/*.upd"/>
+                <exclude name="**/*.udd"/>
+                <exclude name="**/*.uod"/>
+                <exclude name="**/*.usd"/>
+                <exclude name="**/*.utd"/>
+                <exclude name="**/*.uud"/>
+                <exclude name="**/*.odd"/>
+                <exclude name="**/*.ead"/>
+                <exclude name="**/*.ecd"/>
+                <exclude name="**/*.eld"/>
+                <exclude name="**/*.epd"/>
+                <exclude name="**/*.edd"/>
+                <exclude name="**/*.eod"/>
+                <exclude name="**/*.esd"/>
+                <exclude name="**/*.etd"/>
+                <exclude name="**/*.eud"/>
+                <exclude name="**/*.urd"/>
+                <exclude name="**/*.uml"/>
+                <exclude name="**/*.ecore"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="test">
+                <exclude name="**/*.uad"/>
+                <exclude name="**/*.ucd"/>
+                <exclude name="**/*.uld"/>
+                <exclude name="**/*.upd"/>
+                <exclude name="**/*.udd"/>
+                <exclude name="**/*.uod"/>
+                <exclude name="**/*.usd"/>
+                <exclude name="**/*.utd"/>
+                <exclude name="**/*.uud"/>
+                <exclude name="**/*.odd"/>
+                <exclude name="**/*.ead"/>
+                <exclude name="**/*.ecd"/>
+                <exclude name="**/*.eld"/>
+                <exclude name="**/*.epd"/>
+                <exclude name="**/*.edd"/>
+                <exclude name="**/*.eod"/>
+                <exclude name="**/*.esd"/>
+                <exclude name="**/*.etd"/>
+                <exclude name="**/*.eud"/>
+                <exclude name="**/*.urd"/>
+                <exclude name="**/*.uml"/>
+                <exclude name="**/*.ecore"/>
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="TestMDBO.classpath"/>
+        </javac>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" source="${source}" target="${target}">
+            <src path="test"/>
+            <classpath refid="TestMDBO.classpath"/>
+        </javac>
+    </target>
+    <target name="TestMDBO">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="ru.kirsanov.mdbo.dumper.DumperTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.dumper.composer.MultipleInsertSQLComposerTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.dumper.composer.PlainComposerTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.dumper.composer.SimpleInsertSQLComposerTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.dumper.parser.DumpersTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.dumper.parser.ModelDumperTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.dumper.parser.QueryDumperTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.dumper.query.TableDumpQueryTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.metamodel.constraint.EntityConstraintTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.metamodel.constraint.ForeignKeyTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.metamodel.constraint.PrimaryKeyTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.metamodel.constraint.UniqueKeyTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.metamodel.datatype.SimpleDataTypeTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.metamodel.entity.ColumnTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.metamodel.entity.IndexTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.metamodel.entity.MetaObjectTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.metamodel.entity.MysqlModelTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.metamodel.entity.PostgresModelTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.metamodel.entity.SchemaTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.metamodel.entity.TableTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.metamodel.entity.ViewTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.synchronize.synchronizers.ConfiguratorTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.synchronize.synchronizers.mysql.MySQLForeignKeySynchronizerTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.synchronize.synchronizers.mysql.MySQLIndexSynchronizerTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.synchronize.synchronizers.mysql.MySQLPrimaryKeySynchronizerTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.synchronize.synchronizers.mysql.MySQLTableSynchronizerTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.synchronize.synchronizers.mysql.MySQLViewSynchronizerTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.synchronize.synchronizers.postgres.PostgersForeignKeySynchronizerTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.synchronize.synchronizers.postgres.PostgresIndexSynchronizerTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.synchronize.synchronizers.postgres.PostgresPrimaryKeySynchronizerTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.synchronize.synchronizers.postgres.PostgresTableSynchronizerTest" todir="${junit.output.dir}"/>
+            <test name="ru.kirsanov.mdbo.synchronize.synchronizers.postgres.PostgresViewSynchronizerTest" todir="${junit.output.dir}"/>
+            <classpath refid="TestMDBO.classpath"/>
+        </junit>
+    </target>
+    <target name="DumperTest">
+        <mkdir dir="${junit.output.dir}"/>
+        <junit fork="yes" printsummary="withOutAndErr">
+            <formatter type="xml"/>
+            <test name="ru.kirsanov.mdbo.dumper.DumperTest" todir="${junit.output.dir}"/>
+            <classpath refid="TestMDBO.classpath"/>
+        </junit>
+    </target>
+    <target name="junitreport">
+        <junitreport todir="${junit.output.dir}">
+            <fileset dir="${junit.output.dir}">
+                <include name="TEST-*.xml"/>
+            </fileset>
+            <report format="frames" todir="${junit.output.dir}"/>
+        </junitreport>
+    </target>
+</project>
