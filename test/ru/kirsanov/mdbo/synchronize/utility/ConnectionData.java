@@ -1,27 +1,34 @@
 package ru.kirsanov.mdbo.synchronize.utility;
 
+import java.util.Properties;
+
 public class ConnectionData {
 
-    private String dbName = "testbase";
+    private String dbName;
     private String dbms;
-    private String userName = "lqip32";
-    private String password = "4f3v6";
+    private String userName;
+    private String password;
     private String serverName = "localhost";
+    private static final String USER_NAME = "userName";
+    private static final String USER_PASS = "userPass";
+    private static final String SERVER = "server";
 
-    public ConnectionData(String serverName, String dbName, String dbms, String userName, String password) {
-        this.serverName = serverName;
-        this.dbName = dbName;
-        this.dbms = dbms;
-        this.userName = userName;
-        this.password = password;
+    private ConnectionData() {
+        ConfigurationManager configurationManager = new ConfigurationManager();
+        Properties configProperties = configurationManager.loadProperties();
+        this.password = configProperties.getProperty(USER_PASS);
+        this.userName = configProperties.getProperty(USER_NAME);
+        this.serverName = configProperties.getProperty(SERVER, "localhost");
     }
 
     public ConnectionData(String dbName, String dbms) {
+        this();
         this.dbName = dbName;
         this.dbms = dbms;
     }
 
     public ConnectionData(String dbms) {
+        this();
         this.dbms = dbms;
     }
 
@@ -45,7 +52,7 @@ public class ConnectionData {
         return dbName;
     }
 
-    public static String getBaseName(){
+    public static String getBaseName() {
         return "testbase";
     }
 

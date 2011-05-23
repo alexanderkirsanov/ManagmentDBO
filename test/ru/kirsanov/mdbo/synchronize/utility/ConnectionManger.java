@@ -6,8 +6,8 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class ConnectionManger {
-    private String userName = "lqip32";
-    private String password = "4f3v6";
+    private String userName;
+    private String password;
     private String dbms;
     private String serverName;
     private String dbName;
@@ -22,14 +22,12 @@ public class ConnectionManger {
 
     public Connection getConnection() throws SQLException, ClassNotFoundException, IllegalAccessException, InstantiationException {
         Class.forName("com.mysql.jdbc.Driver").newInstance();
-        Connection conn = null;
         Properties connectionProps = new Properties();
         connectionProps.put("user", this.userName);
         connectionProps.put("password", this.password);
-
-        conn = DriverManager.
+        return DriverManager.
                 getConnection("jdbc:" + this.dbms + "://" + this.serverName + "/" + this.dbName, connectionProps);
 
-        return conn;
+
     }
 }
