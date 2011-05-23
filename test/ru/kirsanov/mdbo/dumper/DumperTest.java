@@ -66,9 +66,10 @@ public class DumperTest {
         Model model = new Synchronizer(cm.getConnection()).synchronize(new PostgresModel("test"));
         dumper.dump(model);
     }
+
     @Test
     public void executeWithTruePathTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, IncorrectDumper, DumperNotFound {
-        Dumper dumper = new Dumper(cm.getConnection(), new PlainComposer(','), Encoding.UTF8, "/home/lqip32/");
+        Dumper dumper = new Dumper(cm.getConnection(), new PlainComposer(','), Encoding.UTF8, System.getProperty("user.dir"));
         TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
         tableDumpQuery.addColumn("id");
         dumper.dump(tableDumpQuery);
