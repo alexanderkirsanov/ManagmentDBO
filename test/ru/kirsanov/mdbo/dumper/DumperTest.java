@@ -91,14 +91,6 @@ public class DumperTest {
         dumper.dump(tableDumpQuery);
     }
 
-    @Test(expected = IOException.class)
-    public void setNotWritablePathShouldBeThrowExceptionTest() throws NoColumnForDumpException, IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException, IncorrectDumper, DumperNotFound {
-        Dumper dumper = new Dumper(cm.getConnection(), new PlainComposer(','), Encoding.UTF8, "/");
-        TableDumpQuery tableDumpQuery = new TableDumpQuery("parents");
-        tableDumpQuery.addColumn("id");
-        dumper.dump(tableDumpQuery);
-    }
-
     @After
     public void tearDown() throws SQLException, ClassNotFoundException, InstantiationException, IllegalAccessException {
         ConnectionManger conn = new ConnectionManger(new ConnectionData(ConnectionData.getBaseName(), "postgresql"));
